@@ -20,6 +20,11 @@ AABB_box::AABB_box(const Point center,const float r){
 
 
 }
+
+float AABB_box::getSurface(){
+
+    return r[0]*r[1]*r[2];
+}
      
 AABB_box& AABB_box::operator=(const AABB_box& src){
         this->center = src.center;

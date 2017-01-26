@@ -15,6 +15,7 @@ public:
      AABB_box(const Point center,const float r);
      
      AABB_box& operator=(const AABB_box& src);
+     float getSurface();
 
 };
 

@@ -61,11 +61,11 @@ void drawScene()
 
 
     Node node1(boxes[0]),node2(boxes[1]),node3(boxes[2]),node4(boxes[3]);
-    Node tree1 = buildTree(node1,node2),tree2 = buildTree(node3,node4);
-    Node tree = buildTree(tree1,tree2);
+    Node tree1 = buildTree(&node1,&node2),tree2 = buildTree(&node3,&node4);
+    Node tree = buildTree(&tree1,&tree2);
 
-    setIndex(tree,0);
-    treeTraverse(tree);
+    setIndex(&tree,0);
+    treeTraverse(&tree);
 
 }
 

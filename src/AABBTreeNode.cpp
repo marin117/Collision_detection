@@ -3,47 +3,51 @@
 #include <iostream>
 
 Node::Node(const AABB_box bbox){
-        child.reserve(2);
+        parent = NULL;
+        left = NULL;
+        right = NULL;
         box = bbox;
 }
 
-void treeTraverse(Node& root){
-    if(root.isLeaf()){
-        std::cout<<"leaf "<<root.idx<<std::endl;
+void treeTraverse(Node* root){
+    if(root->isLeaf()){
+        std::cout<<"leaf "<<root->idx<<std::endl;
         return;
     } 
     
-    std::cout<<"node "<<root.idx<<std::endl;
-    treeTraverse(root.child[0]);
-    treeTraverse(root.child[1]);
+    std::cout<<"node "<<root->idx<<std::endl;
+    treeTraverse(root->left);
+    treeTraverse(root->right);
 
 }
 
-void setIndex(Node& root,int index){
-    if(root.isLeaf()){
-        root.idx = index;
+void setIndex(Node* root,int index){
+    if(root->isLeaf()){
+        root->idx = index;
         return;
     } 
     
-    root.idx = index;
-    setIndex(root.child[0],++index);
-    setIndex(root.child[1],++index);
+    root->idx = index;
+    setIndex(root->left,++index);
+    setIndex(root->right,++index);
 
 }
 
 bool Node::isLeaf(){
 
-    if(!child.size()) return true;
+    if(!right) return true;
 
     return false;
 }
 
-Node buildTree(Node& left,Node& right){
+Node buildTree(Node* left,Node* right){
 
-    Node root;
-    root.child.reserve(2);
-    root.box = Combine(left.box,right.box);
-    root.child.emplace_back(left);
-    root.child.emplace_back(right);
+    Node root(Combine(left->box,right->box));
+    root.left = left;
+    root.right = right;
+    left->parent = right->parent = &root;
     return root;
+
 }
+
+

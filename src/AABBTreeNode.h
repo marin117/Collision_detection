@@ -10,7 +10,9 @@
 class Node{
 public:
     AABB_box box;
-    std::vector<Node> child;
+    Node *left;
+    Node *right;
+    Node *parent;
     int idx;
 
     Node()=default;
@@ -21,9 +23,9 @@ public:
     
 };
 
-void setIndex(Node& root,int index);
-Node buildTree(Node& left,Node& right);
-void treeTraverse(Node& root);
+void setIndex(Node* root,int index);
+Node buildTree(Node* left,Node* right);
+void treeTraverse(Node* root);
 
 
 #endif
