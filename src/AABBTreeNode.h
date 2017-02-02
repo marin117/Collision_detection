@@ -5,13 +5,17 @@
 #include "point.h"
 #include "AABB_box.h"
 #include <vector>
+#include <memory>
+
 
 
 class Node{
+    typedef std::unique_ptr<Node> ptr;
 public:
+
     AABB_box box;
-    Node *left;
-    Node *right;
+    ptr left;
+    ptr right;
     Node *parent;
     int idx;
 
@@ -19,13 +23,14 @@ public:
     
 
     Node(const AABB_box bbox);
+    Node (ptr& left,ptr& right);
     bool isLeaf();
     
 };
+ typedef std::unique_ptr<Node> ptr;
 
-void setIndex(Node* root,int index);
-Node buildTree(Node* left,Node* right);
-void treeTraverse(Node* root);
+void setIndex(ptr& root,int index);
+void treeTraverse(ptr& root);
 
 
 #endif

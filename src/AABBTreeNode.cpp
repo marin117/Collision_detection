@@ -2,14 +2,26 @@
 #include "AABB_box.h"
 #include <iostream>
 
+
 Node::Node(const AABB_box bbox){
-        parent = NULL;
-        left = NULL;
-        right = NULL;
+        parent = nullptr;
+        left = nullptr;
+        right = nullptr;
         box = bbox;
 }
 
-void treeTraverse(Node* root){
+Node::Node (ptr& left,ptr& right){
+
+
+    this->left =std::move(left);
+    this->right = std::move(right);
+    //left->parent = right->parent = this;
+
+}
+
+
+void treeTraverse(ptr& root){
+
     if(root->isLeaf()){
         std::cout<<"leaf "<<root->idx<<std::endl;
         return;
@@ -21,7 +33,8 @@ void treeTraverse(Node* root){
 
 }
 
-void setIndex(Node* root,int index){
+void setIndex(ptr& root,int index){
+
     if(root->isLeaf()){
         root->idx = index;
         return;
@@ -40,14 +53,5 @@ bool Node::isLeaf(){
     return false;
 }
 
-Node buildTree(Node* left,Node* right){
-
-    Node root(Combine(left->box,right->box));
-    root.left = left;
-    root.right = right;
-    left->parent = right->parent = &root;
-    return root;
-
-}
 
 

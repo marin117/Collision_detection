@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
-list( APPEND CMAKE_CXX_FLAGS "-std=c++0x -Wall -Wextra -pedantic")
+list( APPEND CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wextra -pedantic")
 
 file(GLOB SOURCES
     src/*.h

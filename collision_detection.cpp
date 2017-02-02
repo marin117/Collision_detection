@@ -7,6 +7,7 @@
 #include "src/AABB_box.h"
 #include "src/AABBTreeNode.h"
 
+typedef std::unique_ptr<Node> ptr;
 
 
 void changeSize ( int w, int h )
@@ -58,15 +59,18 @@ void drawScene()
     glPopMatrix();
     glutSwapBuffers();
 
+    ptr node1 = std::make_unique<Node>(boxes[0]);
+    ptr node2 = std::make_unique<Node>(boxes[1]);
+    ptr node3 = std::make_unique<Node>(boxes[2]);
+    ptr node4 = std::make_unique<Node>(boxes[3]);
 
 
-    Node node1(boxes[0]),node2(boxes[1]),node3(boxes[2]),node4(boxes[3]);
-    Node tree1 = buildTree(&node1,&node2),tree2 = buildTree(&node3,&node4);
-    Node tree = buildTree(&tree1,&tree2);
+    ptr tree1 = std::make_unique<Node>(node1,node2);
+    ptr tree2 = std::make_unique<Node>(node3,node4);
+    ptr tree = std::make_unique<Node>(tree1,tree2);
 
-    setIndex(&tree,0);
-    treeTraverse(&tree);
-
+    setIndex(tree,0);
+    treeTraverse(tree);
 }
 
 
