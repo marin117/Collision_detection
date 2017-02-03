@@ -17,7 +17,7 @@ public:
     ptr left;
     ptr right;
     Node *parent;
-    int idx;
+    int height;
 
     Node()=default;
     
@@ -25,11 +25,11 @@ public:
     Node(const AABB_box bbox);
     Node (ptr& left,ptr& right);
     bool isLeaf();
+    void balanceTree();
     
 };
- typedef std::unique_ptr<Node> ptr;
+typedef std::unique_ptr<Node> ptr;
 
-void setIndex(ptr& root,int index);
 void treeTraverse(ptr& root);
 
 

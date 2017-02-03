@@ -7,8 +7,6 @@
 #include "src/AABB_box.h"
 #include "src/AABBTreeNode.h"
 
-typedef std::unique_ptr<Node> ptr;
-
 
 void changeSize ( int w, int h )
 {
@@ -69,7 +67,6 @@ void drawScene()
     ptr tree2 = std::make_unique<Node>(node3,node4);
     ptr tree = std::make_unique<Node>(tree1,tree2);
 
-    setIndex(tree,0);
     treeTraverse(tree);
 }
 
