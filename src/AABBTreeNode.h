@@ -25,12 +25,13 @@ public:
     Node(const AABB_box bbox);
     Node (ptr& left,ptr& right);
     bool isLeaf();
-    void balanceTree();
+    void insertLeaf(ptr& leaf);
+    void treeTraverse();
+
     
 };
 typedef std::unique_ptr<Node> ptr;
 
-void treeTraverse(ptr& root);
 
 
 #endif

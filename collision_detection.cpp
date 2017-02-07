@@ -64,10 +64,16 @@ void drawScene()
 
 
     ptr tree1 = std::make_unique<Node>(node1,node2);
-    ptr tree2 = std::make_unique<Node>(node3,node4);
-    ptr tree = std::make_unique<Node>(tree1,tree2);
+    //ptr tree2 = std::make_unique<Node>(node3,node4);
+    //ptr tree = std::make_unique<Node>(tree1,tree2);
 
-    treeTraverse(tree);
+    tree1->treeTraverse();
+    std::cout<<"##################"<<std::endl;
+    tree1->insertLeaf(node3);
+    tree1->treeTraverse();
+    std::cout<<"##################"<<std::endl;
+
+
 }
 
 

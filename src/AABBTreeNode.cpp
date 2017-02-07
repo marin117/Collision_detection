@@ -23,16 +23,16 @@ Node::Node (ptr& left,ptr& right){
 }
 
 
-void treeTraverse(ptr& root){
+void Node::treeTraverse(){
 
-    if(root->isLeaf()){
+    if(this->isLeaf()){
         std::cout<<"leaf "<<std::endl;
         return;
     } 
     
     std::cout<<"node "<<std::endl;
-    treeTraverse(root->left);
-    treeTraverse(root->right);
+    this->left->treeTraverse();
+    this->right->treeTraverse();
 
 }
 
@@ -44,7 +44,48 @@ bool Node::isLeaf(){
     return false;
 }
 
-void Node::balanceTree(){
+void Node::insertLeaf(ptr& leaf){
+
+
+    auto temp = this;
+    int direction = 0;
+    ptr newNode;
+
+    while(!temp->isLeaf()){
+        //std::cout<<Combine(this->left->box,leaf->box).getSurface()<<"  "<<Combine(this->right->box,leaf->box).getSurface()<<std::endl;
+        if (Combine(this->left->box,leaf->box).getSurface()>Combine(this->right->box,leaf->box).getSurface()){
+            temp = temp->right.get();
+            direction = 1;
+        }
+        else {
+            temp = temp->left.get();
+            direction = 0;
+        }
+
+    }
+
+    if (!direction){
+        auto parent = temp->parent;
+        newNode = std::make_unique<Node>(temp->parent->left,leaf);
+        newNode->parent = parent;
+        parent->left = std::move(newNode);
+
+    }
+
+    else{
+        auto parent = temp->parent;
+        newNode = std::make_unique<Node>(temp->parent->right,leaf);
+        newNode->parent = parent;
+        parent->right = std::move(newNode);
+
+    }
+    temp = newNode.get();
+
+    while (temp!=nullptr){
+        temp->parent->box = Combine(temp->box,leaf->box);
+        temp = temp->parent;
+
+    }
 
 }
 

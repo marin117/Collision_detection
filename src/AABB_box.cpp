@@ -1,5 +1,6 @@
 #include "AABB_box.h"
 #include <cmath>
+#include <algorithm>
 
 
 AABB_box::AABB_box(const float x,const float y,const float z,const float r){
@@ -49,7 +50,14 @@ bool isOverlap(AABB_box a, AABB_box b){
 
 AABB_box Combine(AABB_box a, AABB_box b){
 
-    AABB_box combined(median(a.center,b.center),(a.r[0]+b.r[0]));
+    //typedef std::pow pow;
+
+    float dist = std::sqrt(pow(a.center.x-b.center.x,2)+
+                           pow(a.center.y-b.center.y,2)+
+                           pow(a.center.z-b.center.z,2))+
+                  std::abs(std::max(a.r[0],b.r[0]));
+
+    AABB_box combined(median(a.center,b.center),dist);
 
     return combined;
 }
