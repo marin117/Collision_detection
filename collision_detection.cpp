@@ -51,8 +51,8 @@ void drawScene()
 
     glPushMatrix();
     glTranslatef(0,0,0);
-    drawSphere(5,0.0,0.0,2.0,100,10);
-    drawSphere(2,0.0,0.0,2.0,100,10);
+    drawSphere(5,0.7,0.0,2.0,100,10);
+    drawSphere(2,0.7,0.0,2.0,100,10);
     drawSphere(3,2.0,0.0,2.0,100,10);
     drawSphere(3,-2.0,0.0,2.0,100,10);
     glPopMatrix();
@@ -62,17 +62,23 @@ void drawScene()
     ptr node2 = std::make_unique<Node>(boxes[1]);
     ptr node3 = std::make_unique<Node>(boxes[2]);
     ptr node4 = std::make_unique<Node>(boxes[3]);
+    ptr node5 = std::make_unique<Node>(boxes[4]);
 
 
     ptr tree1 = std::make_unique<Node>(node1,node2);
-    //ptr tree2 = std::make_unique<Node>(node3,node4);
+    ptr tree2 = std::make_unique<Node>(node3,node4);
     //ptr tree = std::make_unique<Node>(tree1,tree2);
 
+    /*tree->treeTraverse();
+    std::cout<<"##################"<<std::endl;
+    tree->insertLeaf(node5);
+    tree->treeTraverse();
+    std::cout<<"##################"<<std::endl;*/
+
+    tree1->mergeTree(tree2);
     tree1->treeTraverse();
     std::cout<<"##################"<<std::endl;
-    tree1->insertLeaf(node3);
-    tree1->treeTraverse();
-    std::cout<<"##################"<<std::endl;
+    //tree2->treeTraverse();
 
 
 

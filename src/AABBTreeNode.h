@@ -27,6 +27,7 @@ public:
     bool isLeaf();
     void insertLeaf(ptr& leaf);
     void treeTraverse();
+    void mergeTree(ptr& root);
 
 
 

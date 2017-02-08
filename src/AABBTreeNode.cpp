@@ -55,12 +55,14 @@ void Node::insertLeaf(ptr& leaf){
     AABB_box leaf_box = leaf->box;
 
     while(!temp->isLeaf()){
-        //std::cout<<Combine(this->left->box,leaf->box).getSurface()<<"  "<<Combine(this->right->box,leaf->box).getSurface()<<std::endl;
-        if (Combine(this->left->box,leaf->box).getSurface()>Combine(this->right->box,leaf->box).getSurface()){
+
+        std::cout<<Combine(this->left->box,leaf->box).getSurface()<<"  "<<Combine(this->right->box,leaf->box).getSurface()<<std::endl;
+        if (Combine(this->left->box,leaf->box).getSurface()>Combine(this->right->box,leaf->box).getSurface())
+        {
             temp = temp->right.get();
             direction = 1;
         }
-        else {
+        else {   
             temp = temp->left.get();
             direction = 0;
         }
@@ -91,6 +93,32 @@ void Node::insertLeaf(ptr& leaf){
         temp = temp->parent;
 
     }
+
+
+}
+
+void Node::mergeTree(ptr &root){
+
+    if (root == nullptr) return;
+
+    if (root->left->isLeaf()){
+
+        this->insertLeaf(root->left);
+        root->left = nullptr;
+
+
+    }
+    if (root->right->isLeaf()){
+
+        this->insertLeaf(root->right);
+        root->right = nullptr;
+
+    }
+
+
+    this->mergeTree(root->left);
+    this->mergeTree(root->right);
+
 
 }
 
