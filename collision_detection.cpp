@@ -42,6 +42,7 @@ void drawScene()
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glMatrixMode ( GL_MODELVIEW ); // idemo u perspektivu
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
     glLoadIdentity(); // resetiranje
 
     gluLookAt ( 0.0,0.0,50.0, // camera
@@ -74,6 +75,8 @@ void drawScene()
     std::cout<<"##################"<<std::endl;
 
 
+
+
 }
 
 
@@ -85,6 +88,7 @@ int main(int argc, char **argv){
 
     glutCreateWindow ( "AABB" );
     glutReshapeFunc ( changeSize );
+    glutPostRedisplay();
     glutDisplayFunc ( drawScene );
     //glutTimerFunc ( 3, update, 0 );
 

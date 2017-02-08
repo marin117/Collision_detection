@@ -15,6 +15,7 @@ Node::Node (ptr& left,ptr& right){
     this->box = Combine(left->box,right->box);
     left->parent = right->parent = this;
     this->height = std::max(left->height,right->height)+1;
+    this->parent = nullptr;
     this->left =std::move(left);
     this->right = std::move(right);
 
@@ -47,9 +48,11 @@ bool Node::isLeaf(){
 void Node::insertLeaf(ptr& leaf){
 
 
+
     auto temp = this;
     int direction = 0;
     ptr newNode;
+    AABB_box leaf_box = leaf->box;
 
     while(!temp->isLeaf()){
         //std::cout<<Combine(this->left->box,leaf->box).getSurface()<<"  "<<Combine(this->right->box,leaf->box).getSurface()<<std::endl;
@@ -61,32 +64,35 @@ void Node::insertLeaf(ptr& leaf){
             temp = temp->left.get();
             direction = 0;
         }
-
     }
 
+    auto tempParent = temp->parent;
+
     if (!direction){
-        auto parent = temp->parent;
         newNode = std::make_unique<Node>(temp->parent->left,leaf);
-        newNode->parent = parent;
-        parent->left = std::move(newNode);
+        newNode->parent = tempParent;
+        tempParent->left = std::move(newNode);
+
 
     }
 
     else{
-        auto parent = temp->parent;
+
         newNode = std::make_unique<Node>(temp->parent->right,leaf);
-        newNode->parent = parent;
-        parent->right = std::move(newNode);
+        newNode->parent = tempParent;
+        tempParent->right = std::move(newNode);
 
     }
-    temp = newNode.get();
+    temp = tempParent;
 
     while (temp!=nullptr){
-        temp->parent->box = Combine(temp->box,leaf->box);
+
+        temp->box = Combine(temp->box,leaf_box);
         temp = temp->parent;
 
     }
 
 }
+
 
 

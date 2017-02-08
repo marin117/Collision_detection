@@ -28,11 +28,12 @@ public:
     void insertLeaf(ptr& leaf);
     void treeTraverse();
 
+
+
     
 };
+
 typedef std::unique_ptr<Node> ptr;
-
-
 
 #endif
 
