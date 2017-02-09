@@ -49,48 +49,49 @@ void Node::insertLeaf(ptr& leaf){
 
 
 
-    auto temp = this;
+    auto curr = this;
     int direction = 0;
     ptr newNode;
     AABB_box leaf_box = leaf->box;
 
-    while(!temp->isLeaf()){
+    while(!curr->isLeaf()){
 
         std::cout<<Combine(this->left->box,leaf->box).getSurface()<<"  "<<Combine(this->right->box,leaf->box).getSurface()<<std::endl;
         if (Combine(this->left->box,leaf->box).getSurface()>Combine(this->right->box,leaf->box).getSurface())
         {
-            temp = temp->right.get();
+            curr = curr->right.get();
             direction = 1;
         }
         else {   
-            temp = temp->left.get();
+            curr = curr->left.get();
             direction = 0;
         }
     }
 
-    auto tempParent = temp->parent;
+    auto currParent = curr->parent;
 
     if (!direction){
-        newNode = std::make_unique<Node>(temp->parent->left,leaf);
-        newNode->parent = tempParent;
-        tempParent->left = std::move(newNode);
+        newNode = std::make_unique<Node>(curr->parent->left,leaf);
+        newNode->parent = currParent;
+        currParent->left = std::move(newNode);
 
 
     }
 
     else{
 
-        newNode = std::make_unique<Node>(temp->parent->right,leaf);
-        newNode->parent = tempParent;
-        tempParent->right = std::move(newNode);
+        newNode = std::make_unique<Node>(curr->parent->right,leaf);
+        newNode->parent = currParent;
+        currParent->right = std::move(newNode);
 
     }
-    temp = tempParent;
+    curr = currParent;
 
-    while (temp!=nullptr){
+    while (curr!=nullptr){
 
-        temp->box = Combine(temp->box,leaf_box);
-        temp = temp->parent;
+        curr->box = Combine(curr->box,leaf_box);
+        curr->height++;
+        curr = curr->parent;
 
     }
 
@@ -99,22 +100,10 @@ void Node::insertLeaf(ptr& leaf){
 
 void Node::mergeTree(ptr &root){
 
-    if (root == nullptr) return;
-
-    if (root->left->isLeaf()){
-
-        this->insertLeaf(root->left);
-        root->left = nullptr;
-
-
+    if (root->isLeaf()){
+        this->insertLeaf(root);
+        return;
     }
-    if (root->right->isLeaf()){
-
-        this->insertLeaf(root->right);
-        root->right = nullptr;
-
-    }
-
 
     this->mergeTree(root->left);
     this->mergeTree(root->right);

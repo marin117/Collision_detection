@@ -81,8 +81,6 @@ void drawScene()
     //tree2->treeTraverse();
 
 
-
-
 }
 
 

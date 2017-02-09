@@ -28,9 +28,6 @@ public:
     void insertLeaf(ptr& leaf);
     void treeTraverse();
     void mergeTree(ptr& root);
-
-
-
     
 };
 
