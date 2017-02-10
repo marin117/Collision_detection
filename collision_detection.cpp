@@ -34,7 +34,9 @@ void drawSphere(float x,float y,float z,float r,float slices,float stacks){
     glPopMatrix();
 }
 
-
+float i = 10.;
+float j = -3;
+bool collision;
 
 void drawScene()
 {
@@ -51,35 +53,33 @@ void drawScene()
 
     glPushMatrix();
     glTranslatef(0,0,0);
-    drawSphere(5,0.7,0.0,2.0,100,10);
-    drawSphere(2,0.7,0.0,2.0,100,10);
-    drawSphere(3,2.0,0.0,2.0,100,10);
-    drawSphere(3,-2.0,0.0,2.0,100,10);
+    drawSphere(i,0.7,0.0,2.0,100,10);
+    drawSphere(j,0.7,0.0,2.0,100,10);
     glPopMatrix();
     glutSwapBuffers();
 
     ptr node1 = std::make_unique<Node>(boxes[0]);
     ptr node2 = std::make_unique<Node>(boxes[1]);
-    ptr node3 = std::make_unique<Node>(boxes[2]);
-    ptr node4 = std::make_unique<Node>(boxes[3]);
-    ptr node5 = std::make_unique<Node>(boxes[4]);
+
+    ptr tree = std::make_unique<Node>(node1,node2);
+    boxes.clear();
+
+    collision = isOverlap(tree->left->box,tree->right->box);
 
 
-    ptr tree1 = std::make_unique<Node>(node1,node2);
-    ptr tree2 = std::make_unique<Node>(node3,node4);
-    //ptr tree = std::make_unique<Node>(tree1,tree2);
 
-    /*tree->treeTraverse();
-    std::cout<<"##################"<<std::endl;
-    tree->insertLeaf(node5);
-    tree->treeTraverse();
-    std::cout<<"##################"<<std::endl;*/
 
-    tree1->mergeTree(tree2);
-    tree1->treeTraverse();
-    std::cout<<"##################"<<std::endl;
-    //tree2->treeTraverse();
+}
 
+void update(int){
+
+    if (!collision){
+        i-=0.05;
+        j+=0.05;
+    }
+
+    glutPostRedisplay();
+    glutTimerFunc ( 3, update, 0 );
 
 }
 
@@ -92,9 +92,8 @@ int main(int argc, char **argv){
 
     glutCreateWindow ( "AABB" );
     glutReshapeFunc ( changeSize );
-    glutPostRedisplay();
     glutDisplayFunc ( drawScene );
-    //glutTimerFunc ( 3, update, 0 );
+    glutTimerFunc ( 3, update, 0 );
 
 
 

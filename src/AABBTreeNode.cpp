@@ -18,9 +18,6 @@ Node::Node (ptr& left,ptr& right){
     this->parent = nullptr;
     this->left =std::move(left);
     this->right = std::move(right);
-
-
-
 }
 
 
@@ -46,15 +43,12 @@ bool Node::isLeaf(){
 }
 
 void Node::insertLeaf(ptr& leaf){
-
-
-
     auto curr = this;
-    int direction = 0;
+    bool direction = 0;
     ptr newNode;
     AABB_box leaf_box = leaf->box;
 
-    while(!curr->isLeaf()){
+   while(!curr->isLeaf()){
 
         std::cout<<Combine(this->left->box,leaf->box).getSurface()<<"  "<<Combine(this->right->box,leaf->box).getSurface()<<std::endl;
         if (Combine(this->left->box,leaf->box).getSurface()>Combine(this->right->box,leaf->box).getSurface())
@@ -69,6 +63,7 @@ void Node::insertLeaf(ptr& leaf){
     }
 
     auto currParent = curr->parent;
+
 
     if (!direction){
         newNode = std::make_unique<Node>(curr->parent->left,leaf);
@@ -101,6 +96,7 @@ void Node::insertLeaf(ptr& leaf){
 void Node::mergeTree(ptr &root){
 
     if (root->isLeaf()){
+
         this->insertLeaf(root);
         return;
     }

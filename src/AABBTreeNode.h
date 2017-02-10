@@ -24,6 +24,7 @@ public:
 
     Node(const AABB_box bbox);
     Node (ptr& left,ptr& right);
+
     bool isLeaf();
     void insertLeaf(ptr& leaf);
     void treeTraverse();

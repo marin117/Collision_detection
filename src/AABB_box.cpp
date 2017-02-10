@@ -52,9 +52,9 @@ AABB_box Combine(AABB_box a, AABB_box b){
 
     //typedef std::pow pow;
 
-    float dist = std::sqrt(pow(a.center.x-b.center.x,2)+
+    float dist = (std::sqrt(pow(a.center.x-b.center.x,2)+
                            pow(a.center.y-b.center.y,2)+
-                           pow(a.center.z-b.center.z,2))+
+                           pow(a.center.z-b.center.z,2))/2)+
                   std::abs(std::max(a.r[0],b.r[0]));
 
     AABB_box combined(median(a.center,b.center),dist);
