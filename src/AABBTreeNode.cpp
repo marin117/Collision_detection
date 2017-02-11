@@ -1,5 +1,6 @@
 #include "AABBTreeNode.h"
 #include <iostream>
+#include <stack>
 
 
 Node::Node(const AABB_box bbox){
@@ -24,11 +25,16 @@ Node::Node (ptr& left,ptr& right){
 void Node::treeTraverse(){
 
     if(this->isLeaf()){
-        std::cout<<"leaf "<<std::endl;
+        std::cout<<"########leaf##########"<<std::endl;
+        std::cout<<this->box.center.x<<std::endl;
+        std::cout<<this->box.center.y<<std::endl;
+        std::cout<<this->box.center.z<<std::endl;
         return;
     } 
-    
-    std::cout<<"node "<<std::endl;
+    std::cout<<"#######node###########"<<std::endl;
+    std::cout<<this->box.center.x<<std::endl;
+    std::cout<<this->box.center.y<<std::endl;
+    std::cout<<this->box.center.z<<std::endl;
     this->left->treeTraverse();
     this->right->treeTraverse();
 
@@ -104,8 +110,89 @@ void Node::mergeTree(ptr &root){
     this->mergeTree(root->left);
     this->mergeTree(root->right);
 
-
 }
 
 
+void Node::buildTree(int i){
+    if(this->isLeaf()){
+        if (i==0){
+
+            float leftX = (this->box.center.x - this->box.r[0])/2;
+            float rightX =(this->box.center.x + this->box.r[0])/2;
+            ptr left = std::make_unique<Node>(AABB_box(leftX,this->box.center.y,this->box.center.z,this->box.r[0]/2));
+            ptr right =std::make_unique<Node>(AABB_box(rightX,this->box.center.y,this->box.center.z,this->box.r[0]/2));
+            left->parent = right->parent = this;
+            this->left = std::move(left);
+            this->right = std::move(right);
+
+        }
+
+
+        else if(i==1){
+
+            float leftY = (this->box.center.y - this->box.r[1])/2;
+            float rightY =(this->box.center.y + this->box.r[1])/2;
+            ptr left = std::make_unique<Node>(AABB_box(this->box.center.x,leftY,this->box.center.z,this->box.r[1]/2));
+            ptr right =std::make_unique<Node>(AABB_box(this->box.center.x,rightY,this->box.center.z,this->box.r[1]/2));
+            left->parent = right->parent = this;
+            this->left = std::move(left);
+            this->right = std::move(right);
+
+
+        }
+
+        else {
+
+            float leftZ = (this->box.center.z - this->box.r[2])/2;
+            float rightZ =(this->box.center.z + this->box.r[2])/2;
+            ptr left = std::make_unique<Node>(AABB_box(this->box.center.x,this->box.center.y,leftZ,this->box.r[0]/2));
+            ptr right =std::make_unique<Node>(AABB_box(this->box.center.x,this->box.center.y,rightZ,this->box.r[0]/2));
+            left->parent = right->parent = this;
+            this->left = std::move(left);
+            this->right = std::move(right);
+
+        }
+
+
+        return;
+
+
+    }
+
+
+    this->left->buildTree(i);
+    this->right->buildTree(i);
+
+}
+
+bool Node::treeOverlap(ptr &root){
+    return isOverlap(this->box,root->box);
+}
+
+bool Node::treeCollision(ptr &root){
+    if (!this->treeOverlap(root)) return false;
+
+
+    if(this->isLeaf() && root->isLeaf()){
+        std::cout<<this->box.center.y<<std::endl;
+        std::cout<<root->box.center.y<<std::endl;
+        return true;
+    }
+
+    else {
+
+        if (root->isLeaf()){
+            this->left->treeCollision(root);
+            this->right->treeCollision(root);
+
+        }
+
+        else{
+            this->treeCollision(root->left);
+            this->treeCollision(root->right);
+        }
+    }
+   return true;
+
+}
 

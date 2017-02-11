@@ -29,6 +29,9 @@ public:
     void insertLeaf(ptr& leaf);
     void treeTraverse();
     void mergeTree(ptr& root);
+    void buildTree(int i);
+    bool treeOverlap(ptr& root);
+    bool treeCollision(ptr& root);
     
 };
 

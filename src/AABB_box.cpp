@@ -50,7 +50,7 @@ bool isOverlap(AABB_box a, AABB_box b){
 
 AABB_box Combine(AABB_box a, AABB_box b){
 
-    //typedef std::pow pow;
+    
 
     float dist = (std::sqrt(pow(a.center.x-b.center.x,2)+
                            pow(a.center.y-b.center.y,2)+

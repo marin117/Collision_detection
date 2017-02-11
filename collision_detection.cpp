@@ -34,8 +34,8 @@ void drawSphere(float x,float y,float z,float r,float slices,float stacks){
     glPopMatrix();
 }
 
-float i = 10.;
-float j = -3;
+float i = 5.;
+float j = -5.;
 bool collision;
 
 void drawScene()
@@ -53,20 +53,23 @@ void drawScene()
 
     glPushMatrix();
     glTranslatef(0,0,0);
-    drawSphere(i,0.7,0.0,2.0,100,10);
-    drawSphere(j,0.7,0.0,2.0,100,10);
+    drawSphere(i,0.0,0.0,2.0,100,10);
+    drawSphere(j,1.0,0.0,2.0,100,10);
     glPopMatrix();
     glutSwapBuffers();
 
     ptr node1 = std::make_unique<Node>(boxes[0]);
     ptr node2 = std::make_unique<Node>(boxes[1]);
 
-    ptr tree = std::make_unique<Node>(node1,node2);
+    for (int i=0;i<3;i++) {
+        node1->buildTree(i);
+        node2->buildTree(i);
+
+    }
+
     boxes.clear();
 
-    collision = isOverlap(tree->left->box,tree->right->box);
-
-
+    collision = node1->treeCollision(node2);
 
 
 }
@@ -76,8 +79,10 @@ void update(int){
     if (!collision){
         i-=0.05;
         j+=0.05;
+
     }
 
+    else exit(0);
     glutPostRedisplay();
     glutTimerFunc ( 3, update, 0 );
 
