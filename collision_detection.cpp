@@ -6,6 +6,8 @@
 #include "src/point.h"
 #include "src/AABB_box.h"
 #include "src/AABBTreeNode.h"
+#include "src/Actor.h"
+
 
 
 void changeSize ( int w, int h )
@@ -56,22 +58,14 @@ void drawScene()
 
     glPushMatrix();
     glTranslatef(0,0,0);
-    drawSphere(i,0.0,0.0,2.0,100,10);
-    drawSphere(j,1.0,0.0,2.0,100,10);
+    Actor kugla(0,0,0,2,i,0);
+    Actor kugla2(5,0,0,2,j,0);
     glPopMatrix();
     glutSwapBuffers();
 
-    ptr node1 = std::make_unique<Node>(boxes[0]);
-    ptr node2 = std::make_unique<Node>(boxes[1]);
-
     boxes.clear();
 
-
-    collision = node1->treeOverlap(node2);
-
-
-
-
+    collision = kugla.root->treeOverlap(kugla2.root);
 }
 
 
