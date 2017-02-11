@@ -30,7 +30,7 @@ void Node::treeTraverse(){
         std::cout<<this->box.center.y<<std::endl;
         std::cout<<this->box.center.z<<std::endl;
         return;
-    } 
+    }
     std::cout<<"#######node###########"<<std::endl;
     std::cout<<this->box.center.x<<std::endl;
     std::cout<<this->box.center.y<<std::endl;
@@ -62,7 +62,7 @@ void Node::insertLeaf(ptr& leaf){
             curr = curr->right.get();
             direction = 1;
         }
-        else {   
+        else {
             curr = curr->left.get();
             direction = 0;
         }
@@ -153,46 +153,49 @@ void Node::buildTree(int i){
 
         }
 
-
         return;
-
-
     }
-
-
     this->left->buildTree(i);
     this->right->buildTree(i);
 
 }
 
 bool Node::treeOverlap(ptr &root){
+
     return isOverlap(this->box,root->box);
 }
 
 bool Node::treeCollision(ptr &root){
+
+
+    auto curr = this;
+    Node* currRoot = root.get();
+
     if (!this->treeOverlap(root)) return false;
 
 
-    if(this->isLeaf() && root->isLeaf()){
-        std::cout<<this->box.center.y<<std::endl;
-        std::cout<<root->box.center.y<<std::endl;
-        return true;
-    }
+    while(!curr->isLeaf()){
 
-    else {
-
-        if (root->isLeaf()){
-            this->left->treeCollision(root);
-            this->right->treeCollision(root);
+        if(curr->left->treeOverlap(root)) {
+            curr = curr->left.get();
 
         }
+        else {
+            curr = curr->right.get();
 
-        else{
-            this->treeCollision(root->left);
-            this->treeCollision(root->right);
         }
     }
-   return true;
+
+    while (!currRoot->isLeaf()){
+
+        if (curr->treeOverlap(currRoot->left)) currRoot = currRoot->left.get();
+        else currRoot = currRoot->right.get();
+
+    }
+
+    //resolve collision
+
+    return true;
 
 }
 

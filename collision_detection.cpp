@@ -34,9 +34,12 @@ void drawSphere(float x,float y,float z,float r,float slices,float stacks){
     glPopMatrix();
 }
 
+
+
 float i = 5.;
 float j = -5.;
 bool collision;
+
 
 void drawScene()
 {
@@ -61,30 +64,24 @@ void drawScene()
     ptr node1 = std::make_unique<Node>(boxes[0]);
     ptr node2 = std::make_unique<Node>(boxes[1]);
 
-    for (int i=0;i<3;i++) {
-        node1->buildTree(i);
-        node2->buildTree(i);
-
-    }
-
     boxes.clear();
 
-    collision = node1->treeCollision(node2);
+
+    collision = node1->treeOverlap(node2);
+
+
 
 
 }
 
+
 void update(int){
+    i-=0.05;
+    j+=0.05;
 
-    if (!collision){
-        i-=0.05;
-        j+=0.05;
-
-    }
-
-    else exit(0);
+    if (collision) exit(0);
     glutPostRedisplay();
-    glutTimerFunc ( 3, update, 0 );
+    glutTimerFunc (3,update, 0 );
 
 }
 

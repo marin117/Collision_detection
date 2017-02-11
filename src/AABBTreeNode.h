@@ -31,11 +31,13 @@ public:
     void mergeTree(ptr& root);
     void buildTree(int i);
     bool treeOverlap(ptr& root);
-    bool treeCollision(ptr& root);
+    bool treeCollision (ptr& root);
+
     
 };
 
 typedef std::unique_ptr<Node> ptr;
+
 
 #endif
 
