@@ -9,16 +9,15 @@ class Actor{
 public:
     Point center;
     float r;
-    float speed;
     float k;
     ptr root;
 
     Actor() = default;
 
-    Actor(Point center,float r,float speed,float k);
-    Actor(float x, float y, float z,float r,float speed,float k);
-    bool isCollision(Actor collider);
-    void resolveCollision(Actor collider);
+    Actor(Point center,float r,float k);
+    Actor(float x, float y, float z,float r,float k);
+    bool isCollision(Actor& collider);
+    void resolveCollision(float k);
 
 
 };

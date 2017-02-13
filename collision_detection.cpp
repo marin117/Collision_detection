@@ -8,7 +8,7 @@
 #include "src/AABBTreeNode.h"
 #include "src/Actor.h"
 
-
+typedef unsigned int uint;
 
 void changeSize ( int w, int h )
 {
@@ -24,27 +24,22 @@ void changeSize ( int w, int h )
     glViewport ( 0, 0, w, h );
     gluPerspective ( 45,ratio,1,1000 ); // view angle u y, aspect, near, far
 }
-std::vector<AABB_box>boxes;
-
-void drawSphere(float x,float y,float z,float r,float slices,float stacks){
-
-
-    glPushMatrix();
-    glTranslatef(x,y,z);
-    boxes.emplace_back(AABB_box(x,y,z,r));
-    glutSolidSphere(r,slices,stacks);
-    glPopMatrix();
-}
 
 
 
-float i = 5.;
-float j = -5.;
 bool collision;
+std::vector <float> x;
+std::vector<float> y;
+std::vector <float> speeds;
+std::vector <float> k;
+std::vector <Actor> actors;
+
+
 
 
 void drawScene()
 {
+
 
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glMatrixMode ( GL_MODELVIEW ); // idemo u perspektivu
@@ -58,22 +53,38 @@ void drawScene()
 
     glPushMatrix();
     glTranslatef(0,0,0);
-    Actor kugla(0,0,0,2,i,0);
-    Actor kugla2(5,0,0,2,j,0);
+    for (uint i = 0;i<x.size();i++){
+        actors.emplace_back(Actor(x[i],y[i],0,2,k[i]));
+    }
     glPopMatrix();
     glutSwapBuffers();
 
-    boxes.clear();
-
-    collision = kugla.root->treeOverlap(kugla2.root);
 }
 
-
 void update(int){
-    i-=0.05;
-    j+=0.05;
 
-    if (collision) exit(0);
+    float calc;
+
+    for(unsigned int i =0; i<actors.size();i++){
+        for (unsigned int j=i+1;j<actors.size();j++){
+            collision = actors[i].isCollision(actors[j]);
+            if (collision){
+                calc = (actors[i].center.y - actors[j].center.y)/(actors[i].center.x - actors[j].center.x);
+                k[i]=k[j] = calc;
+                speeds[i]=-speeds[i];
+                speeds[j]=-speeds[j];
+
+            }
+        }
+    }
+
+
+    for (uint i = 0;i<x.size();i++){
+        x[i]+=speeds[i];
+    }
+
+
+    actors.clear();
     glutPostRedisplay();
     glutTimerFunc (3,update, 0 );
 
@@ -81,6 +92,20 @@ void update(int){
 
 
 int main(int argc, char **argv){
+
+    x.emplace_back(0);
+    x.emplace_back(10);
+
+    y.emplace_back(0.0);
+    y.emplace_back(3.0);
+
+    k.emplace_back(0.0);
+    k.emplace_back(-1.0);
+
+    speeds.emplace_back(0.05);
+    speeds.emplace_back(-0.05);
+
+
 
     glutInit ( &argc, argv );
     glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
@@ -90,8 +115,6 @@ int main(int argc, char **argv){
     glutReshapeFunc ( changeSize );
     glutDisplayFunc ( drawScene );
     glutTimerFunc ( 3, update, 0 );
-
-
 
     glutMainLoop();
 
