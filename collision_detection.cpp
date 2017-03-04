@@ -91,11 +91,11 @@ void update(int){
 
                 // ovdje treba postojat formula za količinu gibanja
 
-                speedX[i] = speed2N*x_un + speed2T*x_ut;
-                speedY[i] = speed2N*y_un + speed2T*y_ut;
+                speedX[i] = speed2N * x_un + speed1T*x_ut;
+                speedY[i] = speed2N*y_un + speed1T*y_ut;
 
-                speedX[j] = speed1N*x_un + speed1T*x_ut;
-                speedY[j] = speed1N*y_un + speed1T*y_ut;
+                speedX[j] = speed1N * x_un + speed2T * x_ut;
+                speedY[j] = speed1N * y_un + speed2T * y_ut;
 
             }
         }
@@ -122,11 +122,11 @@ int main(int argc, char **argv){
     x.emplace_back(-10);
     x.emplace_back(10);
 
-    y.emplace_back(-10.0);
     y.emplace_back(5.0);
+    y.emplace_back(0.0);
 
-    speedY.emplace_back(3);
     speedY.emplace_back(-3);
+    speedY.emplace_back(0);
 
     speedX.emplace_back(5);
     speedX.emplace_back(-5);
