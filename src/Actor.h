@@ -14,8 +14,8 @@ public:
 
     Actor() = default;
 
-    Actor(Point center,float r,float k);
-    Actor(float x, float y, float z,float r,float k);
+    Actor(Point center,float r);
+    Actor(float x, float y, float z,float r);
     bool isCollision(Actor& collider);
     void resolveCollision(float k);
 

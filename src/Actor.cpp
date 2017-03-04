@@ -1,11 +1,11 @@
 #include "Actor.h"
 
 
-Actor::Actor(Point center,float r,float k){
+Actor::Actor(Point center,float r){
 
-    this->k = k;
+
     this->center.x =  center.x;
-    this->center.y = this->k * this->center.x + center.y;
+    this->center.y = center.y;
     this->center.z = center.z;
     glPushMatrix();
     this->root = std::make_unique<Node>(AABB_box(this->center,r));
@@ -15,11 +15,11 @@ Actor::Actor(Point center,float r,float k){
 
 }
 
-Actor::Actor(float x, float y, float z, float r,  float k){
+Actor::Actor(float x, float y, float z, float r){
 
-    this->k = k;
-    this->center.x =  x;
-    this->center.y = this->k * this->center.x + y;
+
+    this->center.x = x;
+    this->center.y = y;
     this->center.z = z;
     glPushMatrix();
     glTranslatef(this->center.x,this->center.y,this->center.z);
