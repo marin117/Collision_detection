@@ -1,11 +1,6 @@
 #include <iostream>
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include <vector>
-#include <cmath>
-#include "src/point.h"
-#include "src/AABB_box.h"
-#include "src/AABBTreeNode.h"
 #include "src/Actor.h"
 
 typedef unsigned int uint;
@@ -28,17 +23,11 @@ void changeSize ( int w, int h )
 
 
 bool collision;
-std::vector <float> x;
-std::vector<float> y;
-std::vector <float> speedX, speedY;
+
 std::vector <Actor> actors;
 
 
-float ot, nt,dt;
-
-void drawScene()
-{
-
+void init(){
 
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glMatrixMode ( GL_MODELVIEW ); // idemo u perspektivu
@@ -50,14 +39,23 @@ void drawScene()
                 0.0,0.0,-1.0, // where
                 0.0f,1.0f,0.0f ); // up vector
 
+}
+
+
+float ot, nt,dt;
+
+void drawScene()
+{
+    init();
+
     glPushMatrix();
     glTranslatef(0,0,0);
-    for (uint i = 0;i<x.size();i++){
-        actors.emplace_back(Actor(x[i],y[i],0,2));
+    for (uint i = 0;i<actors.size();i++){
+        actors[i].drawSphere();
     }
 
-
     glPopMatrix();
+
     glutSwapBuffers();
 
 }
@@ -68,70 +66,69 @@ void update(int){
     dt = nt - ot;
     ot = nt;
 
-    for(unsigned int i =0; i<1/*actors.size()*/;i++){
+    for(unsigned int i =0; i<actors.size();i++){
         for (unsigned int j=i+1;j<actors.size();j++){
+
             collision = actors[i].isCollision(actors[j]);
 
             if (collision){
-                float x_n = actors[i].center.x - actors[j].center.x;
-                float y_n = actors[i].center.y - actors[j].center.y;
-                float mag = std::sqrt(std::pow(x_n,2) + std::pow(y_n,2));
 
-                float x_un = x_n/mag;
-                float y_un = y_n/mag;
+                Vector3D v_n(actors[i].center - actors[j].center);
+                Vector3D v_un = v_n.normal();
+                Vector3D v_ut(-v_un.y(),v_un.x(),v_un.z());
 
-                float x_ut = -y_un;
-                float y_ut = x_un;
+                float v1n = v_un * actors[i].velocity;
+                float v1t = v_ut * actors[i].velocity;
 
-                float speed1N = x_un * speedX[i] + y_un * speedY[i];
-                float speed1T = x_ut * speedX[i] + y_ut * speedY[i];
+                float v2n = v_un * actors[j].velocity;
+                float v2t = v_ut * actors[j].velocity;
 
-                float speed2N = x_un * speedX[j] + y_un * speedY[j];
-                float speed2T = x_ut * speedX[j] + y_ut * speedY[j];
+                //količina gibanja formula
 
-                // ovdje treba postojat formula za količinu gibanja
+                actors[i].velocity.setX(v2n * v_un.x() + v1t * v_ut.x());
+                actors[i].velocity.setY(v2n * v_un.y() + v1t * v_ut.y());
 
-                speedX[i] = speed2N * x_un + speed1T*x_ut;
-                speedY[i] = speed2N*y_un + speed1T*y_ut;
-
-                speedX[j] = speed1N * x_un + speed2T * x_ut;
-                speedY[j] = speed1N * y_un + speed2T * y_ut;
+                actors[j].velocity.setX(v1n * v_un.x() + v2t * v_ut.x());
+                actors[j].velocity.setY(v1n * v_un.y() + v2t * v_ut.y());
 
             }
         }
     }
 
-    for (uint i = 0;i<x.size();i++){
-
-        x[i]+=speedX[i]*dt;
-        y[i]+=speedY[i]*dt;
-
+    for (uint i=0; i<actors.size();i++){
+        actors[i].updatePosition(dt);
     }
 
-
-    actors.clear();
-
     glutPostRedisplay();
-    glutTimerFunc (16,update, 0 );
+    glutTimerFunc (25,update, 0 );
 
 }
 
 
 int main(int argc, char **argv){
 
-    x.emplace_back(-10);
-    x.emplace_back(10);
+    std::vector <float> x;
+    std::vector<float> y;
+    std::vector <float> speedX, speedY;
 
-    y.emplace_back(5.0);
+
+
+    x.emplace_back(10);
+    x.emplace_back(-10);
+
+    y.emplace_back(2.0);
     y.emplace_back(0.0);
 
-    speedY.emplace_back(-3);
+    speedY.emplace_back(0);
     speedY.emplace_back(0);
 
-    speedX.emplace_back(5);
     speedX.emplace_back(-5);
+    speedX.emplace_back(5);
 
 
+    for (uint i = 0;i<x.size();i++){
+        actors.emplace_back(Actor(x[i],y[i],0,2,speedX[i],speedY[i],0.0));
+    }
 
     glutInit ( &argc, argv );
     glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );

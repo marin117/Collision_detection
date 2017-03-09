@@ -14,6 +14,12 @@ Point::Point(const float x, const float y, const float z){
 
 }
 
+Point operator-(const Point& lhs, const Point& rhs){
+
+    return Point(lhs.x-rhs.x,lhs.y-rhs.y,lhs.z-rhs.z);
+
+}
+
 
 Point median(Point a, Point b){
     Point center;

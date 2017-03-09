@@ -2,7 +2,6 @@
 #define _AABBTreeNode_h
 
 
-#include "point.h"
 #include "AABB_box.h"
 #include <vector>
 #include <memory>

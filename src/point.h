@@ -8,9 +8,8 @@ public:
     float x,y,z;    
 
     Point();
-
     Point(const float x, const float y, const float z);
-
+    friend Point operator-(const Point& lhs, const Point& rhs);
 
 };
 
