@@ -26,15 +26,15 @@ void Node::treeTraverse(){
 
     if(this->isLeaf()){
         std::cout<<"########leaf##########"<<std::endl;
-        std::cout<<this->box.center.x<<std::endl;
-        std::cout<<this->box.center.y<<std::endl;
-        std::cout<<this->box.center.z<<std::endl;
+        std::cout<<this->box.x()<<std::endl;
+        std::cout<<this->box.y()<<std::endl;
+        std::cout<<this->box.z()<<std::endl;
         return;
     }
     std::cout<<"#######node###########"<<std::endl;
-    std::cout<<this->box.center.x<<std::endl;
-    std::cout<<this->box.center.y<<std::endl;
-    std::cout<<this->box.center.z<<std::endl;
+    std::cout<<this->box.x()<<std::endl;
+    std::cout<<this->box.y()<<std::endl;
+    std::cout<<this->box.z()<<std::endl;
     this->left->treeTraverse();
     this->right->treeTraverse();
 
@@ -117,10 +117,10 @@ void Node::buildTree(int i){
     if(this->isLeaf()){
         if (i==0){
 
-            float leftX = (this->box.center.x - this->box.r[0])/2;
-            float rightX =(this->box.center.x + this->box.r[0])/2;
-            ptr left = std::make_unique<Node>(AABB_box(leftX,this->box.center.y,this->box.center.z,this->box.r[0]/2));
-            ptr right =std::make_unique<Node>(AABB_box(rightX,this->box.center.y,this->box.center.z,this->box.r[0]/2));
+            float leftX = (this->box.x() - this->box.rx())/2;
+            float rightX =(this->box.x() + this->box.rx())/2;
+            ptr left = std::make_unique<Node>(AABB_box(leftX,this->box.y(),this->box.z(),this->box.rx()/2));
+            ptr right =std::make_unique<Node>(AABB_box(rightX,this->box.y(),this->box.z(),this->box.rx()/2));
             left->parent = right->parent = this;
             this->left = std::move(left);
             this->right = std::move(right);
@@ -130,10 +130,10 @@ void Node::buildTree(int i){
 
         else if(i==1){
 
-            float leftY = (this->box.center.y - this->box.r[1])/2;
-            float rightY =(this->box.center.y + this->box.r[1])/2;
-            ptr left = std::make_unique<Node>(AABB_box(this->box.center.x,leftY,this->box.center.z,this->box.r[1]/2));
-            ptr right =std::make_unique<Node>(AABB_box(this->box.center.x,rightY,this->box.center.z,this->box.r[1]/2));
+            float leftY = (this->box.y() - this->box.ry())/2;
+            float rightY =(this->box.y() + this->box.ry())/2;
+            ptr left = std::make_unique<Node>(AABB_box(this->box.x(),leftY,this->box.z(),this->box.ry()/2));
+            ptr right =std::make_unique<Node>(AABB_box(this->box.x(),rightY,this->box.z(),this->box.ry()/2));
             left->parent = right->parent = this;
             this->left = std::move(left);
             this->right = std::move(right);
@@ -143,10 +143,10 @@ void Node::buildTree(int i){
 
         else {
 
-            float leftZ = (this->box.center.z - this->box.r[2])/2;
-            float rightZ =(this->box.center.z + this->box.r[2])/2;
-            ptr left = std::make_unique<Node>(AABB_box(this->box.center.x,this->box.center.y,leftZ,this->box.r[0]/2));
-            ptr right =std::make_unique<Node>(AABB_box(this->box.center.x,this->box.center.y,rightZ,this->box.r[0]/2));
+            float leftZ = (this->box.z() - this->box.rz())/2;
+            float rightZ =(this->box.z() + this->box.rz())/2;
+            ptr left = std::make_unique<Node>(AABB_box(this->box.x(),this->box.y(),leftZ,this->box.rx()/2));
+            ptr right =std::make_unique<Node>(AABB_box(this->box.x(),this->box.y(),rightZ,this->box.rx()/2));
             left->parent = right->parent = this;
             this->left = std::move(left);
             this->right = std::move(right);

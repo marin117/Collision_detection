@@ -2,8 +2,7 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include "src/Actor.h"
-
-typedef unsigned int uint;
+#include "src/Wall.h"
 
 void changeSize ( int w, int h )
 {
@@ -25,6 +24,7 @@ void changeSize ( int w, int h )
 bool collision;
 
 std::vector <Actor> actors;
+std::vector <Wall> walls;
 
 
 void init(){
@@ -55,7 +55,6 @@ void drawScene()
     }
 
     glPopMatrix();
-
     glutSwapBuffers();
 
 }
@@ -66,6 +65,18 @@ void update(int){
     dt = nt - ot;
     ot = nt;
 
+
+    for(unsigned int i =0; i<actors.size();i++){
+        for (unsigned int k = 0; k< walls.size();k++){
+            if (actors[i].root->treeOverlap(walls[k].root)){
+
+                float dot =actors[i].vecDir * walls[k].vecDir;
+                float doubleDot = dot*2;
+                Vector3D newNorm = walls[k].vecDir * doubleDot;
+                actors[i].vecDir = actors[i].vecDir - newNorm;
+            }
+        }
+    }
     for(unsigned int i =0; i<actors.size();i++){
         for (unsigned int j=i+1;j<actors.size();j++){
 
@@ -77,19 +88,19 @@ void update(int){
                 Vector3D v_un = v_n.normal();
                 Vector3D v_ut(-v_un.y(),v_un.x(),v_un.z());
 
-                float v1n = v_un * actors[i].velocity;
-                float v1t = v_ut * actors[i].velocity;
+                float v1n = v_un * actors[i].vecDir;
+                float v1t = v_ut * actors[i].vecDir;
 
-                float v2n = v_un * actors[j].velocity;
-                float v2t = v_ut * actors[j].velocity;
+                float v2n = v_un * actors[j].vecDir;
+                float v2t = v_ut * actors[j].vecDir;
 
                 //količina gibanja formula
 
-                actors[i].velocity.setX(v2n * v_un.x() + v1t * v_ut.x());
-                actors[i].velocity.setY(v2n * v_un.y() + v1t * v_ut.y());
+                actors[i].vecDir.setX(v2n * v_un.x() + v1t * v_ut.x());
+                actors[i].vecDir.setY(v2n * v_un.y() + v1t * v_ut.y());
 
-                actors[j].velocity.setX(v1n * v_un.x() + v2t * v_ut.x());
-                actors[j].velocity.setY(v1n * v_un.y() + v2t * v_ut.y());
+                actors[j].vecDir.setX(v1n * v_un.x() + v2t * v_ut.x());
+                actors[j].vecDir.setY(v1n * v_un.y() + v2t * v_ut.y());
 
             }
         }
@@ -111,28 +122,34 @@ int main(int argc, char **argv){
     std::vector<float> y;
     std::vector <float> speedX, speedY;
 
-
-
-    x.emplace_back(10);
+    x.emplace_back(5);
+    x.emplace_back(-5);
     x.emplace_back(-10);
 
-    y.emplace_back(2.0);
-    y.emplace_back(0.0);
+    y.emplace_back(10.0);
+    y.emplace_back(-10.0);
+    y.emplace_back(-4);
 
-    speedY.emplace_back(0);
-    speedY.emplace_back(0);
+    speedY.emplace_back(-10);
+    speedY.emplace_back(10);
+    speedY.emplace_back(12);
+    speedX.emplace_back(0);
+    speedX.emplace_back(7);
+    speedX.emplace_back(3);
 
-    speedX.emplace_back(-5);
-    speedX.emplace_back(5);
 
+    walls.emplace_back(Wall(0,20,0,20,0,0,0,-1,0));
+    walls.emplace_back(Wall(0,-20,0,20,0,0,0,1,0));
+    walls.emplace_back(Wall(20,0,0,0,20,0,-1,0,0));
+    walls.emplace_back(Wall(-20,0,0,0,20,0,1,0,0));
 
     for (uint i = 0;i<x.size();i++){
-        actors.emplace_back(Actor(x[i],y[i],0,2,speedX[i],speedY[i],0.0));
+        actors.emplace_back(Actor(x[i],y[i],0,1,speedX[i],speedY[i],0.0));
     }
 
     glutInit ( &argc, argv );
     glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
-    glutInitWindowSize ( 1000, 1000 );
+    glutInitWindowSize ( 1024, 1080);
 
     glutCreateWindow ( "AABB" );
     glutReshapeFunc ( changeSize );

@@ -2,29 +2,30 @@
 #include <iostream>
 
 
-Actor::Actor(Point center,float r,float velX,float velY,float velZ){
+Actor::Actor(const Point center,const float r,const float vecX,const float vecY,const float vecZ){
 
 
     this->center.x =  center.x;
     this->center.y = center.y;
     this->center.z = center.z;
     this->r = r;
-    this->velocity = Vector3D (velX,velY,velZ);
+    this->vecDir = Vector3D (vecX,vecY,vecZ);
     this->root = std::make_unique<Node>(AABB_box(this->center,this->r));
 
 }
 
-Actor::Actor(float x, float y, float z, float r,float velX,float velY,float velZ){
+Actor::Actor(const float x,const float y,const float z,const float r,const float vecX,const float vecY,const float vecZ){
 
 
     this->center.x = x;
     this->center.y = y;
     this->center.z = z;
     this->r = r;
-    this->velocity = Vector3D (velX,velY,velZ);
+    this->vecDir = Vector3D (vecX,vecY,vecZ);
     this->root = std::make_unique<Node>(AABB_box(this->center,this->r));
 
 }
+
 
 bool Actor::isCollision(Actor& collider){
 
@@ -42,9 +43,9 @@ void Actor::drawSphere(){
 
 }
 void Actor::updatePosition(float dt){
-    this->center.x += this->velocity.x() * dt;
-    this->center.y += this->velocity.y() * dt;
-    this->center.z += this->velocity.z() * dt;
+    this->center.x += this->vecDir.x() * dt;
+    this->center.y += this->vecDir.y() * dt;
+    this->center.z += this->vecDir.z() * dt;
 }
 
 

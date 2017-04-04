@@ -15,10 +15,11 @@ class Vector3D {
         Vector3D(float x,float y, float z);
         Vector3D (Point point);
 
-        friend float operator*(const Vector3D& lhs,const Vector3D& rhs);
-        Vector3D operator*(const float& scalar);
+        Vector3D operator*(float const& scalar);
+        Vector3D operator-(Vector3D& rhs);
         Vector3D normal();
-         float x() const{
+
+        float x() const{
             return vec[0];
         }
     
@@ -48,5 +49,11 @@ class Vector3D {
 
 };
 
+
+inline float operator*(const Vector3D& lhs,const Vector3D& rhs){
+
+    return lhs.x()*rhs.x()+lhs.y()*rhs.y()+lhs.z()*rhs.z();
+
+}
 
 #endif

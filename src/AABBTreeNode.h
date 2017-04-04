@@ -12,11 +12,6 @@ class Node{
     typedef std::unique_ptr<Node> ptr;
 public:
 
-    AABB_box box;
-    ptr left;
-    ptr right;
-    Node *parent;
-    int height;
 
     Node()=default;
     
@@ -32,7 +27,13 @@ public:
     bool treeOverlap(ptr& root);
     bool treeCollision (ptr& root);
 
-    
+private:
+    AABB_box box;
+    ptr left;
+    ptr right;
+    Node *parent;
+    int height;
+
 };
 
 typedef std::unique_ptr<Node> ptr;

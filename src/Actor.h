@@ -10,18 +10,16 @@ class Actor{
 public:
     Point center;
     float r;
-    float k;
     ptr root;
-    Vector3D velocity;
+    Vector3D vecDir;
 
     Actor() = default;
 
-    Actor(Point center,float r,float velX,float velY,float velZ);
-    Actor(float x, float y, float z,float r,float velX,float velY,float velZ);
+    Actor(const Point center,const float r,const float vecX,const float vecY,const float vecZ);
+    Actor(const float x,const float y,const float z,const float r,const float vecX,const float vecY,const float vecZ);
     bool isCollision(Actor& collider);
-    void resolveCollision(float k);
     void drawSphere();
-    void updatePosition(float dt);
+    void updatePosition(const float dt);
 
 
 };
