@@ -1,8 +1,11 @@
 #include <iostream>
 #include <GL/gl.h>
 #include <GL/glut.h>
-#include "src/Actor.h"
+#include "src/Ball.h"
 #include "src/Wall.h"
+#include <memory>
+#include <time.h>
+
 
 void changeSize ( int w, int h )
 {
@@ -23,7 +26,7 @@ void changeSize ( int w, int h )
 
 bool collision;
 
-std::vector <Actor> actors;
+std::vector <Ball> actors;
 std::vector <Wall> walls;
 
 
@@ -111,40 +114,28 @@ void update(int){
     }
 
     glutPostRedisplay();
-    glutTimerFunc (25,update, 0 );
+    glutTimerFunc (16,update, 0 );
 
 }
 
 
 int main(int argc, char **argv){
 
-    std::vector <float> x;
-    std::vector<float> y;
-    std::vector <float> speedX, speedY;
-
-    x.emplace_back(5);
-    x.emplace_back(-5);
-    x.emplace_back(-10);
-
-    y.emplace_back(10.0);
-    y.emplace_back(-10.0);
-    y.emplace_back(-4);
-
-    speedY.emplace_back(-10);
-    speedY.emplace_back(10);
-    speedY.emplace_back(12);
-    speedX.emplace_back(0);
-    speedX.emplace_back(7);
-    speedX.emplace_back(3);
-
+    std::srand (time(NULL));
 
     walls.emplace_back(Wall(0,20,0,20,0,0,0,-1,0));
     walls.emplace_back(Wall(0,-20,0,20,0,0,0,1,0));
     walls.emplace_back(Wall(20,0,0,0,20,0,-1,0,0));
     walls.emplace_back(Wall(-20,0,0,0,20,0,1,0,0));
 
-    for (uint i = 0;i<x.size();i++){
-        actors.emplace_back(Actor(x[i],y[i],0,1,speedX[i],speedY[i],0.0));
+    int ballNum = std::rand()%40 + 2;
+
+    for (uint i = 0;i<ballNum;i++){
+        float x = std::rand()%40 - 20;
+        float y = std::rand()%40 - 20;
+        float speedX = std::rand()%10+1;
+        float speedY = std::rand()%10+1;
+        actors.emplace_back(Ball(x,y,0,0.2,speedX,speedY,0.0));
     }
 
     glutInit ( &argc, argv );
