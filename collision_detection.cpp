@@ -2,8 +2,8 @@
 #include <GL/glut.h>
 #include <time.h>
 #include <iostream>
-#include <memory>
 #include "src/Ball.h"
+#include "src/KDTree.h"
 #include "src/Wall.h"
 
 void changeSize(int w, int h) {
@@ -19,7 +19,7 @@ void changeSize(int w, int h) {
   gluPerspective(45, ratio, 1, 1000);  // view angle u y, aspect, near, far
 }
 
-static std::vector<Ball> actors;
+static std::vector<std::shared_ptr<Ball> > balls;
 static std::vector<Wall> walls;
 
 void init() {
@@ -38,15 +38,20 @@ static float ot, nt, dt;
 
 void drawScene() {
   init();
+  KDtreeNode kdTree;
 
   glPushMatrix();
   glTranslatef(0, 0, 0);
-  for (uint i = 0; i < actors.size(); i++) {
-    actors[i].drawSphere();
+  for (uint i = 0; i < balls.size(); i++) {
+    balls[i]->drawSphere();
   }
+
+  kdTree.build_tree(balls, 0);
+  kdTree.treeTraverse();
 
   glPopMatrix();
   glutSwapBuffers();
+  exit(0);
 }
 
 void update(int) {
@@ -55,44 +60,44 @@ void update(int) {
   ot = nt;
 
   bool collision;
-  for (unsigned int i = 0; i < actors.size(); i++) {
+  for (unsigned int i = 0; i < balls.size(); i++) {
     for (unsigned int k = 0; k < walls.size(); k++) {
-      if (actors[i].isWallCollision(walls[k])) {
-        float dot = actors[i].vecDir * walls[k].vecDir;
+      if (balls[i]->isWallCollision(walls[k])) {
+        float dot = balls[i]->vecDir * walls[k].vecDir;
         float doubleDot = dot * 2;
         Vector3D newNorm = walls[k].vecDir * doubleDot;
-        actors[i].vecDir = actors[i].vecDir - newNorm;
+        balls[i]->vecDir = balls[i]->vecDir - newNorm;
       }
     }
   }
-  for (unsigned int i = 0; i < actors.size(); i++) {
-    for (unsigned int j = i + 1; j < actors.size(); j++) {
-      collision = actors[i].isBallCollision(actors[j]);
+  for (unsigned int i = 0; i < balls.size(); i++) {
+    for (unsigned int j = i + 1; j < balls.size(); j++) {
+      collision = balls[i]->isBallCollision(*balls[j]);
 
       if (collision) {
-        Vector3D v_n(actors[i].getCenter() - actors[j].getCenter());
+        Vector3D v_n(balls[i]->getCenter() - balls[j]->getCenter());
         Vector3D v_un = v_n.normal();
         Vector3D v_ut(-v_un.y(), v_un.x(), v_un.z());
 
-        float v1n = v_un * actors[i].vecDir;
-        float v1t = v_ut * actors[i].vecDir;
+        float v1n = v_un * balls[i]->vecDir;
+        float v1t = v_ut * balls[i]->vecDir;
 
-        float v2n = v_un * actors[j].vecDir;
-        float v2t = v_ut * actors[j].vecDir;
+        float v2n = v_un * balls[j]->vecDir;
+        float v2t = v_ut * balls[j]->vecDir;
 
         // količina gibanja formula
 
-        actors[i].vecDir.setX(v2n * v_un.x() + v1t * v_ut.x());
-        actors[i].vecDir.setY(v2n * v_un.y() + v1t * v_ut.y());
+        balls[i]->vecDir.setX(v2n * v_un.x() + v1t * v_ut.x());
+        balls[i]->vecDir.setY(v2n * v_un.y() + v1t * v_ut.y());
 
-        actors[j].vecDir.setX(v1n * v_un.x() + v2t * v_ut.x());
-        actors[j].vecDir.setY(v1n * v_un.y() + v2t * v_ut.y());
+        balls[j]->vecDir.setX(v1n * v_un.x() + v2t * v_ut.x());
+        balls[j]->vecDir.setY(v1n * v_un.y() + v2t * v_ut.y());
       }
     }
   }
 
-  for (uint i = 0; i < actors.size(); i++) {
-    actors[i].updatePosition(dt);
+  for (uint i = 0; i < balls.size(); i++) {
+    balls[i]->updatePosition(dt);
   }
 
   glutPostRedisplay();
@@ -107,14 +112,17 @@ int main(int argc, char **argv) {
   walls.emplace_back(Wall(20, 0, 0, 0, 20, 0, -1, 0, 0));
   walls.emplace_back(Wall(-20, 0, 0, 0, 20, 0, 1, 0, 0));
 
-  int ballNum = std::rand() % 40 + 2;
-
-  for (int i = 0; i < ballNum; i++) {
+  // unsigned int ballNum = std::rand() % 40 + 2;
+  unsigned int ballNum = 5;
+  for (uint i = 0; i < ballNum; i++) {
     float x = std::rand() % 40 - 20;
     float y = std::rand() % 40 - 20;
+    std::cout << i << ": x " << x << " y " << y << " ";
     float speedX = std::rand() % 10 + 1;
     float speedY = std::rand() % 10 + 1;
-    actors.emplace_back(Ball(x, y, 0, 0.2, speedX, speedY, 0.0));
+    balls.emplace_back(
+        std::make_shared<Ball>(Ball(x, y, 0, 0.2, speedX, speedY, 0.0)));
+    std::cout << std::endl;
   }
 
   glutInit(&argc, argv);
