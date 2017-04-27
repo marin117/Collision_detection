@@ -1,27 +1,43 @@
-#ifndef _Ball_h
-#define _Ball_h
+#ifndef Ball_h
+#define Ball_h
 
-#include "AABBTreeNode.h"
-#include "vector3D.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include "AABBTreeNode.h"
+#include "Wall.h"
+#include "vector3D.h"
 
-class Ball{
-public:
-    Point center;
-    float r;
-    ptr root;
-    Vector3D vecDir;
+typedef std::unique_ptr<Node> ptr;
 
-    Ball() = default;
+class Ball {
+ public:
+  Vector3D vecDir;
+  ptr root;
 
-    Ball(const Point center,const float r,const float vecX,const float vecY,const float vecZ);
-    Ball(const float x,const float y,const float z,const float r,const float vecX,const float vecY,const float vecZ);
-    bool isCollision(Ball& collider);
-    void drawSphere();
-    void updatePosition(const float dt);
+  Ball() = default;
 
+  Ball(const Point center, const float r, const float vecX, const float vecY,
+       const float vecZ);
+  Ball(const float x, const float y, const float z, const float r,
+       const float vecX, const float vecY, const float vecZ);
+  bool isBallCollision(Ball& collider);
+  void drawSphere();
+  void updatePosition(const float dt);
+  bool isWallCollision(Wall& wall);
 
+  Point getCenter() { return this->center; }
+
+  const float& x() const { return this->center.x; }
+
+  const float& y() const { return this->center.y; }
+
+  const float& z() const { return this->center.z; }
+
+  float rad() { return this->r; }
+
+ private:
+  Point center;
+  float r;
 };
 
 #endif
