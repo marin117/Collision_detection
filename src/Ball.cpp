@@ -21,7 +21,7 @@ Ball::Ball(const float x, const float y, const float z, const float r,
   this->root = std::make_unique<Node>(AABB_box(this->center, this->r));
 }
 
-bool Ball::isBallCollision(Ball& collider) {
+bool Ball::collision(Ball &collider) {
   Vector3D dist(this->center - collider.center);
 
   float squared_dist = dist * dist;
@@ -42,8 +42,4 @@ void Ball::updatePosition(float dt) {
   this->center.x += this->vecDir.x() * dt;
   this->center.y += this->vecDir.y() * dt;
   this->center.z += this->vecDir.z() * dt;
-}
-
-bool Ball::isWallCollision(Wall& wall) {
-  return this->root->treeOverlap(wall.root);
 }

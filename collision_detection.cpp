@@ -1,10 +1,10 @@
-#include <GL/gl.h>
-#include <GL/glut.h>
-#include <time.h>
-#include <iostream>
 #include "src/Ball.h"
 #include "src/KDTree.h"
 #include "src/Wall.h"
+#include <GL/gl.h>
+#include <GL/glut.h>
+#include <iostream>
+#include <time.h>
 
 void changeSize(int w, int h) {
   if (h == 0) {
@@ -16,29 +16,29 @@ void changeSize(int w, int h) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glViewport(0, 0, w, h);
-  gluPerspective(45, ratio, 1, 1000);  // view angle u y, aspect, near, far
+  gluPerspective(45, ratio, 1, 1000); // view angle u y, aspect, near, far
 }
 
-static std::vector<std::shared_ptr<Ball> > balls;
+static std::vector<std::shared_ptr<Ball>> balls;
 static std::vector<Wall> walls;
 
 void init() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glMatrixMode(GL_MODELVIEW);  // idemo u perspektivu
+  glMatrixMode(GL_MODELVIEW); // idemo u perspektivu
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-  glLoadIdentity();  // resetiranje
+  glLoadIdentity(); // resetiranje
 
-  gluLookAt(0.0, 0.0, 50.0,     // camera
-            0.0, 0.0, -1.0,     // where
-            0.0f, 1.0f, 0.0f);  // up vector
+  gluLookAt(0.0, 0.0, 50.0,    // camera
+            0.0, 0.0, -1.0,    // where
+            0.0f, 1.0f, 0.0f); // up vector
 }
 
 static float ot, nt, dt;
 
 void drawScene() {
   init();
-  KDtreeNode kdTree;
+  KDtreeNode<std::shared_ptr<Ball>> kdTree;
 
   glPushMatrix();
   glTranslatef(0, 0, 0);
@@ -51,7 +51,6 @@ void drawScene() {
 
   glPopMatrix();
   glutSwapBuffers();
-  exit(0);
 }
 
 void update(int) {
@@ -59,10 +58,9 @@ void update(int) {
   dt = nt - ot;
   ot = nt;
 
-  bool collision;
   for (unsigned int i = 0; i < balls.size(); i++) {
     for (unsigned int k = 0; k < walls.size(); k++) {
-      if (balls[i]->isWallCollision(walls[k])) {
+      if (balls[i]->collision(walls[k])) {
         float dot = balls[i]->vecDir * walls[k].vecDir;
         float doubleDot = dot * 2;
         Vector3D newNorm = walls[k].vecDir * doubleDot;
@@ -72,9 +70,8 @@ void update(int) {
   }
   for (unsigned int i = 0; i < balls.size(); i++) {
     for (unsigned int j = i + 1; j < balls.size(); j++) {
-      collision = balls[i]->isBallCollision(*balls[j]);
 
-      if (collision) {
+      if (balls[i]->collision(*balls[j])) {
         Vector3D v_n(balls[i]->getCenter() - balls[j]->getCenter());
         Vector3D v_un = v_n.normal();
         Vector3D v_ut(-v_un.y(), v_un.x(), v_un.z());
@@ -107,10 +104,10 @@ void update(int) {
 int main(int argc, char **argv) {
   std::srand(time(NULL));
 
-  walls.emplace_back(Wall(0, 20, 0, 20, 0, 0, 0, -1, 0));
-  walls.emplace_back(Wall(0, -20, 0, 20, 0, 0, 0, 1, 0));
-  walls.emplace_back(Wall(20, 0, 0, 0, 20, 0, -1, 0, 0));
-  walls.emplace_back(Wall(-20, 0, 0, 0, 20, 0, 1, 0, 0));
+  walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0));
+  walls.emplace_back(Wall(0, -20, 0, 25, 0, 0, 0, 1, 0));
+  walls.emplace_back(Wall(25, 0, 0, 0, 25, 0, -1, 0, 0));
+  walls.emplace_back(Wall(-25, 0, 0, 0, 25, 0, 1, 0, 0));
 
   // unsigned int ballNum = std::rand() % 40 + 2;
   unsigned int ballNum = 5;
