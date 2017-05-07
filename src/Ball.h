@@ -1,32 +1,33 @@
 #ifndef Ball_h
 #define Ball_h
 
-#include "AABBTreeNode.h"
+//#include "AABBTreeNode.h"
 #include "Wall.h"
 #include "vector3D.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
-
-typedef std::unique_ptr<Node> ptr;
+#include <iostream>
 
 class Ball {
 public:
   Vector3D vecDir;
-  ptr root;
+  AABB_box bBox;
 
   Ball() = default;
 
   Ball(const Point center, const float r, const float vecX, const float vecY,
-       const float vecZ);
+       const float vecZ, const float m);
   Ball(const float x, const float y, const float z, const float r,
-       const float vecX, const float vecY, const float vecZ);
+       const float vecX, const float vecY, const float vecZ, const float m);
   void drawSphere();
   void updatePosition(const float dt);
   bool collision(Ball &collider);
   template <typename T> bool collision(T &collider) {
-    return this->root->treeOverlap(collider.root);
+    return isOverlap(this->bBox, collider.bBox);
   }
-  Point getCenter() { return this->center; }
+  void resolveCollision(Ball &collider);
+  void resolveCollision(Wall &wall);
+  Point &getCenter() { return this->center; }
 
   const float &x() const { return this->center.x; }
 
@@ -34,11 +35,13 @@ public:
 
   const float &z() const { return this->center.z; }
 
-  float rad() { return this->r; }
+  const float &rad() const { return this->r; }
+  const float &getMass() const { return this->mass; }
 
 private:
   Point center;
   float r;
+  float mass;
 };
 
 #endif

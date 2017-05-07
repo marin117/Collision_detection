@@ -19,7 +19,7 @@ void changeSize(int w, int h) {
   gluPerspective(45, ratio, 1, 1000); // view angle u y, aspect, near, far
 }
 
-static std::vector<std::shared_ptr<Ball>> balls;
+static std::vector<Ball> balls;
 static std::vector<Wall> walls;
 
 void init() {
@@ -38,16 +38,32 @@ static float ot, nt, dt;
 
 void drawScene() {
   init();
-  KDtreeNode<std::shared_ptr<Ball>> kdTree;
 
   glPushMatrix();
   glTranslatef(0, 0, 0);
+  KDtreeNode<Ball> ballKdTree;
+  // KDtreeNode<Wall> wallKdTree;
+
   for (uint i = 0; i < balls.size(); i++) {
-    balls[i]->drawSphere();
+    balls[i].drawSphere();
+  }
+  // wallKdTree.build_tree(walls, 0);
+  for (unsigned int i = 0; i < balls.size(); i++) {
+    // wallKdTree.searchCollisions(balls[i]);
+    for (unsigned int k = 0; k < walls.size(); k++) {
+      if (balls[i].collision(walls[k])) {
+        balls[i].resolveCollision(walls[k]);
+      }
+    }
   }
 
-  kdTree.build_tree(balls, 0);
-  kdTree.treeTraverse();
+  ballKdTree.build_tree(balls, 0);
+  // kdTree.treeTraverse();
+  for (unsigned int i = 0; i < balls.size(); i++) {
+    ballKdTree.searchCollisions(balls[i]);
+  }
+
+  // std::cout << "ball speed: " << balls[0].vecDir.x() << std::endl;
 
   glPopMatrix();
   glutSwapBuffers();
@@ -58,80 +74,44 @@ void update(int) {
   dt = nt - ot;
   ot = nt;
 
-  for (unsigned int i = 0; i < balls.size(); i++) {
-    for (unsigned int k = 0; k < walls.size(); k++) {
-      if (balls[i]->collision(walls[k])) {
-        float dot = balls[i]->vecDir * walls[k].vecDir;
-        float doubleDot = dot * 2;
-        Vector3D newNorm = walls[k].vecDir * doubleDot;
-        balls[i]->vecDir = balls[i]->vecDir - newNorm;
-      }
-    }
-  }
-  for (unsigned int i = 0; i < balls.size(); i++) {
-    for (unsigned int j = i + 1; j < balls.size(); j++) {
-
-      if (balls[i]->collision(*balls[j])) {
-        Vector3D v_n(balls[i]->getCenter() - balls[j]->getCenter());
-        Vector3D v_un = v_n.normal();
-        Vector3D v_ut(-v_un.y(), v_un.x(), v_un.z());
-
-        float v1n = v_un * balls[i]->vecDir;
-        float v1t = v_ut * balls[i]->vecDir;
-
-        float v2n = v_un * balls[j]->vecDir;
-        float v2t = v_ut * balls[j]->vecDir;
-
-        // količina gibanja formula
-
-        balls[i]->vecDir.setX(v2n * v_un.x() + v1t * v_ut.x());
-        balls[i]->vecDir.setY(v2n * v_un.y() + v1t * v_ut.y());
-
-        balls[j]->vecDir.setX(v1n * v_un.x() + v2t * v_ut.x());
-        balls[j]->vecDir.setY(v1n * v_un.y() + v2t * v_ut.y());
-      }
-    }
-  }
-
   for (uint i = 0; i < balls.size(); i++) {
-    balls[i]->updatePosition(dt);
+    balls[i].updatePosition(dt);
   }
 
   glutPostRedisplay();
-  glutTimerFunc(16, update, 0);
+  glutTimerFunc(32, update, 0);
 }
 
 int main(int argc, char **argv) {
   std::srand(time(NULL));
 
-  walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0));
-  walls.emplace_back(Wall(0, -20, 0, 25, 0, 0, 0, 1, 0));
-  walls.emplace_back(Wall(25, 0, 0, 0, 25, 0, -1, 0, 0));
-  walls.emplace_back(Wall(-25, 0, 0, 0, 25, 0, 1, 0, 0));
+  walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
+  walls.emplace_back(Wall(0, -20, 0, 25, 0, 0, 0, 1, 0, 10000));
+  walls.emplace_back(Wall(25, 0, 0, 0, 25, 0, -1, 0, 0, 10000));
+  walls.emplace_back(Wall(-25, 0, 0, 0, 25, 0, 1, 0, 0, 10000));
 
   // unsigned int ballNum = std::rand() % 40 + 2;
-  unsigned int ballNum = 5;
+  unsigned int ballNum = 20;
   for (uint i = 0; i < ballNum; i++) {
     float x = std::rand() % 40 - 20;
-    float y = std::rand() % 40 - 20;
-    std::cout << i << ": x " << x << " y " << y << " ";
+    float y = std::rand() % 20;
+    // std::cout << i << ": x " << x << " y " << y << " " << std::endl;
+
     float speedX = std::rand() % 10 + 1;
     float speedY = std::rand() % 10 + 1;
-    balls.emplace_back(
-        std::make_shared<Ball>(Ball(x, y, 0, 0.2, speedX, speedY, 0.0)));
-    std::cout << std::endl;
+    float mass = std::rand() % 5 + 1;
+    balls.emplace_back(Ball(x, y, 0, 0.5, 0, speedY, 0.0, mass));
   }
 
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(1024, 1080);
 
-  glutCreateWindow("AABB");
+  glutCreateWindow("Collision detection");
   glutReshapeFunc(changeSize);
   glutDisplayFunc(drawScene);
   glutTimerFunc(0, update, 0);
   ot = glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
-
   glutMainLoop();
 
   return 0;

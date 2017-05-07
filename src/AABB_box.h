@@ -4,7 +4,7 @@
 #include "point.h"
 
 class AABB_box {
- public:
+public:
   AABB_box() = default;
 
   AABB_box(const float x, const float y, const float z, const float r);
@@ -14,17 +14,17 @@ class AABB_box {
            const float ry, const float rz);
   AABB_box(const Point center, const float rx, const float ry, const float rz);
   AABB_box(const Point center, const float r[]);
-  AABB_box& operator=(const AABB_box& src);
+  AABB_box &operator=(const AABB_box &src);
   float getSurface();
-  const float& x() const { return this->center.x; }
-  const float& y() const { return this->center.y; }
-  const float& z() const { return this->center.z; }
-  const float& rx() const;
-  const float& ry() const;
-  const float& rz() const;
-  const Point& getCenter() const;
+  const float &x() const;
+  const float &y() const;
+  const float &z() const;
+  const float &rx() const;
+  const float &ry() const;
+  const float &rz() const;
+  const Point &getCenter() const;
 
- private:
+private:
   Point center;
   float r[3];
 };
