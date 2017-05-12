@@ -30,6 +30,7 @@ private:
   Point center;
   float r[3];
   float mass;
+  uint i;
 };
 
 #endif

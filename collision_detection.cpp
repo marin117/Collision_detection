@@ -42,28 +42,18 @@ void drawScene() {
   glPushMatrix();
   glTranslatef(0, 0, 0);
   KDtreeNode<Ball> ballKdTree;
-  // KDtreeNode<Wall> wallKdTree;
+  KDtreeNode<Wall> wallKdTree;
 
   for (uint i = 0; i < balls.size(); i++) {
     balls[i].drawSphere();
   }
-  // wallKdTree.build_tree(walls, 0);
-  for (unsigned int i = 0; i < balls.size(); i++) {
-    // wallKdTree.searchCollisions(balls[i]);
-    for (unsigned int k = 0; k < walls.size(); k++) {
-      if (balls[i].collision(walls[k])) {
-        balls[i].resolveCollision(walls[k]);
-      }
-    }
-  }
+  wallKdTree.build_tree(walls, 0);
+  for (unsigned int i = 0; i < balls.size(); i++)
+    wallKdTree.searchCollisions(balls[i]);
 
   ballKdTree.build_tree(balls, 0);
-  // kdTree.treeTraverse();
-  for (unsigned int i = 0; i < balls.size(); i++) {
+  for (unsigned int i = 0; i < balls.size(); i++)
     ballKdTree.searchCollisions(balls[i]);
-  }
-
-  // std::cout << "ball speed: " << balls[0].vecDir.x() << std::endl;
 
   glPopMatrix();
   glutSwapBuffers();
@@ -79,28 +69,27 @@ void update(int) {
   }
 
   glutPostRedisplay();
-  glutTimerFunc(32, update, 0);
+  glutTimerFunc(16, update, 0);
 }
 
 int main(int argc, char **argv) {
   std::srand(time(NULL));
 
-  walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
-  walls.emplace_back(Wall(0, -20, 0, 25, 0, 0, 0, 1, 0, 10000));
-  walls.emplace_back(Wall(25, 0, 0, 0, 25, 0, -1, 0, 0, 10000));
-  walls.emplace_back(Wall(-25, 0, 0, 0, 25, 0, 1, 0, 0, 10000));
+  // walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
+  walls.emplace_back(Wall(0, -20, 0, 25000, 0, 0, 0, 1, 0, 10000));
+  walls.emplace_back(Wall(25, 0, 0, 0, 25000, 0, -1, 0, 0, 10000));
+  walls.emplace_back(Wall(-25, 0, 0, 0, 25000, 0, 1, 0, 0, 10000));
 
   // unsigned int ballNum = std::rand() % 40 + 2;
-  unsigned int ballNum = 20;
+  unsigned int ballNum = 10;
   for (uint i = 0; i < ballNum; i++) {
     float x = std::rand() % 40 - 20;
     float y = std::rand() % 20;
-    // std::cout << i << ": x " << x << " y " << y << " " << std::endl;
 
-    float speedX = std::rand() % 10 + 1;
+    float speedX = std::rand() % 20 - 10;
     float speedY = std::rand() % 10 + 1;
     float mass = std::rand() % 5 + 1;
-    balls.emplace_back(Ball(x, y, 0, 0.5, 0, speedY, 0.0, mass));
+    balls.emplace_back(Ball(x, y, 0, 0.5, speedX, speedY, 0.0, mass, i));
   }
 
   glutInit(&argc, argv);

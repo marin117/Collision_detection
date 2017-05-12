@@ -4,6 +4,12 @@
 #include "vector3D.h"
 #include <algorithm>
 #include <iostream>
+bool operator!=(const Point &lhs, const Point &rhs) {
+  if (lhs.x != rhs.x && lhs.y != rhs.y && lhs.z != rhs.z) {
+    return 0;
+  }
+  return 1;
+}
 
 template <class T> class KDtreeNode {
   static bool sortbyX(T lhs, T rhs) { return lhs.x() < rhs.x(); }
@@ -31,7 +37,7 @@ public:
     else
       std::sort(v.begin(), v.end(), sortbyZ);
 
-    this->object = v.at(v.size() / 2);
+    this->object = v[v.size() / 2];
     this->plane = depth % 3;
 
     for (unsigned int i = 0; i < v.size(); ++i) {
@@ -87,37 +93,18 @@ public:
   }
   template <class T1> void searchCollisions(T1 &ball) {
 
-    /*f (ball.collision(this->object)) {
-      std::cout << "collision 1" << std::endl;
-      ball.resolveCollision(this->object);
-      std::cout << ball.vecDir.x() << std::endl;
-      std::cout << this->object.vecDir.x() << std::endl;
-      // exit(0);
-    }
-
-    if (ball.collision(this->left()->object)) {
-      std::cout << "collision 2" << std::endl;
-      ball.resolveCollision(this->left()->object);
-    }*/
-
     float dist2 = 99999999;
 
     if (this->childSize() == 0) {
       if (ball.collision(this->object)) {
-        std::cout << "KDTreeLeaf " << this->object.vecDir.x() << std::endl;
-        std::cout << ball.vecDir.x() << std::endl;
         ball.resolveCollision(this->object);
-        std::cout << ball.vecDir.x() << std::endl;
       }
 
       return;
     }
 
     if (ball.collision(this->object)) {
-      std::cout << "KDTree " << this->object.vecDir.x() << std::endl;
-      std::cout << ball.vecDir.x() << std::endl;
       ball.resolveCollision(this->object);
-      std::cout << ball.vecDir.x() << std::endl;
     }
     Vector3D vec1(ball.getCenter() - this->left()->object.getCenter());
 
@@ -129,8 +116,8 @@ public:
       dist2 = vec2 * vec2;
     }
 
-    if (dist1 < dist2 || ball.collision(this->left()->object) ||
-        this->childSize() == 1) {
+    if ((dist1 < dist2 || ball.collision(this->left()->object)) &&
+        this->childSize() >= 1) {
       this->left()->searchCollisions(ball);
     }
     if ((dist1 > dist2 || ball.collision(this->right()->object)) &&

@@ -16,9 +16,10 @@ public:
   Ball() = default;
 
   Ball(const Point center, const float r, const float vecX, const float vecY,
-       const float vecZ, const float m);
+       const float vecZ, const float m, const uint i);
   Ball(const float x, const float y, const float z, const float r,
-       const float vecX, const float vecY, const float vecZ, const float m);
+       const float vecX, const float vecY, const float vecZ, const float m,
+       const uint i);
   void drawSphere();
   void updatePosition(const float dt);
   bool collision(Ball &collider);
@@ -37,11 +38,13 @@ public:
 
   const float &rad() const { return this->r; }
   const float &getMass() const { return this->mass; }
+  const uint &getI() const { return this->i; }
 
 private:
   Point center;
   float r;
   float mass;
+  uint i;
 };
 
 #endif
