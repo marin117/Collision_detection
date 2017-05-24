@@ -41,12 +41,12 @@ void drawScene() {
 
   glPushMatrix();
   glTranslatef(0, 0, 0);
-  KDtreeNode<Ball> ballKdTree;
-  KDtreeNode<Wall> wallKdTree;
-
   for (uint i = 0; i < balls.size(); i++) {
     balls[i].drawSphere();
   }
+  KDtreeNode<Ball> ballKdTree;
+  KDtreeNode<Wall> wallKdTree;
+
   wallKdTree.build_tree(walls, 0);
   for (unsigned int i = 0; i < balls.size(); i++)
     wallKdTree.searchCollisions(balls[i]);
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 
     float speedX = std::rand() % 20 - 10;
     float speedY = std::rand() % 10 + 1;
-    float mass = std::rand() % 5 + 1;
+    float mass = std::rand() % 20 + 1000;
     balls.emplace_back(Ball(x, y, 0, 0.5, speedX, speedY, 0.0, mass, i));
   }
 

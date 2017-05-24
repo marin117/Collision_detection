@@ -46,9 +46,8 @@ void Ball::drawSphere() {
   glPopMatrix();
 }
 void Ball::updatePosition(float dt) {
-  float acc = -9.81;
-  float v = this->vecDir.y();
-  this->vecDir.setY(v + acc * dt);
+  double acc = -9.81;
+  this->vecDir.setY(this->vecDir.y() + acc * dt);
   this->center.x += this->vecDir.x() * dt;
   this->center.y += this->vecDir.y() * dt;
   this->center.z += this->vecDir.z() * dt;
@@ -64,7 +63,6 @@ void Ball::resolveCollision(Ball &collider) {
   float v1t = v_ut * this->vecDir;
 
   float v2n = v_un * collider.vecDir;
-  float v2t = v_ut * collider.vecDir;
 
   float v1x =
       (v1n * (this->mass - collider.getMass()) + 2 * collider.getMass() * v2n) /
@@ -72,14 +70,6 @@ void Ball::resolveCollision(Ball &collider) {
   float v1y =
       (v1n * (this->mass - collider.getMass()) + 2 * collider.getMass() * v2n) /
       (this->mass + collider.getMass()) * v_un.y();
-
-  /* float v2x = (v2n * (collider.getMass() - this->mass) + 2 * this->mass *
-   v1n) /
-               (this->mass + collider.getMass()) * v_un.x();
-
-   float v2y = (v2n * (collider.getMass() - this->mass) + 2 * this->mass * v1n)
-   /
-               (this->mass + collider.getMass()) * v_un.y();*/
 
   this->vecDir.setX(v1x + v1t * v_ut.x());
   this->vecDir.setY(v1y + v1t * v_ut.y());
@@ -91,12 +81,14 @@ void Ball::resolveCollision(Wall &collider) {
   float doubleDot = dot * 2;
   Vector3D newNorm = collider.vecDir * doubleDot;
   this->vecDir = this->vecDir - newNorm;
+  /*if (collider.vecDir.x() != 0) {
+    float v1x =
+        std::abs((this->vecDir.x() * (this->mass - collider.getMass())) /
+                 (this->mass + collider.getMass()));
+    this->vecDir.setX(v1x);
+  }*/
 
-  /*float v1x = std::abs((this->vecDir.x() * (this->mass - collider.getMass()))
- /
-                       (this->mass + collider.getMass()));
- this->vecDir.setX(v1x);*/
-  if (collider.vecDir.y() != 0) {
+  if (collider.vecDir.y() != 0.0) {
     float v1y =
         std::abs((this->vecDir.y() * (this->mass - collider.getMass())) /
                  (this->mass + collider.getMass()));
