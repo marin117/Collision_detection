@@ -1,8 +1,7 @@
 #include "src/Ball.h"
 #include "src/KDTree.h"
 #include "src/Wall.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+
 #include <iostream>
 #include <time.h>
 

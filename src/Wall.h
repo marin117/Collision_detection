@@ -3,8 +3,6 @@
 
 #include "AABB_box.h"
 #include "vector3D.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
 
 class Wall {
 
@@ -30,7 +28,7 @@ private:
   Point center;
   float r[3];
   float mass;
-  uint i;
+  unsigned int i;
 };
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef Ball_h
 #define Ball_h
 
-//#include "AABBTreeNode.h"
 #include "Wall.h"
 #include "vector3D.h"
 #include <GL/gl.h>
