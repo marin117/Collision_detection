@@ -1,4 +1,4 @@
-#include "src/Ball.h"
+/*#include "src/Ball.h"
 #include "src/KDTree.h"
 #include "src/Wall.h"
 
@@ -37,14 +37,14 @@ static float ot, nt, dt;
 
 void drawScene() {
   init();
+  KDtreeNode<Ball> ballKdTree;
+  KDtreeNode<Wall> wallKdTree;
 
   glPushMatrix();
   glTranslatef(0, 0, 0);
   for (uint i = 0; i < balls.size(); i++) {
-    balls[i].drawSphere();
+    // balls[i].drawSphere();
   }
-  KDtreeNode<Ball> ballKdTree;
-  KDtreeNode<Wall> wallKdTree;
 
   wallKdTree.build_tree(walls, 0);
   for (unsigned int i = 0; i < balls.size(); i++)
@@ -66,7 +66,7 @@ void update(int) {
   for (uint i = 0; i < balls.size(); i++) {
     balls[i].updatePosition(dt);
   }
-
+  std::cout << dt << std::endl;
   glutPostRedisplay();
   glutTimerFunc(16, update, 0);
 }
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
   walls.emplace_back(Wall(-25, 0, 0, 0, 25000, 0, 1, 0, 0, 10000));
 
   // unsigned int ballNum = std::rand() % 40 + 2;
-  unsigned int ballNum = 10;
+  unsigned int ballNum = 20;
   for (uint i = 0; i < ballNum; i++) {
     float x = std::rand() % 40 - 20;
     float y = std::rand() % 20;
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     float speedX = std::rand() % 20 - 10;
     float speedY = std::rand() % 10 + 1;
     float mass = std::rand() % 20 + 1000;
-    balls.emplace_back(Ball(x, y, 0, 0.5, speedX, speedY, 0.0, mass, i));
+    balls.emplace_back(Ball(x, y, 0, 0.5f, speedX, speedY, 0.0, mass, i));
   }
 
   glutInit(&argc, argv);
@@ -104,3 +104,5 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+*/
+int main() { return 0; }

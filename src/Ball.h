@@ -3,8 +3,12 @@
 
 #include "Wall.h"
 #include "vector3D.h"
-#include <GL/gl.h>
-#include <GL/glut.h>
+//#include <GL/gl.h>
+//#include <GL/glut.h>
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 #include <iostream>
 
 class Ball {
@@ -19,7 +23,8 @@ public:
   Ball(const float x, const float y, const float z, const float r,
        const float vecX, const float vecY, const float vecZ, const float m,
        const uint i);
-  void drawSphere();
+  void drawSphere(unsigned int program, int matrix, glm::mat4 &view,
+                  glm::mat4 &projection);
   void updatePosition(const float dt);
   bool collision(Ball &collider);
   template <typename T> bool collision(T &collider) {

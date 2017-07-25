@@ -38,12 +38,23 @@ bool Ball::collision(Ball &collider) {
   return squared_dist <= squared_rad;
 }
 
-void Ball::drawSphere() {
-  glPushMatrix();
-  glTranslatef(this->center.x, this->center.y, this->center.z);
-  this->bBox = AABB_box(this->center, this->r);
-  glutSolidSphere(this->r, 100, 10);
-  glPopMatrix();
+void Ball::drawSphere(unsigned int program, int matrix, glm::mat4 &view,
+                      glm::mat4 &projection) {
+  /*  glPushMatrix();
+    glTranslatef(this->center.x, this->center.y, this->center.z);
+    this->bBox = AABB_box(this->center, this->r);
+    glutSolidSphere(this->r, 100, 10);
+    glPopMatrix();*/
+
+  glm::mat4 Model = glm::mat4(1.0f);
+  glm::vec3 position = glm::vec3(this->x(), this->y(), this->z());
+  glm::vec3 radius = glm::vec3(1.0f, 1.0f, 1.0f) * this->r;
+  Model = glm::scale(Model, radius);
+  Model = glm::translate(Model, position);
+  glm::mat4 mvp = projection * view * Model;
+  glUniformMatrix4fv(matrix, 1, GL_FALSE, &mvp[0][0]);
+  glUseProgram(program);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 void Ball::updatePosition(float dt) {
   double acc = -9.81;
