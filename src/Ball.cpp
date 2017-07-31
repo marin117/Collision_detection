@@ -55,6 +55,7 @@ void Ball::drawSphere(unsigned int program, int matrix, glm::mat4 &view,
   glUniformMatrix4fv(matrix, 1, GL_FALSE, &mvp[0][0]);
   glUseProgram(program);
   glDrawArrays(GL_TRIANGLES, 0, 3);
+  this->bBox = AABB_box(this->center, this->r);
 }
 void Ball::updatePosition(float dt) {
   double acc = -9.81;

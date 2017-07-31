@@ -3,6 +3,7 @@
 
 #include "point.h"
 #include <cmath>
+#include <iostream>
 #include <vector>
 
 class Vector3D {
@@ -38,6 +39,7 @@ public:
     float mag = std::sqrt(std::pow(this->x(), 2) + std::pow(this->y(), 2) +
                           std::pow(this->z(), 2));
     if (mag == 0) {
+
       return Vector3D(1, 0, 0);
     }
 
