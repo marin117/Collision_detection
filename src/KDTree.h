@@ -39,6 +39,7 @@ public:
 
     this->object = v[v.size() / 2];
     this->plane = depth % 3;
+    this->child.clear();
 
     for (unsigned int i = 0; i < v.size(); ++i) {
       if (i < v.size() / 2) {
@@ -71,15 +72,15 @@ public:
 
   void treeTraverse() {
     if (this->childSize() == 0) {
-      std::cout << this->object->x() << std::endl;
-      std::cout << this->object->y() << std::endl;
+      std::cout << this->object.x() << std::endl;
+      std::cout << this->object.y() << std::endl;
       std::cout << this->childSize() << std::endl;
       std::cout << this->getPlane() << std::endl;
       return;
     }
 
-    std::cout << this->object->x() << std::endl;
-    std::cout << this->object->y() << std::endl;
+    std::cout << this->object.x() << std::endl;
+    std::cout << this->object.y() << std::endl;
     std::cout << this->childSize() << std::endl;
     std::cout << this->getPlane() << std::endl;
 

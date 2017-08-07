@@ -73,9 +73,8 @@ int main(void) {
                                        "SimpleFragmentShader.fragmentshader");
   int MatrixID = glGetUniformLocation(programID, "MVP");
 
-  static const float vertices[] = {
-      -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f,
-  };
+  static float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
+                             0.0f,  0.0f,  0.5f, 0.0f};
 
   unsigned int VBO;
   glGenBuffers(1, &VBO);
@@ -90,14 +89,14 @@ int main(void) {
   std::vector<Wall> walls;
   KDtreeNode<Wall> wallsKDtree;
   KDtreeNode<Ball> ballsKDtree;
-  walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
+  // walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
   walls.emplace_back(Wall(0, -20, 0, 25000, 0, 0, 0, 1, 0, 10000));
   walls.emplace_back(Wall(25, 0, 0, 0, 25000, 0, -1, 0, 0, 10000));
   walls.emplace_back(Wall(-25, 0, 0, 0, 25000, 0, 1, 0, 0, 10000));
 
   std::vector<Ball> balls;
 
-  for (uint i = 0; i < 10; i++) {
+  for (uint i = 0; i < 5; i++) {
     float x = std::rand() % 40 - 20;
     float y = std::rand() % 20;
 
@@ -131,10 +130,14 @@ int main(void) {
       balls[i].drawSphere(programID, MatrixID, View, Projection);
     }
     ballsKDtree.build_tree(balls, 0);
+
     for (uint i = 0; i < balls.size(); i++) {
       wallsKDtree.searchCollisions(balls[i]);
+    }
+    for (uint i = 0; i < balls.size(); i++) {
       ballsKDtree.searchCollisions(balls[i]);
     }
+    ballsKDtree.treeTraverse();
     // Swap buffers
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -150,7 +153,7 @@ int main(void) {
          glfwWindowShouldClose(window) == 0);
 
   // Cleanup VBO
-  glDeleteBuffers(1, &VBO);
+  // glDeleteBuffers(1, &VBO);
   glDeleteVertexArrays(1, &VAO);
   glDeleteProgram(programID);
 
