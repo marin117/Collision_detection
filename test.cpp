@@ -1,6 +1,7 @@
 // Include standard headers
 
 #include "src/KDTree.h"
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,11 +16,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+
 GLFWwindow *window;
 
 // Include GLM
 
 using namespace glm;
+using namespace std;
+
+#define stacks 20
+#define slices 20
+#define radius 1
 
 #include "src/shader.hpp"
 
@@ -65,55 +72,67 @@ int main(void) {
 
   // Dark blue background
   glClearColor(0.7f, 0.3f, 0.4f, 0.0f);
-  unsigned int VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
+
   // Create and compile our GLSL program from the shaders
   unsigned int programID = LoadShaders("SimpleVertexShader.vertexshader",
                                        "SimpleFragmentShader.fragmentshader");
   int MatrixID = glGetUniformLocation(programID, "MVP");
+  GLuint vao;
+  GLuint ebo;
+  GLuint vbo;
+  std::vector<glm::vec3> vertices;
+  std::vector<int> indices;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
 
-  static float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
-                             0.0f,  0.0f,  0.5f, 0.0f};
+  for (int i = 0; i <= stacks; ++i) {
 
-  unsigned int VBO;
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLfloat V = i / (float)stacks;
+    GLfloat phi = V * glm::pi<float>();
 
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // Loop Through Slices
+    for (int j = 0; j <= slices; ++j) {
 
-  std::vector<Wall> walls;
-  KDtreeNode<Wall> wallsKDtree;
-  KDtreeNode<Ball> ballsKDtree;
-  // walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
-  walls.emplace_back(Wall(0, -20, 0, 25000, 0, 0, 0, 1, 0, 10000));
-  walls.emplace_back(Wall(23, 0, 0, 0, 25000, 0, -1, 0, 0, 10000));
-  walls.emplace_back(Wall(-23, 0, 0, 0, 25000, 0, 1, 0, 0, 10000));
+      GLfloat U = j / (float)slices;
+      GLfloat theta = U * (glm::pi<float>() * 2);
 
-  std::vector<Ball> balls;
+      // Calc The Vertex Positions
+      GLfloat x = cosf(theta) * sinf(phi);
+      GLfloat y = cosf(phi);
+      GLfloat z = sinf(theta) * sinf(phi);
 
-  for (uint i = 0; i < 10; i++) {
-    float x = std::rand() % 40 - 20;
-    float y = std::rand() % 20;
-
-    float speedX = std::rand() % 20 - 10;
-    float speedY = std::rand() % 10 + 1;
-    float mass = std::rand() % 20 + 1000;
-    balls.emplace_back(Ball(x, y, 0, 1.0f, speedX, speedY, 0.0, mass, i));
+      // Push Back Vertex Data
+      vertices.push_back(glm::vec3(x, y, z));
+    }
   }
 
-  // balls.emplace_back(Ball(20, 0, 0, 1.0f, 2.0, 0.0, 0.0, 1, 0));
+  // Calc The Index Positions
+  for (int i = 0; i < slices * stacks + slices; ++i) {
 
-  double lastTime;
-  double dt, currentTime;
-  wallsKDtree.build_tree(walls, 0);
+    indices.push_back(i);
+    indices.push_back(i + slices + 1);
+    indices.push_back(i + slices);
+
+    indices.push_back(i + slices + 1);
+    indices.push_back(i);
+    indices.push_back(i + 1);
+  }
+
+  glGenBuffers(1, &ebo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint),
+               &indices[0], GL_STATIC_DRAW);
+
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat) * 3,
+               &vertices[0], GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+  glEnableVertexAttribArray(0);
+  float i = 0.1;
 
   do {
-    currentTime = glfwGetTime();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glm::mat4 Projection = glm::perspective(glm::radians(45.0f),
@@ -124,38 +143,27 @@ int main(void) {
         glm::vec3(0, 0, -1), // and looks at the origin
         glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
         );
+    glm::mat4 Model = glm::mat4(1.0);
+    glm::vec3 rad = glm::vec3(1.0f, 1.0f, 1.0f) * 2.0f;
+    Model = glm::scale(Model, rad);
+    glm::vec3 pos = glm::vec3(1.0f, i -= 0.05, 0.0);
+    Model = glm::translate(Model, pos);
+    glm::mat4 MVP = Projection * View * Model;
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-    glBindVertexArray(VAO);
-    for (uint i = 0; i < balls.size(); i++) {
-      balls[i].drawSphere(programID, MatrixID, View, Projection);
-    }
-    ballsKDtree.build_tree(balls, 0);
+    glUseProgram(programID);
 
-    for (uint i = 0; i < balls.size(); i++) {
-      wallsKDtree.searchCollisions(balls[i]);
-    }
-    for (uint i = 0; i < balls.size(); i++) {
-      ballsKDtree.searchCollisions(balls[i]);
-    }
-    ballsKDtree.treeTraverse();
-    // Swap buffers
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+
     glfwSwapBuffers(window);
     glfwPollEvents();
-    for (uint i = 0; i < balls.size(); i++) {
-      balls[i].updatePosition(dt);
-    }
-
-    dt = currentTime - lastTime;
-    lastTime = currentTime;
 
   } // Check if the ESC key was pressed or the window was closed
   while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
          glfwWindowShouldClose(window) == 0);
-
-  // Cleanup VBO
-  glDeleteBuffers(1, &VBO);
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteProgram(programID);
 
   // Close OpenGL window and terminate GLFW
   glfwTerminate();

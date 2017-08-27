@@ -23,6 +23,9 @@ include_directories( ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS} ${GLEW_INCLUDE_
 
 add_executable(collision_detection collision_detection.cpp ${SOURCES})
 add_executable(bouncing_balls bouncing_balls.cpp ${SOURCES})
+add_executable(test test.cpp ${SOURCES})
 
 target_link_libraries(collision_detection ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} glm)
 target_link_libraries(bouncing_balls ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLFW_LIBRARIES}  ${GLEW_LIBRARIES} glm)
+target_link_libraries(test ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLFW_LIBRARIES}  ${GLEW_LIBRARIES} glm)
+
