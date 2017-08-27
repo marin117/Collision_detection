@@ -1,0 +1,90 @@
+\ifglsentryexists{nfc}{}%
+{%
+\gls@defglossaryentry{nfc}%
+{%
+name={\acronymfont {\glsentryshort {nfc}}},%
+sort={NFC},%
+type={main},%
+first={NFC},%
+firstplural={NFCs},%
+text={NFC},%
+plural={NFCs},%
+description={Near Field Communication},%
+descriptionplural={Near Field Communication},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Near Field Communication},%
+longplural={Near Field Communications},%
+short={NFC},%
+shortplural={NFCs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{wlan}{}%
+{%
+\gls@defglossaryentry{wlan}%
+{%
+name={\acronymfont {\glsentryshort {wlan}}},%
+sort={WLAN},%
+type={main},%
+first={WLAN},%
+firstplural={WLANs},%
+text={WLAN},%
+plural={WLANs},%
+description={Wireless Local Area Network},%
+descriptionplural={Wireless Local Area Network},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Wireless Local Area Network},%
+longplural={Wireless Local Area Networks},%
+short={WLAN},%
+shortplural={WLANs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{gsm}{}%
+{%
+\gls@defglossaryentry{gsm}%
+{%
+name={\acronymfont {\glsentryshort {gsm}}},%
+sort={GSM},%
+type={main},%
+first={GSM},%
+firstplural={GSMs},%
+text={GSM},%
+plural={GSMs},%
+description={Global System for Mobile (Communications)},%
+descriptionplural={Global System for Mobile (Communications)},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Global System for Mobile (Communications)},%
+longplural={Global System for Mobile (Communications)s},%
+short={GSM},%
+shortplural={GSMs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
