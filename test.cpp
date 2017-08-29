@@ -81,7 +81,6 @@ int main(void) {
         );
 
     sfera.drawSphere(1, 0, 0, 0, View, Projection);
-    sfera.drawSphere(2, i += 0.05, 1, 0, View, Projection);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

@@ -40,6 +40,8 @@ public:
 
         // Push Back Vertex Data
         vertices.push_back(glm::vec3(x, y, z));
+        normals.push_back(glm::vec3(x, y, z));
+        collors.push_back(glm::vec3(0.7, 0.9, 0.8));
       }
     }
 
@@ -65,8 +67,26 @@ public:
     glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(GLfloat) * 3,
                  &this->vertices[0], GL_STATIC_DRAW);
 
+    glGenBuffers(1, &this->collorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->collorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, this->collors.size() * sizeof(GLfloat) * 3,
+                 &this->collors[0], GL_STATIC_DRAW);
+
+    glGenBuffers(1, &normalbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glBufferData(GL_ARRAY_BUFFER, this->normals.size() * sizeof(GLfloat) * 3,
+                 &this->normals[0], GL_STATIC_DRAW);
+
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(0);
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, this->collorbuffer);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, this->normalbuffer);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
   }
 
   void drawSphere(float r, float x, float y, float z, glm::mat4 &view,
@@ -88,7 +108,11 @@ private:
   uint vao;
   uint ebo;
   uint vbo;
+  uint normalbuffer;
+  uint collorbuffer;
   std::vector<glm::vec3> vertices;
+  std::vector<glm::vec3> normals;
+  std::vector<glm::vec3> collors;
   std::vector<int> indices;
   uint shader;
   int slices, stacks;
