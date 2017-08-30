@@ -64,10 +64,15 @@ int main(void) {
   glClearColor(0.7f, 0.3f, 0.4f, 0.0f);
   float i = 0.1;
 
-  unsigned int programID = LoadShaders("SimpleVertexShader.vertexshader",
-                                       "SimpleFragmentShader.fragmentshader");
+  unsigned int programID = LoadShaders("StandardShading.vertexshader",
+                                       "StandardShading.fragmentshader");
+  int ViewMatrixID = glGetUniformLocation(programID, "V");
 
   Sphere sfera(programID);
+
+  glUseProgram(programID);
+  int LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
+
   do {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -80,7 +85,11 @@ int main(void) {
         glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
         );
 
-    sfera.drawSphere(1, 0, 0, 0, View, Projection);
+    glm::vec3 lightPos = glm::vec3(0, 0, 20);
+    glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+
+    glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
+    sfera.drawSphere(1, 3, 4, 0, View, Projection);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

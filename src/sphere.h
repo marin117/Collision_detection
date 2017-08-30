@@ -17,6 +17,7 @@ public:
 
     this->shader = Shader;
     this->MatrixID = glGetUniformLocation(Shader, "MVP");
+    this->ModelMatrixID = glGetUniformLocation(Shader, "M");
     this->slices = 10;
     this->stacks = 10;
     glGenVertexArrays(1, &this->vao);
@@ -41,7 +42,7 @@ public:
         // Push Back Vertex Data
         vertices.push_back(glm::vec3(x, y, z));
         normals.push_back(glm::vec3(x, y, z));
-        collors.push_back(glm::vec3(0.7, 0.9, 0.8));
+        colors.push_back(glm::vec3(1, 0, 0));
       }
     }
 
@@ -67,10 +68,10 @@ public:
     glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(GLfloat) * 3,
                  &this->vertices[0], GL_STATIC_DRAW);
 
-    glGenBuffers(1, &this->collorbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, this->collorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, this->collors.size() * sizeof(GLfloat) * 3,
-                 &this->collors[0], GL_STATIC_DRAW);
+    glGenBuffers(1, &this->colorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
+    glBufferData(GL_ARRAY_BUFFER, this->colors.size() * sizeof(GLfloat) * 3,
+                 &this->colors[0], GL_STATIC_DRAW);
 
     glGenBuffers(1, &normalbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
@@ -81,7 +82,7 @@ public:
     glEnableVertexAttribArray(0);
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, this->collorbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->colorbuffer);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
     glEnableVertexAttribArray(2);
@@ -97,7 +98,10 @@ public:
     glm::vec3 pos = glm::vec3(x, y, z);
     Model = glm::translate(Model, pos);
     glm::mat4 MVP = projection * view * Model;
+
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
+
     glUseProgram(this->shader);
     glBindVertexArray(vao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -109,14 +113,15 @@ private:
   uint ebo;
   uint vbo;
   uint normalbuffer;
-  uint collorbuffer;
+  uint colorbuffer;
   std::vector<glm::vec3> vertices;
   std::vector<glm::vec3> normals;
-  std::vector<glm::vec3> collors;
+  std::vector<glm::vec3> colors;
   std::vector<int> indices;
   uint shader;
   int slices, stacks;
   int MatrixID;
+  int ModelMatrixID;
 };
 
 #endif
