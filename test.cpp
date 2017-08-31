@@ -73,6 +73,9 @@ int main(void) {
   glUseProgram(programID);
   int LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   do {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -80,7 +83,7 @@ int main(void) {
                                             (float)4 / (float)3, 0.1f, 1000.0f);
 
     glm::mat4 View = glm::lookAt(
-        glm::vec3(0, 0, 50), // Camera is at (0,0,50), in World Space
+        glm::vec3(0, 0, 10), // Camera is at (0,0,50), in World Space
         glm::vec3(0, 0, -1), // and looks at the origin
         glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
         );
@@ -89,7 +92,7 @@ int main(void) {
     glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
     glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
-    sfera.drawSphere(1, 3, 4, 0, View, Projection);
+    sfera.drawSphere(1, 0, 0, 0, View, Projection);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

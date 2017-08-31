@@ -18,8 +18,8 @@ public:
     this->shader = Shader;
     this->MatrixID = glGetUniformLocation(Shader, "MVP");
     this->ModelMatrixID = glGetUniformLocation(Shader, "M");
-    this->slices = 10;
-    this->stacks = 10;
+    this->slices = 20;
+    this->stacks = 20;
     glGenVertexArrays(1, &this->vao);
     glBindVertexArray(this->vao);
 
