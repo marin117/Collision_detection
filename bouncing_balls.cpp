@@ -65,26 +65,17 @@ int main(void) {
 
   // Dark blue background
   glClearColor(0.7f, 0.3f, 0.4f, 0.0f);
-  unsigned int VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
+
   // Create and compile our GLSL program from the shaders
-  unsigned int programID = LoadShaders("SimpleVertexShader.vertexshader",
-                                       "SimpleFragmentShader.fragmentshader");
-  int MatrixID = glGetUniformLocation(programID, "MVP");
+  unsigned int programID = LoadShaders("StandardShading.vertexshader",
+                                       "StandardShading.fragmentshader");
+  int MatrixID = glGetUniformLocation(programID, "VP");
+  int ViewMatrixID = glGetUniformLocation(programID, "V");
 
-  static float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f,
-                             0.0f,  0.0f,  0.5f, 0.0f};
+  Sphere sphere(programID);
 
-  unsigned int VBO;
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glUseProgram(programID);
+  int LightID = glGetUniformLocation(programID, "LightPosition_worldspace");
 
   std::vector<Wall> walls;
   KDtreeNode<Wall> wallsKDtree;
@@ -102,7 +93,7 @@ int main(void) {
 
     float speedX = std::rand() % 20 - 10;
     float speedY = std::rand() % 10 + 1;
-    float mass = std::rand() % 20 + 1000;
+    float mass = std::rand() % 20 + 40;
     balls.emplace_back(Ball(x, y, 0, 1.0f, speedX, speedY, 0.0, mass, i));
   }
 
@@ -111,6 +102,9 @@ int main(void) {
   double lastTime;
   double dt, currentTime;
   wallsKDtree.build_tree(walls, 0);
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   do {
     currentTime = glfwGetTime();
@@ -125,10 +119,17 @@ int main(void) {
         glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
         );
 
-    glBindVertexArray(VAO);
-    for (uint i = 0; i < balls.size(); i++) {
-      balls[i].drawSphere(programID, MatrixID, View, Projection);
-    }
+    glm::mat4 VP = Projection * View;
+
+    glm::vec3 lightPos = glm::vec3(0, 0, 20);
+    glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &VP[0][0]);
+
+    glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
+
+    for (uint i = 0; i < balls.size(); i++)
+      balls[i].drawSphere(sphere);
+
     ballsKDtree.build_tree(balls, 0);
 
     for (uint i = 0; i < balls.size(); i++) {
@@ -151,11 +152,6 @@ int main(void) {
   } // Check if the ESC key was pressed or the window was closed
   while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
          glfwWindowShouldClose(window) == 0);
-
-  // Cleanup VBO
-  glDeleteBuffers(1, &VBO);
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteProgram(programID);
 
   // Close OpenGL window and terminate GLFW
   glfwTerminate();

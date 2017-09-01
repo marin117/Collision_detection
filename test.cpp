@@ -62,11 +62,11 @@ int main(void) {
 
   // Dark blue background
   glClearColor(0.7f, 0.3f, 0.4f, 0.0f);
-  float i = 0.1;
 
   unsigned int programID = LoadShaders("StandardShading.vertexshader",
                                        "StandardShading.fragmentshader");
   int ViewMatrixID = glGetUniformLocation(programID, "V");
+  int MatrixID = glGetUniformLocation(programID, "VP");
 
   Sphere sfera(programID);
 
@@ -88,11 +88,14 @@ int main(void) {
         glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
         );
 
+    glm::mat4 VP = Projection * View;
+
     glm::vec3 lightPos = glm::vec3(0, 0, 20);
     glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &VP[0][0]);
 
     glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &View[0][0]);
-    sfera.drawSphere(1, 0, 0, 0, View, Projection);
+    sfera.drawSphere(1, 0, 0, 0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

@@ -16,7 +16,6 @@ public:
   Sphere(uint Shader) {
 
     this->shader = Shader;
-    this->MatrixID = glGetUniformLocation(Shader, "MVP");
     this->ModelMatrixID = glGetUniformLocation(Shader, "M");
     this->slices = 20;
     this->stacks = 20;
@@ -90,16 +89,13 @@ public:
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, NULL);
   }
 
-  void drawSphere(float r, float x, float y, float z, glm::mat4 &view,
-                  glm::mat4 &projection) {
+  void drawSphere(float r, float x, float y, float z) {
     glm::mat4 Model = glm::mat4(1.0);
     glm::vec3 rad = glm::vec3(1.0f, 1.0f, 1.0f) * r;
     Model = glm::scale(Model, rad);
     glm::vec3 pos = glm::vec3(x, y, z);
     Model = glm::translate(Model, pos);
-    glm::mat4 MVP = projection * view * Model;
 
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
     glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &Model[0][0]);
 
     glUseProgram(this->shader);
@@ -120,7 +116,6 @@ private:
   std::vector<int> indices;
   uint shader;
   int slices, stacks;
-  int MatrixID;
   int ModelMatrixID;
 };
 
