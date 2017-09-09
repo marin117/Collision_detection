@@ -58,7 +58,7 @@ Ova klasa kako joj i samo ime govori, sadrži implementaciju najvažnijih vektor
 Naravno, za same vektore postoji još niz operacija, no ovdje su nam za sada bile potrebne samo ove dvije. Postavljene su i \emph{Set} metode za postavljanje vrijednosti u koordinate vektora. Ova klasa je header only i napisana je prema literaturi \cite{2}.
 
 \section{Kretanje kuglica}
-U ovom kratkom paragrafu objasniti ćemo kako se realiziralo kretanje kuglica po sceni. Kako je to objašnjeno u \ref{sec:balls}, za kretanje smo koristili funkciju pod imenom \emph{updatePosition} koja je za argument primala broj \emph{dt} što u prijevodu znači delta time ili razlika u vremenu između 2 framea. 
+U ovom kratkom paragrafu objasniti ćemo kako se realiziralo kretanje kuglica po sceni. Kako je to objašnjeno u poglavlju \ref{sec:balls}, za kretanje smo koristili funkciju pod imenom \emph{updatePosition} koja je za argument primala broj \emph{dt} što u prijevodu znači delta time ili razlika u vremenu između 2 framea. 
 Brzinu kretanja kuglice definirali smo kao:
 \begin{itemize}
 	\item Brzina u X smjeru
@@ -78,16 +78,16 @@ gdje je:
 S obzirom da nama ne treba izračun brzine, nego nam je potreban put koji će kuglica prijeći u svakom trenutku, malom izmjenom i prilagodbom jednadžbe dobijemo:
 \begin{equation}\label{equ:put}
 \begin{aligned}
-	s_x = vector.x * dt\\
-	s_y = vector.y * dt\\
-	s_z = vector.z * dt
+	s_x = vector.x \ dt\\
+	s_y = vector.y \ dt\\
+	s_z = vector.z \ dt
 	\end{aligned}
 \end{equation}
 gdje nam je:
 \begin{itemize}
-	\item vector.(x,y,z) - brzina u danoj koordinati
-	\item s (x,y,z) - prijeđeni put u danoj koordinati
-	\item dt - razlika vremena između 2 framea
+	\item $vector.(x,y,z)$ - brzina u danoj koordinati
+	\item $s (x,y,z)$ - prijeđeni put u danoj koordinati
+	\item $dt$ - razlika vremena između 2 framea
 \end{itemize}
 Na ovakav jednostavan način dobili smo kretanje kuglice u bilo kojem smjeru, za sad bez nikakve vanjske sile tj. gravitacije.
 \begin{figure}[!http]
@@ -114,7 +114,7 @@ Sudari su općenito mogu podijeliti u 2 skupine:
 	\item Neelastične sudare
 	\item Elastične sudare
 \end{itemize}
-Neelastični sudari su oni sudari kod kojih se energija sustava gubi zbog različitih razloga (deformacija tijela u sudaru, toplina i sl.). Budući da u realnom sudaru najčešće dolazi djelomičnog gubitka energije, ima smisla ukazati i na tu problematiku\cite{9}. Analiza takvog sudara i dalje se temelji na zakonima očuvanja. Kod elastičnih sudara u zatvorenom sustavu nalaze se sva tijela masa m1 i m2 koja se gibaju brzinama v1 i v2 prije sudara, odnosno brzinama v'1 i v'2 poslije sudara\cite{9}.
+Neelastični sudari su oni sudari kod kojih se energija sustava gubi zbog različitih razloga (deformacija tijela u sudaru, toplina i sl.). Budući da u realnom sudaru najčešće dolazi djelomičnog gubitka energije, ima smisla ukazati i na tu problematiku\cite{9}. Analiza takvog sudara i dalje se temelji na zakonima očuvanja. Kod elastičnih sudara u zatvorenom sustavu nalaze se sva tijela masa $m_{1}$ i $m_{2}$ koja se gibaju brzinama $v_{1}$ i $v_{2}$ prije sudara, odnosno brzinama $v'_{1}$ i $v'_{2}$ poslije sudara\cite{9}.
 \subsection{Sudari bez gubitka energije} \label{subsec:no_energy}
 U prvom i najosnovnijem slučaju, razmotrili smo situaciju gdje nema nikakvog gubitka energije i gdje izlazne brzine nakon sudara ostaju jednake. Prva situacija je bila sljedeća.
 
@@ -122,24 +122,24 @@ U prvom i najosnovnijem slučaju, razmotrili smo situaciju gdje nema nikakvog gu
 	\begin{center}
 		\begin{tikzpicture}
 		\draw (-3,0) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (-3,0) to (-1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v1};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (-3,0) to (-1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v_{1}$};
 		\draw (3,0) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (3,0) to (1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v2};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (3,0) to (1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v_{2}$};
 		
 		\end{tikzpicture}
 	\end{center}
 	\caption {Primjer sudara kuglica}
 	\label{fig:15}
 \end{figure}
-Kuglice se kreću jedna prema drugoj, jedan se kreće brzinom v1, a druga brzinom v2. U trenutku sudara, kuglice će se odbiti jedna od druge i nastaviti se kretati brzinom v'1 tj. v'2.
-\newpage
+Kuglice se kreću jedna prema drugoj, jedan se kreće brzinom $v_{1}$, a druga brzinom $v_{2}$. U trenutku sudara, kuglice će se odbiti jedna od druge i nastaviti se kretati brzinom $v'_{1}$ tj. $v'_{2}$.
+\newline
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
 		\draw (-1.5,0) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (-1.5,0) to (-3.5,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v'1};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (-1.5,0) to (-3.5,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v'_{1}$};
 		\draw (1.5,0) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (1.5,0) to (3.5,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v'2};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (1.5,0) to (3.5,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v'_{2}$};
 		
 		\end{tikzpicture}
 	\end{center}
@@ -148,8 +148,8 @@ Kuglice se kreću jedna prema drugoj, jedan se kreće brzinom v1, a druga brzino
 \end{figure}
 Nakon sudara vrijediti će sljedeće:
 \begin{itemize}
-	\item v'1 = -v1
-	\item v'2 = -v2
+	\item $v'_{1}$ = -$v_{1}$
+	\item $v'_{2}$ = -$v_{2}$
  
 \end{itemize}
 Ovakav slučaj je trivijalan i nije problem odrediti smjer kretanja kuglica nakon sudara. Kretanje kuglica je samo u jednoj dimenziji te ukoliko pomnožimo brzinu kretanja kuglice sa (-1) dobiti ćemo rezultatnu brzinu nakon sudara.
@@ -159,30 +159,30 @@ Sljedeća situacija je kompliciranija. Kretanje jedne kuglice se događa u 2 dim
 	\begin{center}
 		\begin{tikzpicture}
 		\draw (-1.5,0) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (-1.5,0) to (1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v1};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (-1.5,0) to (1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v_{1}$};
 		\draw (3.5,-2) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (3.5,-2) to (1.5,-0.5) node[minimum size = 1pt, xshift = 0.2 cm, yshift = -0.5cm]{v2};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (3.5,-2) to (1.5,-0.5) node[minimum size = 1pt, xshift = 0.2 cm, yshift = -0.5cm]{$v_{2}$};
 		
 		\end{tikzpicture}
 	\end{center}
 	\caption {Primjer sudara kuglica u 2 dimenzije}
 	\label{fig:16}
 \end{figure}
-Primjetimo kako se druga kuglica, koja se giba brzinom v2, giba u 2 dimenzije (ima komponentu brzine u X smjeru i komponentu brzine u Y smjeru). Pretpostavimo da su mase kuglica jednake i da se pri njihovom sudare neće izgubiti nikakva energija. Rezultirajući vektori brzina više neće biti samo invertirani. Kuglica koja se giba samo po X osi (brzinom v1) nakon sudara dobiti će i neku svoju Y komponentu brzine.
+Primjetimo kako se druga kuglica, koja se giba brzinom $v_{2}$, giba u 2 dimenzije (ima komponentu brzine u X smjeru i komponentu brzine u Y smjeru). Pretpostavimo da su mase kuglica jednake i da se pri njihovom sudare neće izgubiti nikakva energija. Rezultirajući vektori brzina više neće biti samo invertirani. Kuglica koja se giba samo po X osi (brzinom $v_{1}$) nakon sudara dobiti će i neku svoju Y komponentu brzine.
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
 		\draw (-0.35,0) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (-0.35,0) to (-2.5,1.5) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm,red]{v'1};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (-0.35,0) to (-2.5,1.5) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm,red]{$v'_{1}$};
 		\draw (2.5,-1) circle (1.5);
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (2.5,-1) to (4.5,0.5) node[minimum size = 1pt, xshift = 0.2 cm, yshift = -0.5cm,red]{v'2};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (2.5,-1) to (4.5,0.5) node[minimum size = 1pt, xshift = 0.2 cm, yshift = -0.5cm,red]{$v'_{2}$};
 		
 		\end{tikzpicture}
 	\end{center}
 	\caption {Smjer gibanja kuglica nakon sudara u 2 dimenzije}
 	\label{fig:17}
 \end{figure}
-Pretpostavimo da su i brzine kuglica u X smjeru jednake, pa će rezultat sudara približno jednak kao na \ref{fig:15}. Ovakav rezultat sudara možemo prikazati u nekoliko matematičkih koraka\cite{2}.
+Pretpostavimo da su i brzine kuglica u X smjeru jednake, pa će rezultat sudara približno jednak kao na slici \ref{fig:15}. Ovakav rezultat sudara možemo prikazati u nekoliko matematičkih koraka\cite{2}.
 
 Prvo pronađemo vektor normale. To je vektor čije su komponente razlika između koordinata centara kuglica. Sukladno tome odmah pronađemo vektor tangente te oba vektora pomoću klase \emph{Vector3D} normaliziramo (kako je već i spomenuto pomoću ove klase puno nam je lakše pronaći vektor normale i tangente)\cite{2}.
 
@@ -199,29 +199,29 @@ Prvo pronađemo vektor normale. To je vektor čije su komponente razlika između
 	\caption {Vektor normale i tangente}
 	\label{fig:18}
 \end{figure}
-Nakon toga, inicijalne brzine v1 i v2 pomnožimo sa jediničnim vektorima normale i tangente\cite{2}. Pomnožiti u ovome slučaju znači izračunati skalarni produkt između 2 vektora.
+Nakon toga, inicijalne brzine $v_{1}$ i $v_{2}$ pomnožimo sa jediničnim vektorima normale i tangente\cite{2}. Pomnožiti u ovome slučaju znači izračunati skalarni produkt između 2 vektora.
 \begin{equation}\label{equ:dot_vector}
 \begin{aligned}
-		v'(1,2)n = un * v(1,2) \\
-		v'(1,2)t = ut * v(1,2)
+		v'_{1,2}n = un\  v_{1,2} \\
+		v'_{1,2}t = ut\ v_{1,2}
 	\end{aligned}
 \end{equation}
 gdje nam je:
 \begin{itemize}
-	\item un - jedinični vektor vektora normale
-	\item ut - jedinički vektor vektora tangente
-	\item v (1,2) - vektori brzine kuglica
-	\item v'n - rezultirajuća brzina u smjeru normale
-	\item v't - rezultirajuća brzina u smjeru tangente
+	\item $un$ - jedinični vektor vektora normale
+	\item $ut$ - jedinični vektor vektora tangente
+	\item $v_{1,2}$ - vektori brzine kuglica
+	\item $v'n$ - rezultirajuća brzina u smjeru normale
+	\item  $v't$ - rezultirajuća brzina u smjeru tangente
 \end{itemize}
 Tangencijalne brzine nakon sudara ostaju jednake što znači da smo u smjeru tangente izračunali brzinu\cite{2}. Nakon što smo odradili sve ove korake, pomoću jednostavne formule izračunamo rezultatne brzine za obje kuglice prema formuli:
 \begin{equation}\label{equ:final_vec}
 	\begin{aligned}
-		v'1 = v'2n * un + v'1t * ut \\
-		v'2 = v'1n * un + v'2t * ut
+		v'_{1} = v'_{2}n \ un + v'_{1}t \ ut \\
+		v'_{2} = v'_{1}n \ un + v'{_2}t \ ut
 		\end{aligned}
 \end{equation}
-S ovim jendostavnim matematičkim koracima dobiti ćemo točno odbijanje kuglica nakon sudara kako je i prikazano na \ref{fig:17}. Ovo se može opisati i jednostavnim algoritmom koji je prikazan na idućoj strani.
+S ovim jednostavnim matematičkim koracima dobiti ćemo točno odbijanje kuglica nakon sudara kako je i prikazano na slici \ref{fig:17}. Ovo se može opisati i jednostavnim algoritmom koji je prikazan na idućoj strani.
 \newpage
 \begin{algorithm}
 	\caption{Algoritam za izračunavanje smjera brzina nakon sudara između 2 kuglice}
@@ -234,12 +234,12 @@ S ovim jendostavnim matematičkim koracima dobiti ćemo točno odbijanje kuglica
 			\State $normal = (a.center - b.center)$
 			\State $un = unitVector(normal)$
 			\State $ut(-un.y,un.x)$
-			\State $v1n = a.v * un$
-			\State $v1t = a.v * ut$
-			\State $v2n = b.v * un$
-			\State $v2t = b.v * ut$
-			\State $a.v = v1n * un + v1t * ut$
-			\State $b.v = v2n * un + v1t * ut$
+			\State $v_{1}n = a.v$  $un$
+			\State $v_{1}t = a.v$ $ut$
+			\State $v_{2}n = b.v$ $un$
+			\State $v_{2}t = b.v$ $ut$
+			\State $a.v = v_{1}n$ $un + v_{1}t$ $ut$
+			\State $b.v = v_{2}$ $un + v_{2}t$ $ut$
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}\
@@ -257,7 +257,7 @@ glm::mat4 View = glm::lookAt(
 \end{lstlisting}
 Prva linija govori nam gdje smo na našoj sceni postavili kameru. Prva linija dakle znači da se kameri nalazi na koordinatama (0,0,50) (udaljeni smo samo u Z smjeru). To znači da je naša X koordinata u rasponu od [-25, 25], a Y u rasponu od [-20,20] (razlog ovome je Aspect ratio koji je 4:3, no u ovome poglavlju to nije jako bitno).
 
-Sada kada znamo konkretne koordinate našeg prozora, možemo proći kroz implementaciju same klase. Ona je u principu vrlo jednostavna, zidovi su zamišljeni kao obični AABB-i s kojima kuglice provjeravaju sudar. Kako je već spomenuto u \ref{sec:balls} kuglice imaju pridodjeljen odgovarajući AABB, pa te objekte možemo iskoristiti za detekciju sudara između zida i kuglice. Naravno i ovdje će se događati neke pogreške prilikom detekcije no to nam u principu nije jako bitno. Ovdje pogreška neće toliko utjecati na kretanje kuglice koliko bi u slučaju sudara između 2 kuglice. Zidovi također imaju pridodjeljen objekt klase \emph{Vector3D}, a u njemu nam je zapisana normala zida. Normala zida nam je vrlo bitna za izračun sudara kuglice i zida. Važno je naglasiti da je normala jedinični vektor.
+Sada kada znamo konkretne koordinate našeg prozora, možemo proći kroz implementaciju same klase. Ona je u principu vrlo jednostavna, zidovi su zamišljeni kao obični AABB-i s kojima kuglice provjeravaju sudar. Kako je već spomenuto u poglavlju \ref{sec:balls} kuglice imaju pridodjeljen odgovarajući AABB, pa te objekte možemo iskoristiti za detekciju sudara između zida i kuglice. Naravno i ovdje će se događati neke pogreške prilikom detekcije no to nam u principu nije jako bitno. Ovdje pogreška neće toliko utjecati na kretanje kuglice koliko bi u slučaju sudara između 2 kuglice. Zidovi također imaju pridodjeljen objekt klase \emph{Vector3D}, a u njemu nam je zapisana normala zida. Normala zida nam je vrlo bitna za izračun sudara kuglice i zida. Važno je naglasiti da je normala jedinični vektor.
 
 \begin{figure}[!http]
 	\begin{center}
@@ -331,14 +331,14 @@ Nakon implementacije klase koje nam definiraju zidove, same sudare nije bio prob
 Ovakav tip sudara možemo prikazati jednostavnom formulom:
 \begin{equation}\label{equ:wall_collision}
 		\begin{aligned}
-			vector = vector - 2 * Dot(vector, normal) * normal;
+			vector = vector - 2Dot(vector, normal) normal;
 		\end{aligned}
 \end{equation}
 gdje su:
 \begin{itemize}
-	\item vector - brzina i smjer kretanja kuglice
-	\item normal - normala zida
-	\item Dot - skalarni produkt
+	\item $vector$ - brzina i smjer kretanja kuglice
+	\item $normal$ - normala zida
+	\item $Dot$ - skalarni produkt
 \end{itemize}
 Ovo se također može prikazati jednostavni algoritmom koji je prikazan na sljedećoj stranici.\newpage
 \begin{algorithm}
@@ -349,7 +349,7 @@ Ovo se također može prikazati jednostavni algoritmom koji je prikazan na sljed
 		\If {AABBCollision($ball ,wall$) is false}
 		\Return
 		\EndIf
-		\State $DoubleDot = 2 * (ball.vector * wall.normal)$
+		\State $DoubleDot = 2  (ball.vector * wall.normal)$
 		\State $collisionNormal = DoubleDot * wall.normal$
 		\State $ball.vector = ball.vector - collisionNormal$
 		\EndFunction
@@ -383,20 +383,20 @@ Sila teža i težina jednake su po iznosu i smjeru djelovanja, ali nisu identič
 Programski, ovo je vrlo jednostavno realizirati. S obzirom da je sila teža vertikalna sila, ona će djelovati samo na Y komponentu brzine kuglice. Opća formula sile teže glasi:
 \begin{equation} \label{equ:sila_teza}
 	\begin{aligned}
-		G = m * g
+		G = m \ g
 	\end{aligned}
 \end{equation}
 gdje je:
 \begin{itemize}
-	\item m - masa objekta
-	\item g - akceleracija sile teže koja iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$
+	\item $m$ - masa objekta
+	\item $g$ - akceleracija sile teže koja iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$
 \end{itemize}
 Ovo je samo formula sile i ona nam u ovom slučaju nije jako korisna. S obzirom da baratamo samo sa silama moramo iskoristiti drugu fizikalnu veličinu kojom ćemo regulirati brzinu da simuliramo silu težu. 
 
 Fizikalna veličina koja nama zapravo treba je slobodni pad. Brzina slobodnog pada iznosi:
 \begin{equation}\label{slobodni_pad}
 	\begin{aligned}
-		v = g * t
+		v = g \ t
 	\end{aligned}
 \end{equation}
 Slobodni pad je gibanje tijela isključivo pod utjecajem sile teže. Zakonitosti slobodnoga pada prvi je proučavao Galileo Galilei, te ustanovio da je prijeđeni put s proporcionalan kvadratu protekloga vremena t, a brzina v jednoliko raste s proteklim vremenom, te da gibanje ne ovisi o masi tijela koje pada \cite{10}.Uobičajeno je da se slobodni pad uzima kao primjer jednolikog ubrzanog gibanja (gibanja sa stalnim ubrzanjem). Pritom se pretpostavlja da nema otpora zraka ili trenja \cite{10}.
@@ -414,7 +414,7 @@ Sama implementacija slobodnog pada je trivijalna:
 	\end{algorithmic}
 \end{algorithm}
 
-U \ref{alg:free_fall} dt nam označava vrijeme koje je dobiveno između 2 framea. Na primjer, ukoliko imamo 60 sličica po sekundi, dt nam iznosi 16.6667 ms. Dobivanje razlike vremena između 2 framea je vrlo jednostavno. U nastavku ćemo prikazati implementaciju funkcije koja nam omogućuje izračunavanje proteklog vremena i kretanje kuglica po prostoru. \newpage
+U algoritmu \ref{alg:free_fall} dt nam označava vrijeme koje je dobiveno između 2 framea. Na primjer, ukoliko imamo 60 sličica po sekundi, dt nam iznosi 16.6667 ms. Dobivanje razlike vremena između 2 framea je vrlo jednostavno. U nastavku ćemo prikazati implementaciju funkcije koja nam omogućuje izračunavanje proteklog vremena i kretanje kuglica po prostoru. \newpage
 \begin{lstlisting}[style = myC++, label = {code:12}, caption = {Implementacije update funkcija}]
 
 void Ball::updatePosition(float dt) {
@@ -446,37 +446,37 @@ Stvari s gravitacijom gledane na ovakav način su zapravo dosta jasne. Na ovakav
 U svim poglavljima do sada stalno se spominjala nekakva fizikalna reakcija kuglice na sudar. Svaka kuglica prilikom svog kretanja ima nekakvu kinetičku energiju. Opća formula kinetičke energije glasi:
 \begin{equation}\label{equ:kinetic}
 	\begin{aligned}
-	E_{k} = \frac{m * v^2}{2}
+	E_{k} = \frac{m \ v^2}{2}
 	\end{aligned}
 \end{equation}
 gdje je:
 \begin{itemize}
-	\item m - masa kuglice 
-	\item v - brzina kuglice
+	\item $m$ - masa kuglice 
+	\item $v$ - brzina kuglice
 \end{itemize}
-Prilikom sudara između 2 kuglice, dio kinetičke energije će se izgubiti, tj. prijeći će u iz jedne kuglice na drugu i obrnuto. S obzirom da vrijedi ZAKON OČUVANJA ENERGIJE, zbroj energije 2 kuglice se neće promijeniti. Zakon očuvanja energije nam govori da u u zatvorenom sustavu zbroj svih oblika energije (mehaničke, toplinske, električne, magneske i tako dalje) konstantan. Drugim riječima, u zatvorenom sustavu jedan oblik energije može prelaziti u druge oblike, a da se pri tom energija niti stvara niti poništava\cite{11}.
+Prilikom sudara između 2 kuglice, dio kinetičke energije će se izgubiti, tj. prijeći će u iz jedne kuglice na drugu i obrnuto. S obzirom da vrijedi ZAKON OČUVANJA ENERGIJE, zbroj energije 2 kuglice se neće promijeniti. Zakon očuvanja energije nam govori da u u zatvorenom sustavu zbroj svih oblika energije (mehaničke, toplinske, električne, magneske,...) konstantan. Drugim riječima, u zatvorenom sustavu jedan oblik energije može prelaziti u druge oblike, a da se pri tom energija niti stvara niti poništava\cite{11}.
 
 Iduća fizikalna pojava koju ćemo analizirati je količina gibanja. Količina gibanja ili zalet (oznaka p) je vektorska fizikalna veličina u klasičnoj mehanici koja opisuje gibanje čestice ili sustava čestica\cite{12}:
 \begin{equation}\label{equ:impuls}
 \begin{aligned}
-	p = m * v
+	p = m \ v
 \end{aligned}
 \end{equation}
 gdje je:
 \begin{itemize}
-	\item m - masa čestice
-	\item v - brzina čestice
+	\item $m$ - masa čestice
+	\item $v$ - brzina čestice
 \end{itemize}
 Svaka kuglica koja se na sceni kreće, imati će količinu gibanja. Prilikom sudara količina gibanja količina gibanja jedne kuglice prenijeti će se na drugu kuglicu i obrnuto. Slično, kao i kod zakona o očuvanju energije, zakon očuvanja količine gibanja nam govori da količina gibanja izoliranog sustava je konstantna, odnosno, ukupna promjena količine gibanja u vremenu unutar izoliranog sustava jednaka je nuli\cite{12}.
 
-Sada kada smo objasnili 2 važna fizikalna zakona, možemo definirati što je to elastični sudar zapravo. Kako smo i ranije rekli, elastični sudar je sudar tijela ulaze nekom brzinom v1 i v2, a izlazna brzina iz sudara im je v'1 i v'2. Kombinirajući zakon o očuvanju energije i zakon o očuvanju količine gibanja možemo reći slijedeće. Ukupna energija i ukupna količina gibanja prilikom sudara se ne mijenjaju, ali energija i količina gibanja određene kuglice se mijenja\cite{13}. Pokažimo to na jednom jednostavnom primjeru.
+Sada kada smo objasnili 2 važna fizikalna zakona, možemo definirati što je to elastični sudar zapravo. Kako smo i ranije rekli, elastični sudar je sudar tijela ulaze nekom brzinom $v_{1}$ i $v_{2}$, a izlazna brzina iz sudara im je $v'_{1}$ i $v'_{2}$. Kombinirajući zakon o očuvanju energije i zakon o očuvanju količine gibanja možemo reći slijedeće. Ukupna energija i ukupna količina gibanja prilikom sudara se ne mijenjaju, ali energija i količina gibanja određene kuglice se mijenja\cite{13}. Pokažimo to na jednom jednostavnom primjeru.
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
-		\draw (-3,0) circle (1.5) node[xshift = -1.5cm, yshift = 1.5cm]{m1};
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (-3,0) to (-1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v1};
-		\draw (3,0) circle (1) node[xshift = 1cm, yshift = 1cm]{m2};
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (3,0) to (1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{v2};
+		\draw (-3,0) circle (1.5) node[xshift = -1.5cm, yshift = 1.5cm]{$m_{1}$};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (-3,0) to (-1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v_{1}$};
+		\draw (3,0) circle (1) node[xshift = 1cm, yshift = 1cm]{$m_{2}$};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt] (3,0) to (1,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm]{$v_{2}$};
 		
 		\end{tikzpicture}
 	\end{center}
@@ -486,17 +486,17 @@ Sada kada smo objasnili 2 važna fizikalna zakona, možemo definirati što je to
 \newline
 gdje je:
 \begin{itemize}
-	\item m1 \textgreater m2
-	\item v2 \textgreater v1
+	\item $m_{1}$ \textgreater$m_{1}$
+	\item $v_{1}$ \textgreater $v_{2}$
 \end{itemize}
-S obzirom na mase i brzine možemo reći slijedeće. Kuglice će se nastaviti gibati u suprotnim smjerovima. Brzina v1 će se smanjiti s obzirom da je masa te kuglice veća. Brzina v2 će se povećati i kuglica će se kretati u suprotnom smjeru s većom brzinom.\newpage
+S obzirom na mase i brzine možemo reći slijedeće. Kuglice će se nastaviti gibati u suprotnim smjerovima. Brzina $v_{1}$ će se smanjiti s obzirom da je masa te kuglice veća. Brzina $v_{2}$ će se povećati i kuglica će se kretati u suprotnom smjeru s većom brzinom.\newpage
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
-		\draw (-3,0) circle (1.5) node[xshift = -1.5cm, yshift = 1.5cm]{m1};
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (-3,0) to (-5,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm,red]{v'1};
-		\draw (3,0) circle (1) node[xshift = 1cm, yshift = 1cm]{m2};
-		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (3,0) to (6,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm,red]{v'2};
+		\draw (-3,0) circle (1.5) node[xshift = -1.5cm, yshift = 1.5cm]{$m_{1}$};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (-3,0) to (-5,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm,red]{$v'_{1}$};
+		\draw (3,0) circle (1) node[xshift = 1cm, yshift = 1cm]{$m_{2}$};
+		\draw[-{>[scale=3.5,length=2,width=3]},line width=0.4pt,red] (3,0) to (6,0) node[minimum size = 1pt, xshift = -0.1 cm, yshift = 0.35cm,red]{$v'_{2}$};
 		
 		\end{tikzpicture}
 	\end{center}
@@ -505,26 +505,26 @@ S obzirom na mase i brzine možemo reći slijedeće. Kuglice će se nastaviti gi
 \end{figure} 
 Iako su se brzine promijenile, ukupna količina gibanja ostala je jednaka. Sukladno tome vrijedi:
 \begin{equation}\label{equ:kol_gib}
-	m1 * v1 + m2 * v2 = m1 * v'1 + m2 * v'2
+	m_{1}  v_{1} + m_{2} v_{2} = m_{1}  v'_{1} + m_{2}  v'_{2}
 \end{equation}
 Naravno, rekli smo da i ukupna količina energije ostaje jednaka, pa vrijedi:
 \begin{equation}\label{equ:kol_energ}
-\frac{1}{2} * (m1 * v1^2 + m2 * v2^2) = \frac{1}{2} * (m1 * v'1^2 + m2 * v'2^2)
+\frac{1}{2}  (m_{1}  v_{1}^2 + m_{2}  v_{2}^2) = \frac{1}{2}  (m_{1}  v_{1}'^2 + m_{2}  v_{2}'^2)
 \end{equation}
 gdje su u obje jednadžbe:
 \begin{itemize}
-	\item m1, m2 - mase kuglica
-	\item v1, v2 - brzine kuglica prije sudara
-	\item v'1, v'2 - brzine kuglica nakon sudara
+	\item $m_{1}$, $m_{2}$ - mase kuglica
+	\item $v_{1}$, $v_{2}$ - brzine kuglica prije sudara
+	\item $v'_{1}$, $v'_{2}$ - brzine kuglica nakon sudara
 \end{itemize}
 Nakon niza matematičkih operacija i skraćivanja izraza možemo donijeti konačne izraze koji će nam izračunati brzine kuglica nakon sudara. Oni glase\cite{13}:
 \begin{equation}\label{equ:elastic_coll}
 	\begin{aligned}
-		v'1 = \frac{v1 * (m1 - m2) + 2 * m2 *v2}{m1 + m2}\\
-		v'2 = \frac{v2 * (m2 - m1) + 2 * m1 *v1}{m1 + m2}
+		v'_{1} = \frac{v_{1}  (m_{1} - m_{2}) + 2  m_{2} v_{2}}{m_{1} + m_{2}}\\
+		v'_{2} = \frac{v_{2}  (m_{2} - m_{1}) + 2  m_{1} v_{1}}{m_{1} + m_{2}}
 	\end{aligned}
 \end{equation}
-Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome što smo ranije naveli u poglavlju \ref{subsec:no_energy} nama i trebaju samo 1D sudari. Objasnimo zašto. Ranije u \ref{subsec:no_energy} smo opisali jednadžbe kojima ćemo dobiti smjer kretanja kuglica nakon sudara bez gubitka količine energije i količine gibanja. U ovome poglavlju, objasnili smo kako će se ponašati samo vrijednosti brzina nakon sudara. Sve što mi trebamo sada napraviti je, ove 2 jednadžbe iz \ref{equ:elastic_coll} dodati u kod za rješavanje sudara kuglica. Prema \ref{alg:resolve_collision_1} možemo iznijeti slijedeći algoritam za to:\newpage
+Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome što smo ranije naveli u poglavlju \ref{subsec:no_energy} nama i trebaju samo 1D sudari. Objasnimo zašto. Ranije u poglavlju \ref{subsec:no_energy} smo opisali jednadžbe kojima ćemo dobiti smjer kretanja kuglica nakon sudara bez gubitka količine energije i količine gibanja. U ovome poglavlju, objasnili smo kako će se ponašati samo vrijednosti brzina nakon sudara. Sve što mi trebamo sada napraviti je, ove 2 jednadžbe iz jednadžbe \ref{equ:elastic_coll} dodati u kod za rješavanje sudara kuglica. Prema algoritmu \ref{alg:resolve_collision_1} možemo iznijeti slijedeći algoritam za to:\newline
 \begin{algorithm}
 	\caption{Algoritam za izračunavanje smjera i iznosa brzina sudara između 2 kuglice uz promjenu količine gibanja jedne kuglice}
 	\label{alg:resolve_collision_2}
@@ -536,14 +536,14 @@ Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome �
 		\State $normal = (a.center - b.center)$
 		\State $un = unitVector(normal)$
 		\State $ut(-un.y,un.x)$
-		\State $v1n = a.v * un$
-		\State $v1t = a.v * ut$
-		\State $v2n = b.v * un$
-		\State $v2t = b.v * ut$
-		\State $v1(x,y,z) = \frac{v1n * (m1 - m2) + 2 * m2 *v2n}{m1 + m2}$
-		\State $v2(x,y,z) = \frac{v2n * (m2 - m1) + 2 * m1 *v1n}{m1 + m2}$
-		\State $a.v = v1 * un + v1t * ut$
-		\State $b.v = v2 * un + v1t * ut$
+		\State $v_{1}n = a.v$ $un$
+		\State $v_{1}t = a.v$  $ut$
+		\State $v_{2}n = b.v$  $un$
+		\State $v_{2}t = b.v$  $ut$
+		\State $v_{1}(x,y,z) = \frac{v_{1}n  (m_{1} - m_{2}) + 2  m_{2} v_{2}n}{m_{1} + m_{2}}$
+		\State $v_{2}(x,y,z) = \frac{v_{2}n  (m_{2} - m_{1}) + 2  m_{1} v_{1}n}{m_{1} + m_{2}}$
+		\State $a.v = v_{1}$  $un + v_{1}t$  $ut$
+		\State $b.v = v_{2}$  $un + v_{1}t$  $ut$
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}\

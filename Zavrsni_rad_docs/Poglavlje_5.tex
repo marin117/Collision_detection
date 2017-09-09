@@ -52,7 +52,7 @@ gdje su koordinate centara:\newpage
 	\item 5 - (8,1)
 	\item 6 - (2,3)
 \end{itemize}
-Na \ref{fig:25} vidimo da ne treba u svim situacijama provjeravati sudar. Na primjer za kuglicu 2 i 6 znamo da se sudar neće dogoditi te tu provjeri ne moramo uzimati u obzir dok između kuglica 5 i 4 te 1 i 2 znamo da bi se mogao dogoditi sudar u skorom vremenu, te, te sudare moramo provjeriti.
+Na slici \ref{fig:25} vidimo da ne treba u svim situacijama provjeravati sudar. Na primjer za kuglicu 2 i 6 znamo da se sudar neće dogoditi te tu provjeri ne moramo uzimati u obzir dok između kuglica 5 i 4 te 1 i 2 znamo da bi se mogao dogoditi sudar u skorom vremenu, te, te sudare moramo provjeriti.
 
 Postoje mnoge tehnike za podijeliti prostor, no ona koju smo mi koristili je k-d stablo. k-d stablo je binarno stablo gdje je svaki čvor k-dimenzionalna točka\cite{14}. Svaki čvor koji nije list, može se shvatit kao ravnina koja dijeli prostor. Točke koje se nalaze lijevo od ravnine predstavlja lijeva strana stabla, dok desne točke predstavlja desna strana stabla\cite{14}. Konkretno, ukoliko odaberemo X os za os podijele, točke manje od vrijednosti X bit će nam u lijevoj grani stabla, dok točke veće od X vrijednosti će biti na desnoj strani stabla\cite{14}. U 3D prostoru intuitivno je da ćemo imat 3 dimenzije. Dakle, root čvor stabla će podijeliti prostor prema X koordinati, zatim njegova djeca prema Y koordinati, djeca djece po Z koordinati itd. .
 \begin{figure}[!http]
@@ -76,7 +76,7 @@ Postoje mnoge tehnike za podijeliti prostor, no ona koju smo mi koristili je k-d
 	\label{fig:25}
 \end{figure} \newline
 Nakon što smo došli do Z dimenzije, ponovno dijelimo prostor po "x" koordinati, i tako se vrtimo dok ne podijelimo cijeli prostor. 
-Sada se možemo vratiti na situaciju iz \ref{fig:26}. k-d stablo će nam onakav prostor podijeliti na sljedeći način\cite{14}:
+Sada se možemo vratiti na situaciju iz slike \ref{fig:26}. k-d stablo će nam onakav prostor podijeliti na sljedeći način\cite{14}:
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
@@ -128,7 +128,7 @@ S obzirom na sve ovo možemo napisati jednostavan algoritam za izgradnju samog k
 	\end{algorithmic}
 \end{algorithm}
 \newpage
-Sada kada znamo izgraditi stablo možemo prikazati kako bi stablo konkretno izgledalo za situaciju \ref{fig:27} it prošlog poglavlja:
+Sada kada znamo izgraditi stablo možemo prikazati kako bi stablo konkretno izgledalo za situaciju na slici \ref{fig:27} it prošlog poglavlja:
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}[level distance=1.5cm,
@@ -145,7 +145,7 @@ Sada kada znamo izgraditi stablo možemo prikazati kako bi stablo konkretno izgl
 		
 		\end{tikzpicture}
 	\end{center}
-	\caption {Prikaz strukture k-d stabla za \ref{fig:27}}
+	\caption {Prikaz strukture k-d stabla za sliku \ref{fig:27}}
 	\label{fig:28}
 \end{figure}
 Prikažimo ovo isto stablo sa koordinatama centara\cite{14}:
@@ -165,7 +165,7 @@ Prikažimo ovo isto stablo sa koordinatama centara\cite{14}:
 		
 		\end{tikzpicture}
 	\end{center}
-	\caption {Prikaz strukture k-d stabla za \ref{fig:27}}
+	\caption {Prikaz strukture k-d stabla za sliku \ref{fig:27}}
 	\label{fig:28-1}
 \end{figure}
 
@@ -177,7 +177,7 @@ gdje je:
 \begin{itemize}
 	\item N - broj elemenata
 \end{itemize}
-Algoritmi koji se uglavnom koriste za sortiranje su \emph{Mergesort} (implementiran u C++ STL-u) i \emph{Heapsort}. Složenost ovih algoritama u općem slučaju je O(NlogN). Sukladno tome to je i najbolja složenost koja se može postići s ovim algoritmima sortiranja. Složenost izgradnje stabla u najgorem slučaju može biti O(kNlogN) operacija što ćemo mi i imati s obzirom da u svakoj od k dimenzija moramo sortirati točke i odabrati median element. S obzirom da se kuglice na sceni kreću, stablo moramo graditi u svakom frameu pa je i ovakav način detekcije sudara sam po sebi dosta složen, no još uvijek je brži od onog opisanog u \ref{alg:primitive_collision}. 
+Algoritmi koji se uglavnom koriste za sortiranje su \emph{Mergesort} (implementiran u C++ STL-u) i \emph{Heapsort}. Složenost ovih algoritama u općem slučaju je O(NlogN). Sukladno tome to je i najbolja složenost koja se može postići s ovim algoritmima sortiranja. Složenost izgradnje stabla u najgorem slučaju može biti O(kNlogN) operacija što ćemo mi i imati s obzirom da u svakoj od k dimenzija moramo sortirati točke i odabrati median element. S obzirom da se kuglice na sceni kreću, stablo moramo graditi u svakom frameu pa je i ovakav način detekcije sudara sam po sebi dosta složen, no još uvijek je brži od onog opisanog u algoritmu \ref{alg:primitive_collision}. 
 
 Sada kada smo naš prostor podijelili prema točkama kuglica, potrebno je samo pretražiti sve potencijalne sudare na sceni. Dobra osobina k-d stabla je ta što će nam podijeliti prostor po gustoći točaka. Tako možemo vrlo jednostavno detektirati sudare na sceni i izračunati ih ukoliko se sudar dogodio.
 
@@ -213,7 +213,7 @@ Pretraga sudara u k-d stablu nakon izgradnje je trivijalna stvar. Sve se svodi n
 
 	\end{algorithmic}
 \end{algorithm}
-Na ovakav ćemo način vrlo jednostavno na cijeloj sceni detektirati sudare i izračunati. S obzirom da je kuglica uvijek u sudaru sama sa sobom, potrebno je izbjeći računanje takvog sudara. Prilikom implementacije klase za kuglice, u \ref{code:7}, spomenuli smo atribut \emph{i} tipa integer. Ovaj atribut označava poziciju kuglice u listi i na taj način ćemo vrlo jednostavno izbjeći računanje sudara kuglice same sa sobom. Testiranjem je utvrđeno da se prilikom takvog računanja mogu pojaviti anomalije i ponašanje kuglica koje ne želimo.\newpage
+Na ovakav ćemo način vrlo jednostavno na cijeloj sceni detektirati sudare i izračunati. S obzirom da je kuglica uvijek u sudaru sama sa sobom, potrebno je izbjeći računanje takvog sudara. Prilikom implementacije klase za kuglice, u kodu \ref{code:7}, spomenuli smo atribut \emph{i} tipa integer. Ovaj atribut označava poziciju kuglice u listi i na taj način ćemo vrlo jednostavno izbjeći računanje sudara kuglice same sa sobom. Testiranjem je utvrđeno da se prilikom takvog računanja mogu pojaviti anomalije i ponašanje kuglica koje ne želimo.\newpage
 \subsection{Implementacija klase za k-d stablo}
 U ovome poglavlju nećemo prikazivati implementaciju svih funkcija. Opisati ćemo samo odluke i strukturu same klase.
 \begin{lstlisting}[style = myC++, label = {code:13}, caption={Implementacija klase za k-d stablo}]

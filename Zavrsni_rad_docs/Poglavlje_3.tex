@@ -1,5 +1,5 @@
 \chapter{Hijerarhija ograničavajućih volumena (eng. Bounding volume hierarchy)}\label{cha:BVH}
-Prije nego što krenemo sa stvarnom animacijom i detekcijom sudara, trebali bi znati kako u stvarnome životu komplicirane objekte smjestiti u ograničavajući volumen. S obzirom da su objekti inače vrlo komplicirani, sastavljeni od puno različitih primitiva, potrebna nam je struktura podataka koja će na vjeran način ograničiti naš objekt. Ukoliko naš objekt ograničimo manjim volumenima i na pametan način te volumene posložimo u stablo, dobili smo određenu hijerarhiju volumena ili BVH. Možemo to prikazati na ovakav način:
+Prije nego što krenemo sa stvarnom animacijom i detekcijom sudara, trebali bi znati kako u stvarnome životu komplicirane objekte smjestiti u ograničavajući volumen. S obzirom da su objekti inače vrlo komplicirani te sastavljeni od puno različitih primitiva, potrebna nam je struktura podataka koja će na vjeran način ograničiti naš objekt. Ukoliko naš objekt ograničimo manjim volumenima i na pametan način te volumene posložimo u stablo, dobili smo određenu hijerarhiju volumena ili BVH. Možemo to prikazati na ovakav način:
 \begin{itemize}
 	\item Root element stabla ograniči cijeli objekt
 	\item Njegova djeca ograniče lijevu i desnu polovicu objekta
@@ -61,7 +61,7 @@ Prije nego što se upustimo u izgradnju samog AABB stabla, potrebno je pronaći 
 	\end{center}
 \end{figure}
 
-Kako je to spomenuto ranije u \ref{sec::AABB_representation}, koristili smo reprezentaciju AABB-a sa točkom centra i radijusom. Pronalaženje ograničavajućeg volumena za ovakvu reprezentaciju AABB-a malo je zahtjevnije nego u slučaju sa min-max reprezentacijom.
+Kako je to spomenuto ranije u poglavlju \ref{sec::AABB_representation}, koristili smo reprezentaciju AABB-a sa točkom centra i radijusom. Pronalaženje ograničavajućeg volumena za ovakvu reprezentaciju AABB-a malo je zahtjevnije nego u slučaju sa min-max reprezentacijom.
 \begin{algorithm}
 \caption{Algoritam za izračunavanje minimalnog ograničavajućeg volumena za 2 AABB-a}
 \label{alg:fatten_aabb}
@@ -86,7 +86,7 @@ Za izgradnju AABB stabla postoje 3 načina\cite{3}:
 	\item Ubacivanje elemenata u stablo
 \end{itemize}
 Za sva 3 načina, potrebno je odabrati strategiju koja će napraviti što manje stablo. Ukoliko nam je stablo veliko pretraga elemenata u kojima se događa sudar će duže trajati. Zbog toga, potrebno je odabrati strategiju koja će stvoriti dobro balansirano ili približno dobro balansirano stablo\cite{1}. Ukoliko i ne stvorimo dobru strategiju za izgradnju stabla, uvijek možemo balansirati stablo "ručno" tj. putem funkcije. Ovo nikako nije poželjan slučaj. Time se gubi dodatno vrijeme na procesoru i funkcija za balansiranje je sama po sebi komplicirana i zahtjeva O(n) operacija. Za Top down i Bottom up konstrukciju potrebno je odabrati ravninu presijecanja (eng. Partitioning plane). Izgradnja ovoga stabla je u principu kao izgradnja svakog drugog stabla, samo je odabir ravnine presijecanja posao koji zahtjeva veliku količinu znanja i testiranja da u konačnici naše stablo bude minimalno. 
-Ravnina presijecanja, kao što joj i samo ime govori, presjeći će listu naših objekata i pripadajućih AABB-a na onaj način kojim ćemo dobiti što manje stablo.Najjednostavniji model ravnine presijecanja je taj da se u listi elemenata odabere median element i da s obzirom na njegov AABB, izrađuje lijeva i desna grana stabla. Kao što je već rečeno, root element stabla će biti cijeli objekt te je potrebno samo odabrati pripadajuću točko centra i radijus (na ranije spomenuti način opisan u \ref{subsec:combineAABB} samo sa listom elemenata).
+Ravnina presijecanja, kao što joj i samo ime govori, presjeći će listu naših objekata i pripadajućih AABB-a na onaj način kojim ćemo dobiti što manje stablo.Najjednostavniji model ravnine presijecanja je taj da se u listi elemenata odabere median element i da s obzirom na njegov AABB, izrađuje lijeva i desna grana stabla. Kao što je već rečeno, root element stabla će biti cijeli objekt te je potrebno samo odabrati pripadajuću točko centra i radijus (na ranije spomenuti način opisan u poglavlju \ref{subsec:combineAABB} samo sa listom elemenata).
 
 U ovom radu, odabrali smo treću strategiju za izgradnju stabla. Ubacivanje elemenata u prvom trenutku činilo se kao najlogičniji izbor jer je glavna ideja bila da se stablo elemenata izgrada prilikom sudara kuglica.
 
@@ -111,7 +111,7 @@ U ovom radu, odabrali smo treću strategiju za izgradnju stabla. Ubacivanje elem
 	\caption {Prikaz sudara 2 kuglice i pripadajućeg AABB stabla}
 	\label{fig:11}
 \end{figure}
-Prema \ref{fig:11} stablo bi izgradili vrlo jednostavno. Nakon detekcije sudara, stvorili bi novi element, koji bi bio root element stabla (na \ref{fig:11} crvenom bojom). Njegov lijevi element pokazivao bi na lijevi AABB (plavom bojom), a desno dijete bi pokazivalo na desni AABB (zelenom bojom). 
+Prema slici \ref{fig:11} stablo bi izgradili vrlo jednostavno. Nakon detekcije sudara, stvorili bi novi element, koji bi bio root element stabla (na slici \ref{fig:11} crvenom bojom). Njegov lijevi element pokazivao bi na lijevi AABB (plavom bojom), a desno dijete bi pokazivalo na desni AABB (zelenom bojom). 
 
 Iako je primjer dosta trivijalan, još uvijek ne znamo kako nam klasa za AABB stablo izgleda, stoga još uvijek je sve prilično apstraktno. Klasa, kao i bilo koja druga klasa za stablo će sadržavati na lijevi i desni element stabla. To smo riješili pomoću "pametnih" pokazivača tj. u C++-u, \texttt{unique\char`_ptr}. Ovakav tip pokazivača nas rasterećuje brige o memoriji i njezinom brisanju. Osim toga, sadržimo "običan" pokazivač na element roditelja. Važan podatak koji nam također treba je i dubina stabla. Osim svega navedenog, ovakav tip stabla gradili smo u konstrukturu. Nema smisla stvarati AABB stablo od jedne kuglice, stoga je ovo bio zgodan način da se olakša sama implementacija algoritma za dodavanje dodatnih elemenata. Jednom kada bi izgradili stablo od 2 elementa, mogli smo dodati u njega bilo koji drugi element ubacivanjem na najbolju poziciju, tj. na poziciju gdje ćemo imati minimalno stablo.
 
@@ -172,7 +172,7 @@ Prvo se sudare plava i crvena kuglica te se na taj način preko konstruktora izr
 
 		\end{tikzpicture}
 	\end{center}
-	\caption {Prikaz AABB stabla za \ref{fig:12}}
+	\caption {Prikaz AABB stabla za sliku \ref{fig:12}}
 	\label{fig:12-1}
 \end{figure}
 Nakon udara svake kuglice, ubacujemo novi AABB u naše stablo. Za to je korišten vrlo jednostavan algoritam. Primjećujemo da svaki element koji ubacujemo u stablo će biti list, stoga možemo slobodno reći da ova funkcija realizira ubacivanje lista u stablo\cite{6}. Prije samog algoritma, treba naglasiti da napisani algoritam možda nije najtočniji i možda ne radi za sve slučajeve. Algoritam je u svakom slučaju nedovoljno testiran, ali za ovako mali primjer poslužio nam je da vrlo dobro prikažemo strukturu AABB stabla. Algoritam radi na jednostavan način. Iteriramo po kreiranom stablu i izračunavamo površinu AABB-a od elementa koji želimo ubaciti i lijevog i desnog djeteta. Ukoliko je površina AABB-a od lijevog djeteta i elementa manja od površine AABB-a i desnog djeteta, iteriramo u lijevu stranu stabla. Ako je obrnuto, iteriramo na desnu stranu i tako sve dok ne dođemo do posljednjeg elementa stabla\cite{6}. S obzirom jesmo li išli lijevo ili desno, tu ubacujemo naš novokreirani element u stablo. U zadnjem koraku, vraćamo se od lista prema root elementu i radimo "update" AABB-a nad svakim elementom stabla.\newpage
@@ -232,7 +232,7 @@ Za jedno i drugo stablo vrijedi struktura:
 				child {node[draw, circle,inner sep=1pt,minimum size =1cm] {right}};
 \end{tikzpicture}
 	\end{center}
-	\caption{Struktura stabla za \ref{fig:13}}
+	\caption{Struktura stabla za sliku \ref{fig:13}}
 	\label{fig:13-1}
 \end{figure}
 U nekom trenutku, mi želimo točno znati da se dogodio sudar između zelene i žute kuglice (kuglice su prikazane drugom bojom samo radi razumjevanja). Na već opisani način detektiramo na kojem mjestu će se dogoditi sudar. Kada otkrijemo u kojem se listu dogodio sudar, taj sudar ćemo na neki određeni način riješiti i napraviti update na cijelom stablu. U našem slučaju kuglice su se odbile bez gubitka energije.\newpage
@@ -262,7 +262,7 @@ U nekom trenutku, mi želimo točno znati da se dogodio sudar između zelene i �
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}\
-Kao i \ref{alg:leaf_insertion}, ovaj algoritam također nije istestiran do kraja i vjerovatno u sebi ima neke pogreške, no za ovako jednostavne primjere će raditi. Ovime smo zapravo pokazali da nakon potpunog razumijevanja AABB stabla i strukture možemo vrlo jednostavno napisati kod za izgradnju stabla i detektiranje sudara između 2 ili više stabala.
+Kao i u algoritmu \ref{alg:leaf_insertion}, ovaj algoritam također nije istestiran do kraja i vjerovatno u sebi ima neke pogreške, no za ovako jednostavne primjere će raditi. Ovime smo zapravo pokazali da nakon potpunog razumijevanja AABB stabla i strukture možemo vrlo jednostavno napisati kod za izgradnju stabla i detektiranje sudara između 2 ili više stabala.
 \newpage
 
 \section{Prednosti i mane BVH-a}
