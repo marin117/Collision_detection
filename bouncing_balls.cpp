@@ -87,7 +87,7 @@ int main(void) {
 
   std::vector<Ball> balls;
 
-  for (uint i = 0; i < 10; i++) {
+  for (uint i = 0; i < 5; i++) {
     float x = std::rand() % 40 - 20;
     float y = std::rand() % 20;
 
