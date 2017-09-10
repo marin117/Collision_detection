@@ -1,0 +1,91 @@
+\chapter{Sjenčanje}
+U fazi sjenčanja, ujedno i posljednjoj fazi ovoga rada, cilj je bio dodati atribute kuglicama kako bi rad izgledao impresivnije. Prije samog korištenja alata za sjenčanje (tzv. Shader) bilo je potrebno promijeniti okolinu u kojoj se rad izvršavao. Do sada, koristili smo OpenGL 1.x, koji je eksperimentalan i ne koristi Shadere za iscrtavanje poligona. S OpenGL-a 1.x, smo iz tog razloga prešli na noviju verziju, OpenGL 3.3 koji nam omogućava korištenje Shadera i nekih naprednijih opcija koje nismo do sada imali.
+
+Iako je noviji, OpenGL 3.3 koristi neke nove principe i modele s kojima se do sada nismo susreli. Zbog toga, morali smo odustati od \emph{GLUT-a}, koji nam je služio za komunikaciju sa operacijskim sustavom (prikaz prozora, korištenje miša i tipkovnice, terminiranje prozora,...). Prešli smo na noviji \emph{GLFW} koji se koristi kod modernijih verzija OpenGL-a. U principu \emph{GLFW} i \emph{GLUT} služe za iste stvari, no \emph{GLFW} je moderniji i pruža nam bolju optimizaciju programa nego stariji \emph{GLUT}. Usprkos tome, \emph{GLFW} nema biblioteke za crtanje sfera, pravokutnika i sl. pa smo morali sami definirati sferu kojom ćemo opisati kuglice. To će biti objašnjeno u narednom poglavlju.
+\newpage
+\section{Crtanje sfere}
+Kako smo spomenuli \emph{GLFW} nema biblioteke kojima možemo nacrtati jednostavne poligone kao što ima \emph{GLUT}. Dakle, do sada korištena funkcija \emph{glutSolidSphere} za crtanje kuglica, više nam nije bilo od koristi i morali smo definirati sami točke kojima ćemo crtati sferu.
+
+Za crtanje sfere postoje generalno 2 načina:
+\begin{itemize}
+	\item Programsko generiranje točaka, indeksa i normala
+	\item Prijenos objekta iz odgovarajućeg formata generiranog u programu za crtanje modela (npr. Blender)
+\end{itemize}
+U početku je bila velika dilema koji od ova 2 načina odabrati, s obzirom da je svaki od njih imao neke svoje prednosti i mane, no u konačnosti izabrali smo programsko generiranje zbog relativno lakšeg implementiranja od prijenosa objekata. Inače, prijenos objekata iz nekog drugog alata nije sam po sebi težak, no ili zahtjeva dodatne biblioteke (npr. Assimp) ili zahtjeva pisanje programa koji će preuzeti podatke iz formata i postaviti ih u polja koja iscrtavamo.
+
+Kako smo rekli, OpenGL 3.3 za crtanje objekata koristi Shadere. Bez Shadera na sceni nećemo vidjeti ništa, te su oni ti koje objekte prikazuju. Shadere je potrebno posebno kompilirati i to za sada nećemo ovdje prikazivati, nego u kasnijim poglavljima. Za početak koristili smo jednostavne Shadere. Shadere dijelimo na Shadere točaka i Shadere fragmenata\cite{15}. Trenutno nećemo ulaziti u analizu kodova nego ćemo samo prikazati Shadere. Shader točaka definiran je:
+\begin{lstlisting}[style = myC++, label = {code:14}, caption = {Jednostavni Shader točaka}]
+#version 330 core
+layout(location = 0) in vec3 vertexPosition;
+// Values that stay constant for the whole mesh.
+out vec3 fragmentColor;
+void main(){
+// Output position of the vertex, in clip space : MVP * position
+	gl_Position.xyz =  vertexPosition_modelspace;
+	fragmentColor = vertexColor;
+}
+\end{lstlisting}
+Shader fragmenata definiran je kao:
+\begin{lstlisting}[style = myC++, label = {code:15}, caption = {Jednostavni Shader fragmenata}]
+#version 330 core
+// Ouput data
+in vec3 fragmentColor;
+out vec3 color;
+
+void main()
+{
+	color = vec3(0.4,0.2,0.7); 
+}
+\end{lstlisting}
+
+U početku, bilo je vrlo teško krenuti od crtanja same sfere. Trebalo je prvo razumjeti sve strukture koje se koriste u OpenGL-u 3.3 pa smo krenuli prvo od crtanja običnog trokuta korištenjem spomenutih Shadera.
+
+\subsection{Crtanje trokuta}
+Crtanje trokuta je prvi korak pri učenju OpenGL-a 3.3 \cite{15}\cite{16}. Na ovom jednostavnom primjeru, mogu se naučiti sve strukture i tipovi podataka koji se koriste prilikom korištenja OpenGL-a 3.3. 
+
+Trokut možemo definirati sa 3 točke. Neka to budu točke:
+\begin{itemize}
+	\item (-0.5f, -0.5f, 0.0f)
+	\item (0.5f, -0.5f, 0.0f)
+	\item (0.0f, 0.5f, 0.0f)
+\end{itemize}
+Vrlo je važno da točke budu definirane točno ovim redom inače ih OpenGL 3.3 neće nacrtati kako smo to htjeli. Ove točke važno je spremiti u strukturu zvanu VBO tj. Vertex Buffer Object. Ova struktura nam omogućava crtanje objekata na grafičkoj kartici, a ne na procesoru\cite{16}. Prije VBO-a definirali smo i Vertex Array Object, no ovdje on nije posebno bitan pa ga nećemo posebno ni spominjati. U nastavku slijedi kod kojime smo generirali VBO i u njega poslali podatke o točkama trokuta\cite{15}.\newpage
+\begin{lstlisting}[style = myC++, label = {code:15}, caption = {Generiranje VBO\cite{16}}]
+static const float vertices[] = {-0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.0f, 0.5f, 0.0f,}; //vertices of triangle
+	  
+unsigned int VBO;
+glGenBuffers(1, &VBO);
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	  
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+glEnableVertexAttribArray(0);
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+\end{lstlisting}
+Samo crtanje trokuta izvodi se na:
+\begin{lstlisting}[style = myC++, label = {code:16}, caption = {Crtanje trokuta\cite{15}}]
+do {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+	glUseProgram(Shader);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+}
+\end{lstlisting}
+
+Objašnjenje ovoga koda nećemo raditi, s obzirom da su to funkcije i strukture korištene isključivo sa strane OpenGL-a. Nastavak objašnjenja ovih struktura može se pronaći u \cite{15} i \cite{16}. Na ovakav način dobili smo trokut koji izgleda ovako:\newpage
+\begin{figure}[!http]
+	\begin{center}
+		\includegraphics[height = 8 cm, width = 8 cm, keepaspectratio = true]{triangle}
+		\caption{Trokut u OpenGL-u 3.3}
+		\label{fig:29}
+		\end{center}
+\end{figure}
+
+Idući zadatak bio je ovaj trokut pomicati po prostoru. Ovdje smo umjesto funkcija unutar OpenGL-a koristili \emph{glm} biblioteku matematičkih funkcija koja nam omogućava operacija sa matricama i transformacije u prostoru. Prije samih transformacija, potrebno je objasniti Shadere i funkcije koje koristimo unutar njih.
+
+\section{Shader}
+

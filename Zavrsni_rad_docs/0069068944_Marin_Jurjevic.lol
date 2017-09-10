@@ -12,3 +12,7 @@
 \contentsline {lstlisting}{\numberline {4.3}Implementacija klase Wall}{36}{lstlisting.4.3}
 \contentsline {lstlisting}{\numberline {4.4}Implementacije update funkcija}{41}{lstlisting.4.4}
 \contentsline {lstlisting}{\numberline {5.1}Implementacija klase za k-d stablo}{55}{lstlisting.5.1}
+\contentsline {lstlisting}{\numberline {6.1}Jednostavni Shader to\IeC {\v c}aka}{58}{lstlisting.6.1}
+\contentsline {lstlisting}{\numberline {6.2}Jednostavni Shader fragmenata}{59}{lstlisting.6.2}
+\contentsline {lstlisting}{\numberline {6.3}Generiranje VBO\cite {16}}{60}{lstlisting.6.3}
+\contentsline {lstlisting}{\numberline {6.4}Crtanje trokuta\cite {15}}{60}{lstlisting.6.4}

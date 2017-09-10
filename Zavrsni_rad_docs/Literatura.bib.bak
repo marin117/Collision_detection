@@ -95,4 +95,18 @@
   url   = {https://en.wikipedia.org/wiki/Elastic_collision},
 }
 
+@Electronic{14,
+  month = aug,
+  year  = {2017},
+  title = {KD tree, Wikipedia},
+  url   = {https://en.wikipedia.org/wiki/K-d_tree},
+}
+
+@Electronic{15,
+  month = aug,
+  year  = {2017},
+  title = {OpenGL Tutorial},
+  url   = {http://www.opengl-tutorial.org/},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
