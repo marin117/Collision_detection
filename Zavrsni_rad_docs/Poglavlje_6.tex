@@ -85,7 +85,67 @@ Objašnjenje ovoga koda nećemo raditi, s obzirom da su to funkcije i strukture 
 		\end{center}
 \end{figure}
 
-Idući zadatak bio je ovaj trokut pomicati po prostoru. Ovdje smo umjesto funkcija unutar OpenGL-a koristili \emph{glm} biblioteku matematičkih funkcija koja nam omogućava operacija sa matricama i transformacije u prostoru. Prije samih transformacija, potrebno je objasniti Shadere i funkcije koje koristimo unutar njih.
+Idući zadatak bio je ovaj trokut pomicati po prostoru. Ovdje smo umjesto funkcija unutar OpenGL-a koristili \emph{glm} biblioteku matematičkih funkcija koja nam omogućava operacija sa matricama i transformacije u prostoru.
 
-\section{Shader}
+\subsection{Transformacije}
 
+Prije korištenja OpenGL-a 3.3 transformacije smo definirali funkcijama unutar OpenGL-a. S obzirom da smo tada samo crtanje objekata izvršavali na procesoru, ovo je bilo moguće bez problema. Prelaskom na OpenGL 3.3 transformacije smo morali poslati u Shader da bi znali gdje nacrtati objekt.
+
+Svaki objekt ima svoj definirani prostor koji je definiran lokalnim koordinatama\cite{16}. Lokalne koordinate svakog objekta definirane su matricom modela. Transformacijom matrice modela definiramo poziciju svakog objekta unutar cijele scene tj. svijeta. Konačno, matricom pogleda definiramo pogled na svijet tj. koordinate iz kojih imamo pogled na cijelu scenu. U konačnosti definiranjem projekcije definiramo kako ćemo vidjeti stvari na sceni ("Clip space"). Ovo možemo prikazati jednostavnim dijagramom:\newpage
+\begin{figure}[!http]
+	\begin{center}
+		\includegraphics[height = 5 cm, width = 5 cm, keepaspectratio = true]{transformations}
+		\caption{Transformacije matrica i koordinata u OpenGL-u\cite{15}}
+		\label{fig:30}
+	\end{center}
+\end{figure}
+Umnoškom:
+\begin{equation}
+	\begin{aligned}
+		MVP = Projection Matrix * View Matrix * Model Matrix
+	\end{aligned}
+\end{equation}
+dobili smo transformaciju točaka u prostor koji mi vidimo (ili ne vidimo)\cite{16}. Transformacijom matrice modela (Model Matrix), možemo obavljati transformacije na objektima (translacija, skaliranje, rotiranje).Jednostavnim umnoškom matrica definiramo transformacije objekta. Na primjer:
+\begin{lstlisting}[style = myC++, label = {code:17}, caption = {Primjer transformacije objekata}]
+glm::mat4 projection = glm::perspective(glm::radians(45.0f),(float)4 / (float)3, 0.1f, 1000.0f);
+  
+glm::mat4 view = glm::lookAt(
+  glm::vec3(0, 0, 50), // Camera is at (0,0,50), in World Space
+  glm::vec3(0, 0, -1), // and looks at the origin
+  glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
+);
+glm::mat4 Model = glm::mat4(1.0f);
+glm::vec3 position = glm::vec3(5.0, 4.0, 0.0);
+glm::vec3 radius = glm::vec3(1.0f, 1.0f, 1.0f) * 3.0f;
+Model = glm::scale(Model, radius);
+Model = glm::translate(Model, position);
+glm::mat4 mvp = projection * view * Model;
+\end{lstlisting}
+Transformacije objekata moramo primjenjivati prema pravilu, prvo skaliranje, zatim rotacija i u konačnosti translacija\cite{15}. 
+
+Kada smo na procesoru izračunali transformacijske matrice, iste je potrebno poslati u Shadere. U pravilu, sva množenja matrica potrebno je izvršavati na procesoru, no nekada se množenja matrice mogu izvršavati i na grafičkoj kartici. Ovo će biti kod nas slučaj u kasnijem dijelu crtanja same sfere radi boljeg dizajna koda. Izračunate transformacijske matrice šaljemo u Shadere pomoću ključne riječi \emph{uniform}. Unutar Shadera točaka je potrebno pomnožiti transformacijsku matricu sa svim točkama objekta, da bi dobili točno mjesto gdje ćemo nacrtati naš objekt. To se izvodi na sljedeći način:
+\begin{lstlisting}[style = myC++, label = {code:17}, caption = {Primjer transformacije objekata}]
+layout(location = 0) in vec3 vertexPosition_modelspace;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+
+void main(){
+// Output position of the vertex, in clip space : MVP * position
+gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+}
+
+\end{lstlisting}
+Trokut sa slike \ref{fig:29} sada izgleda ovako:
+\begin{figure}[!http]
+	\begin{center}
+		\includegraphics[height = 8 cm, width = 8 cm, keepaspectratio = true]{transformed_triangle}
+		\caption{Trokut sa apliciranim transformacijama}
+		\label{fig:31}
+	\end{center}
+\end{figure}
+Iako smo trokut skaliranjem povećali, on izgleda manje iz razloga što je kamera udaljena u Z smjeru. Rotaciju ovdje nismo primjenjivali jer nam kasnije nije bila potrebna.
+
+Razumijevanje transformacija i matrica bila je jedna od ključnih koraka prije crtanja same sfere. Sada smo mogli definirati veliki broj trokuta, koje ćemo onda crtati na sceni, a sve u nekoliko linija unutar Shadera i C++. U ovom koraku već smo mogli primijetiti da algoritam koji smo prije implementirali radi na trokutima (koji su opisani sferom). U daljnjim koracima potrebno je bilo nacrtati same sfere i definirati Shadere koji će dati sferama određena svojstva.
+
+\subsection{Definiranje sfere}

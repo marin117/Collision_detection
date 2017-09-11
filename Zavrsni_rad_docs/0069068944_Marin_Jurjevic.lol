@@ -16,3 +16,5 @@
 \contentsline {lstlisting}{\numberline {6.2}Jednostavni Shader fragmenata}{59}{lstlisting.6.2}
 \contentsline {lstlisting}{\numberline {6.3}Generiranje VBO\cite {16}}{60}{lstlisting.6.3}
 \contentsline {lstlisting}{\numberline {6.4}Crtanje trokuta\cite {15}}{60}{lstlisting.6.4}
+\contentsline {lstlisting}{\numberline {6.5}Primjer transformacije objekata}{62}{lstlisting.6.5}
+\contentsline {lstlisting}{\numberline {6.6}Primjer transformacije objekata}{63}{lstlisting.6.6}
