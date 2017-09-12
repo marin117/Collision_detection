@@ -23,3 +23,12 @@
 *.mtc1
 *.out
 *.synctex.gz
+*.aux
+*.lof
+*.log
+*.fls
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2

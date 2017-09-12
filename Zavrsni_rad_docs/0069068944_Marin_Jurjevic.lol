@@ -18,3 +18,9 @@
 \contentsline {lstlisting}{\numberline {6.4}Crtanje trokuta\cite {15}}{60}{lstlisting.6.4}
 \contentsline {lstlisting}{\numberline {6.5}Primjer transformacije objekata}{62}{lstlisting.6.5}
 \contentsline {lstlisting}{\numberline {6.6}Primjer transformacije objekata}{63}{lstlisting.6.6}
+\contentsline {lstlisting}{\numberline {6.7}Kod za generiranje sfere}{65}{lstlisting.6.7}
+\contentsline {lstlisting}{\numberline {6.8}Kod za generiranje to\IeC {\v c}aka i indeksa sfere}{66}{lstlisting.6.8}
+\contentsline {lstlisting}{\numberline {6.9}Kod za crtanje sfere}{67}{lstlisting.6.9}
+\contentsline {lstlisting}{\numberline {6.10}Mno\IeC {\v z}enje matrica u Shaderu}{67}{lstlisting.6.10}
+\contentsline {lstlisting}{\numberline {6.11}Kona\IeC {\v c}ni Shader to\IeC {\v c}aka}{70}{lstlisting.6.11}
+\contentsline {lstlisting}{\numberline {6.12}Kona\IeC {\v c}ni Shader fragmenata}{71}{lstlisting.6.12}
