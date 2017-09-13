@@ -1,7 +1,7 @@
 \chapter{Sudari, fizika i vanjske sile}
 U ovom poglavlju, prije implementacije algoritma za podjelu prostora, prvo je potrebno opisati kakve će se uopće reakcije događati među kuglicama prilikom sudara. Potrebno je također i ograničiti našu scenu svojevrsnim zidovima. Vanjska sila je također važan dio ovoga projekta. Bilo je potrebno dodati gravitaciju na cijeloj sceni da se dobije dojam padanja kuglica i odbijanja od podloge. 
 
-Prije početka samog rješavanja sudara među kuglicama potrebno je definirati i njihova kretanja. Kretanja su definirana u pomoćnoj klasi \emph{Vector3D}. Pomoću ove klase također su definirane normale zidova. Ovakav pristup znatno je olakšao samo rješavanje sudara jer se izjeglo korištenje kompliciranih trigonometrijskih jednadžbi i funkcija.\newpage
+Potrebno je realizirati kretanje kuglica po sceni. Kretanja su definirana u pomoćnoj klasi \emph{Vector3D}. Pomoću ove klase također su definirane normale zidova. Ovakav pristup znatno je olakšao samo rješavanje sudara jer se izbjeglo korištenje kompliciranih trigonometrijskih jednadžbi i funkcija.\newpage
 
 \section{Implementacija klase Vector 3D}\label{sec:vec3}
 
@@ -50,15 +50,15 @@ inline float operator*(const Vector3D &lhs, const Vector3D &rhs) {
 }
 
 \end{lstlisting}
-Ova klasa kako joj i samo ime govori, sadrži implementaciju najvažnijih vektorskih operacija:
+Ova klasa kako sadrži implementaciju najvažnijih vektorskih operacija:
 \begin{itemize}
 	\item Operator * će nam izračunati skalarni produkt između 2 vektora
-	\item Funkcija normalize će normalizirati vektor
+	\item Funkcija $normalize$ će normalizirati vektor
 \end{itemize}
-Naravno, za same vektore postoji još niz operacija, no ovdje su nam za sada bile potrebne samo ove dvije. Postavljene su i \emph{Set} metode za postavljanje vrijednosti u koordinate vektora. Ova klasa je header only i napisana je prema literaturi \cite{2}.
+Naravno, za same vektore postoji još niz operacija, no ovdje su nam za sada bile potrebne samo ove dvije. Postavljene su i \emph{Set} metode za postavljanje vrijednosti u koordinate vektora. Ova klasa je $header only$ i napisana je prema literaturi \cite{2}.
 
 \section{Kretanje kuglica}
-U ovom kratkom paragrafu objasniti ćemo kako se realiziralo kretanje kuglica po sceni. Kako je to objašnjeno u poglavlju \ref{sec:balls}, za kretanje smo koristili funkciju pod imenom \emph{updatePosition} koja je za argument primala broj \emph{dt} što u prijevodu znači delta time ili razlika u vremenu između 2 framea. 
+U ovom kratkom paragrafu objasniti ćemo kako se realiziralo kretanje kuglica po sceni. Kako je to objašnjeno u poglavlju \ref{sec:balls}, za kretanje smo koristili funkciju pod imenom \emph{updatePosition} koja je za argument primala broj \emph{dt} što u prijevodu znači $delta time$ ili razlika u vremenu između 2 framea. 
 Brzinu kretanja kuglice definirali smo kao:
 \begin{itemize}
 	\item Brzina u X smjeru
@@ -75,7 +75,7 @@ gdje je:
 	\item s - prijeđeni put
 	\item t - vrijeme 
 \end{itemize}
-S obzirom da nama ne treba izračun brzine, nego nam je potreban put koji će kuglica prijeći u svakom trenutku, malom izmjenom i prilagodbom jednadžbe dobijemo:
+S obzirom da nama ne treba izračun brzine, nego nam je potreban put koji će kuglica prijeći u svakom trenutku, malom izmjenom i prilagodbom jednadžbe dobije se:
 \begin{equation}\label{equ:put}
 \begin{aligned}
 	s_x = vector.x \ dt\\
@@ -89,7 +89,7 @@ gdje nam je:
 	\item $s (x,y,z)$ - prijeđeni put u danoj koordinati
 	\item $dt$ - razlika vremena između 2 framea
 \end{itemize}
-Na ovakav jednostavan način dobili smo kretanje kuglice u bilo kojem smjeru, za sad bez nikakve vanjske sile tj. gravitacije.
+Na ovakav jednostavan način dobili smo kretanje kuglice u bilo kojem smjeru, za sad bez ikakve vanjske sile tj. gravitacije.
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
@@ -105,7 +105,7 @@ Na ovakav jednostavan način dobili smo kretanje kuglice u bilo kojem smjeru, za
 	\label{fig:14}
 \end{figure}
 
-Sada kada nam je jasno definirano kretanje kuglica, potrebno je definirati kako će se kuglice ponašati prilikom sudara. S obzirom da su nam sve informacije spremljene u vektoru, to ne bi smjelo predstavljati nikakav problem. Korištenjem jednostavnih formula iz mehanike može se vrlo jednostavno dobiti reakcija kuglice na sudar sa drugom kuglicom ili zidom.
+Sada kada nam je jasno definirano kretanje kuglica, potrebno je definirati kako će se kuglice ponašati prilikom sudara. S obzirom da su nam sve informacije spremljene u vektoru, to ne bi smjelo predstavljati problem. Korištenjem jednostavnih formula iz mehanike može se vrlo jednostavno dobiti reakcija kuglice na sudar sa drugom kuglicom ili zidom.
 
 \section{Sudari kuglica}
 
@@ -246,7 +246,7 @@ S ovim jednostavnim matematičkim koracima dobiti ćemo točno odbijanje kuglica
 Nakon pokretanja animacije primjećuje se jedan problem. Kuglice se slobodno gibaju po sceni i te u vrlo kratkom periodu izađu iz našeg viewporta. Našu scenu sada moramo ograničiti i to sa 4 strane s obzirom da još nismo implementirali gravitaciju. Za to će nam poslužiti klasa \emph{Wall} koju ćemo opisati u sljedećem poglavlju.
 
 \subsection{Zidovi i klasa Wall}
-Kako nam i samo ime govori, ova klasa služi za implementaciju granica tj. koji će ograničiti kretanje kuglica. Ove zidove nećemo vidjeti. Oni su nevidljivi i nalaze se na samim rubovima našeg prozora i ovise o \emph{lookAt} vektoru. Prvo bi bilo zgodno objasniti što i je taj \emph{lookAt} vektor. Laičkim rječnikom  možemo reći ovako: \emph{lookAt} vektor je vektor koji nam služi za pozicioniranje kamere na našoj sceni. Na primjer:\newpage
+Ova klasa služi za implementaciju granica tj. koji će ograničiti kretanje kuglica. Ove zidove nećemo vidjeti. Oni su nevidljivi i nalaze se na samim rubovima prozora i ovise o \emph{lookAt} vektoru. \emph{LookAt} vektor je vektor koji služi za pozicioniranje kamere na sceni. Na primjer:\newpage
 \begin{lstlisting}[style=myC++, label = {code:10}, caption={Primjer lookAt vektora iz glm knjižnice}]
 glm::mat4 View = glm::lookAt(
 	glm::vec3(0, 0, 50), // Camera is at (0,0,50), in World Space
@@ -255,9 +255,9 @@ glm::mat4 View = glm::lookAt(
 	);
 }
 \end{lstlisting}
-Prva linija govori nam gdje smo na našoj sceni postavili kameru. Prva linija dakle znači da se kameri nalazi na koordinatama (0,0,50) (udaljeni smo samo u Z smjeru). To znači da je naša X koordinata u rasponu od [-25, 25], a Y u rasponu od [-20,20] (razlog ovome je Aspect ratio koji je 4:3, no u ovome poglavlju to nije jako bitno).
+Prva linija govori gdje smo na sceni postavili kameru. To znači da se kameri nalazi na koordinatama (0,0,50) (udaljeni smo samo u Z smjeru). X koordinata, dakle je u rasponu od [-25, 25], a Y u rasponu od [-20,20] (razlog ovome je $Aspect ratio$ koji je 4:3, no u ovome poglavlju to nije bitno).
 
-Sada kada znamo konkretne koordinate našeg prozora, možemo proći kroz implementaciju same klase. Ona je u principu vrlo jednostavna, zidovi su zamišljeni kao obični AABB-i s kojima kuglice provjeravaju sudar. Kako je već spomenuto u poglavlju \ref{sec:balls} kuglice imaju pridodjeljen odgovarajući AABB, pa te objekte možemo iskoristiti za detekciju sudara između zida i kuglice. Naravno i ovdje će se događati neke pogreške prilikom detekcije no to nam u principu nije jako bitno. Ovdje pogreška neće toliko utjecati na kretanje kuglice koliko bi u slučaju sudara između 2 kuglice. Zidovi također imaju pridodjeljen objekt klase \emph{Vector3D}, a u njemu nam je zapisana normala zida. Normala zida nam je vrlo bitna za izračun sudara kuglice i zida. Važno je naglasiti da je normala jedinični vektor.
+Zidovi su zamišljeni kao obični AABB-i s kojima kuglice provjeravaju sudar. Kako je već spomenuto u poglavlju \ref{sec:balls} kuglice imaju pridodijeljen odgovarajući AABB, pa te objekte možemo iskoristiti za detekciju sudara između zida i kuglice. Ovdje će se također događati neke pogreške prilikom detekcije no to u principu nije bitno. Ovdje pogreška neće toliko utjecati na kretanje kuglice koliko bi u slučaju sudara između 2 kuglice. Zidovi također imaju pridodijeljen objekt klase \emph{Vector3D}, a u njemu nam je zapisana normala zida. Normala zida je vrlo bitna za izračun sudara kuglice i zida. Važno je naglasiti da je normala jedinični vektor.
 
 \begin{figure}[!http]
 	\begin{center}
@@ -269,7 +269,7 @@ Sada kada znamo konkretne koordinate našeg prozora, možemo proći kroz impleme
 	\caption {Prikaz jednog zida i normale na zid}
 	\label{fig:19}
 \end{figure}
-Zid ima AABB iste reprezentacije kao što imaju i kuglice, dakle radijus i centar. S obzirom na takvu reprezentaciju morali smo pažljivo izabrati koordinate centra i sam radijus. Vertikalni zidovi imali su Y koordinatu centra 0, a horizontalni zidovi su imali X koordinatu 0. Dalje, trebalo je odrediti radijus. Zidovi koji su vertikalni, imali su samo Y komponentu radijusa, dok su horizontalni imali samo X koordinatu radijusa. Primjer je u 2D, no logika i analogija je ista u sve 3 dimenzije. Samo bi dodali još 2 zida koji nam ograničavaju Z os i to je sve.
+Zid ima AABB iste reprezentacije kao što imaju i kuglice, dakle radijus i centar.  Vertikalni zidovi imali su Y koordinatu centra 0, a horizontalni zidovi su imali X koordinatu 0. Zatim je trebalo je odrediti radijus. Zidovi koji su vertikalni, imali su samo Y komponentu radijusa, dok su horizontalni imali samo X koordinatu radijusa. Primjer je u 2D, no logika i analogija je ista u sve 3 dimenzije. Samo bi dodali još 2 zida koji nam ograničavaju Z os.
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
@@ -282,7 +282,7 @@ Zid ima AABB iste reprezentacije kao što imaju i kuglice, dakle radijus i centa
 	\label{fig:20}
 \end{figure}
 
-Kada znamo sve ove informacije, implementacija same klase je prilično trivijalna. Ona je prikazana na idućoj strani.
+S obzirom na prethodno rečeno, implementacija same klase je trivijalna. Ona je prikazana na idućoj strani.
 \newpage
 \begin{lstlisting}[style=myC++, label = {code:11}, caption={Implementacija klase Wall}]
 class Wall {
@@ -311,9 +311,9 @@ private:
 };
 
 \end{lstlisting}
-Primjećujemo da je implementacije klase u principu vrlo trivijalna. Nemamo nikakvih metoda, osim \emph{Get}, koje nam služe za dohvaćanje pojedinih privatnih varijabli. Među varijablama nalazi se i \emph{mass} što definira masu zida. Ovoj varijabli pridodali smo neku vrlo veliku vrijednost, i nju ćemo kasnije koristiti za elastične sudare između zida i kuglica. 
+U klasi nema metoda, osim \emph{Get}, koje nam služe za dohvaćanje pojedinih privatnih varijabli. Među varijablama nalazi se i \emph{mass} što definira masu zida. Ovoj varijabli pridodali smo vrlo veliku vrijednost, i nju ćemo kasnije koristiti za elastične sudare između zida i kuglica. 
 \subsection{Sudari kuglica i zida}
-Nakon implementacije klase koje nam definiraju zidove, same sudare nije bio problem izračunati. U prvom trenutku ponovno nismo htjeli da se gubi energija kuglica. Sada će posebno do izražaja doći važnost normale zida. Htjeli smo da se kuglice odbije od zida pod istim kutom pod kojim se i sudarila. Ovakvim definiranjem normala, izbjegli smo korištenje trigonometrije i izračune upadnih i izlaznih kuteva.
+Nakon implementacije klase koje nam definiraju zidove, same sudare nije problem izračunati. U počeku nismo htjeli da se gubi energija kuglica. Sada će do izražaja dolazi važnost normale zida. Htjeli smo da se kuglice odbije od zida pod istim kutom pod kojim se i sudarila. Ovakvim definiranjem normala, izbjegli smo korištenje trigonometrije i izračune upadnih i izlaznih kuteva.
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
@@ -328,7 +328,7 @@ Nakon implementacije klase koje nam definiraju zidove, same sudare nije bio prob
 	\caption {Reakcija kuglice na sudar sa zidom}
 	\label{fig:21}
 \end{figure}
-Ovakav tip sudara možemo prikazati jednostavnom formulom:
+Ovakav tip sudara možemo prikazati formulom:
 \begin{equation}\label{equ:wall_collision}
 		\begin{aligned}
 			vector = vector - 2Dot(vector, normal) normal;
@@ -356,16 +356,13 @@ Ovo se također može prikazati jednostavni algoritmom koji je prikazan na sljed
 	\end{algorithmic}
 \end{algorithm}
 
-Sada naša animacija izgleda konačno kao nešto smisleno. Možemo dodati puno kuglica i testirati sudari između njih i sudare između kuglica i zidova. Prostor je ograničen i fizika odbijanja je smislena. Idući korak je dodavanje vanjske sile i gravitacije. Želimo da naše kuglice padaju, kao što je to situacija u stvarnome svijetu. Padanje i odbijanje od podloge. U sljedećem poglavlju razmotrit ćemo dodavanje gravitacije na kretanje kuglica i njihovo odbijanje od podloge. U konačnici, odbijanje od podloge će biti isto. No, nakon odbijanja s kuglicama se nešto treba dogoditi. Kuglice se u stvarnom svijetu ne mogu vječno odbijati od podloge. Mora se dogoditi gubitak kinematičke energije što će u nekom trenutku rezultirati da se kuglice prestanu gibati. Sve ove slučajeve razmotriti ćemo u narednim poglavljima.\newpage
+Animacija sada izgleda smisleno. Možemo dodati puno kuglica i testirati sudare između njih i sudare između kuglica i zidova. Prostor je ograničen i fizika odbijanja je smislena. Idući korak je dodavanje vanjske sile i gravitacije. Želimo da kuglice padaju, kao u stvarnome svijetu te realizirati padanje i odbijanje od podloge. U sljedećem poglavlju razmotrit ćemo dodavanje gravitacije na kretanje kuglica i njihovo odbijanje od podloge. U konačnici, odbijanje od podloge će biti isto. No, nakon odbijanja s kuglice trebaju imati fizikalnu reakciju na sudar. Kuglice se u stvarnom svijetu ne mogu stalno odbijati od podloge. Mora se dogoditi prijenos (u ovome slučaju gubitak) kinetičke energije što će u nekom trenutku rezultirati da se kuglice prestanu gibati. Sve ove slučajeve razmotriti ćemo u narednim poglavljima.\newpage
 
 \section{Sila teža} 
 Sila teže je sila kojom Zemlja privlači neko tijelo mase m, označavamo ju najčešće slovom G. Ta sila privlači sva tijela prema središtu Zemlje pa je stoga tu i usmjerena.
 Sila teže razlog je zbog kojeg sva bića i predmeti ne odlete u Svemir, već stoje na površini Zemlje.
-Kada pustimo tijelo da slobodno pada s određene visine, ono se giba ubrzanjem g koje iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$ neovisno o njegovoj težini što znači da će istovremeno pasti i iznimno teško i iznimno lagano tijelo ukoliko ih bacimo s iste visine.
-No, na Mjesecu npr. ubrzanje kojim tijelo pada kada ga slobodno pustimo 6 je puta manje nego na Zemlji, tako da bi tamo ljudi lebdjeli iznad površine 
-Nadalje, težina je posljedica djelovanja sile teže. To je sila kojom predmet djeluje na vodoravnu podlogu na koju je položen, npr. knjiga na stol, ili uteg na nit na koju je obješen.
+Kada pustimo tijelo da slobodno pada s određene visine, ono se giba ubrzanjem g koje iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$ neovisno o njegovoj težini što znači da će istovremeno pasti i iznimno teško i iznimno lagano tijelo ukoliko ih bacimo s iste visine. To je sila kojom predmet djeluje na vodoravnu podlogu na koju je položen, npr. knjiga na stol, ili uteg na nit na koju je obješen.
 Sila teža i težina jednake su po iznosu i smjeru djelovanja, ali nisu identični pojmovi.
-
 
 \begin{figure}[!http]
 	\begin{center}
@@ -380,7 +377,7 @@ Sila teža i težina jednake su po iznosu i smjeru djelovanja, ali nisu identič
 	\label{fig:22}
 \end{figure}
 
-Programski, ovo je vrlo jednostavno realizirati. S obzirom da je sila teža vertikalna sila, ona će djelovati samo na Y komponentu brzine kuglice. Opća formula sile teže glasi:
+Programski, ovo je jednostavno realizirati. S obzirom da je sila teža vertikalna sila, ona će djelovati samo na Y komponentu brzine kuglice. Opća formula sile teže glasi:
 \begin{equation} \label{equ:sila_teza}
 	\begin{aligned}
 		G = m \ g
@@ -391,15 +388,15 @@ gdje je:
 	\item $m$ - masa objekta
 	\item $g$ - akceleracija sile teže koja iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$
 \end{itemize}
-Ovo je samo formula sile i ona nam u ovom slučaju nije jako korisna. S obzirom da baratamo samo sa silama moramo iskoristiti drugu fizikalnu veličinu kojom ćemo regulirati brzinu da simuliramo silu težu. 
+Ovo je samo formula sile i ona nam u ovom slučaju nije korisna. S obzirom da baratamo samo sa silama moramo iskoristiti drugu fizikalnu veličinu kojom ćemo regulirati brzinu da simuliramo silu težu. 
 
-Fizikalna veličina koja nama zapravo treba je slobodni pad. Brzina slobodnog pada iznosi:
+Fizikalna veličina koju trebamo je slobodni pad. Brzina slobodnog pada iznosi:
 \begin{equation}\label{slobodni_pad}
 	\begin{aligned}
 		v = g \ t
 	\end{aligned}
 \end{equation}
-Slobodni pad je gibanje tijela isključivo pod utjecajem sile teže. Zakonitosti slobodnoga pada prvi je proučavao Galileo Galilei, te ustanovio da je prijeđeni put s proporcionalan kvadratu protekloga vremena t, a brzina v jednoliko raste s proteklim vremenom, te da gibanje ne ovisi o masi tijela koje pada \cite{10}.Uobičajeno je da se slobodni pad uzima kao primjer jednolikog ubrzanog gibanja (gibanja sa stalnim ubrzanjem). Pritom se pretpostavlja da nema otpora zraka ili trenja \cite{10}.
+Slobodni pad je gibanje tijela isključivo pod utjecajem sile teže Slobodnoi pad je prijeđeni put s proporcionalan kvadratu protekloga vremena t, a brzina v jednoliko raste s proteklim vremenom, te da gibanje ne ovisi o masi tijela koje pada \cite{10}.Uobičajeno je da se slobodni pad uzima kao primjer jednolikog ubrzanog gibanja (gibanja sa stalnim ubrzanjem). Pritom se pretpostavlja da nema otpora zraka ili trenja \cite{10}.
 
 Sama implementacija slobodnog pada je trivijalna:
 \begin{algorithm}
@@ -414,7 +411,7 @@ Sama implementacija slobodnog pada je trivijalna:
 	\end{algorithmic}
 \end{algorithm}
 
-U algoritmu \ref{alg:free_fall} dt nam označava vrijeme koje je dobiveno između 2 framea. Na primjer, ukoliko imamo 60 sličica po sekundi, dt nam iznosi 16.6667 ms. Dobivanje razlike vremena između 2 framea je vrlo jednostavno. U nastavku ćemo prikazati implementaciju funkcije koja nam omogućuje izračunavanje proteklog vremena i kretanje kuglica po prostoru. \newpage
+U algoritmu \ref{alg:free_fall} $dt$ (delta time) nam označava vrijeme koje je dobiveno između 2 framea. Na primjer, ukoliko imamo 60 sličica po sekundi, dt nam iznosi 16.6667 ms. Dobivanje razlike vremena između 2 framea je vrlo jednostavno. U nastavku ćemo prikazati implementaciju funkcije koja nam omogućuje izračunavanje proteklog vremena i kretanje kuglica po prostoru. \newpage
 \begin{lstlisting}[style = myC++, label = {code:12}, caption = {Implementacije update funkcija}]
 
 void Ball::updatePosition(float dt) {
@@ -441,7 +438,7 @@ glutTimerFunc(16, update, 0);
 
 Funkcija \emph{glutGet(\texttt{GLUT\_ELAPSED\_TIME})} će nam vratit broj milisekudni koje su prošle od \emph{glutInit} poziva (koji se stalno poziva na početku main petlje). Funkcija \emph{glutTimerFunc} će nam odrediti najmanji broj milisekundi koji će proći do idućeg poziva Update funkcije.
 
-Stvari s gravitacijom gledane na ovakav način su zapravo dosta jasne. Na ovakav način možemo dodati bilo koju vanjsku silu koja će djelovati na kuglice. Iduće što želimo je da kuglice prilikom sudara izgube energiju. To će biti dodatno objašnjeno u idućem poglavlju.\newpage
+Stvari s gravitacijom gledane na ovakav način su zapravo jasne. Na ovakav način možemo dodati bilo koju vanjsku silu koja će djelovati na kuglice. Iduće što želimo je da kuglice prilikom sudara prenose energiju. To će biti dodatno objašnjeno u idućem poglavlju.\newpage
 \section{Elastični sudari}
 U svim poglavljima do sada stalno se spominjala nekakva fizikalna reakcija kuglice na sudar. Svaka kuglica prilikom svog kretanja ima nekakvu kinetičku energiju. Opća formula kinetičke energije glasi:
 \begin{equation}\label{equ:kinetic}
@@ -489,7 +486,7 @@ gdje je:
 	\item $m_{1}$ \textgreater$m_{1}$
 	\item $v_{1}$ \textgreater $v_{2}$
 \end{itemize}
-S obzirom na mase i brzine možemo reći slijedeće. Kuglice će se nastaviti gibati u suprotnim smjerovima. Brzina $v_{1}$ će se smanjiti s obzirom da je masa te kuglice veća. Brzina $v_{2}$ će se povećati i kuglica će se kretati u suprotnom smjeru s većom brzinom.\newpage
+S obzirom na mase i brzine možemo reći sljedeće. Kuglice će se nastaviti gibati u suprotnim smjerovima. Brzina $v_{1}$ će se smanjiti s obzirom da je masa te kuglice veća. Brzina $v_{2}$ će se povećati i kuglica će se kretati u suprotnom smjeru s većom brzinom.\newpage
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}
@@ -507,7 +504,7 @@ Iako su se brzine promijenile, ukupna količina gibanja ostala je jednaka. Sukla
 \begin{equation}\label{equ:kol_gib}
 	m_{1}  v_{1} + m_{2} v_{2} = m_{1}  v'_{1} + m_{2}  v'_{2}
 \end{equation}
-Naravno, rekli smo da i ukupna količina energije ostaje jednaka, pa vrijedi:
+Ukupna količina energije ostaje jednaka pa vrijedi i:
 \begin{equation}\label{equ:kol_energ}
 \frac{1}{2}  (m_{1}  v_{1}^2 + m_{2}  v_{2}^2) = \frac{1}{2}  (m_{1}  v_{1}'^2 + m_{2}  v_{2}'^2)
 \end{equation}
@@ -524,7 +521,7 @@ Nakon niza matematičkih operacija i skraćivanja izraza možemo donijeti konač
 		v'_{2} = \frac{v_{2}  (m_{2} - m_{1}) + 2  m_{1} v_{1}}{m_{1} + m_{2}}
 	\end{aligned}
 \end{equation}
-Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome što smo ranije naveli u poglavlju \ref{subsec:no_energy} nama i trebaju samo 1D sudari. Objasnimo zašto. Ranije u poglavlju \ref{subsec:no_energy} smo opisali jednadžbe kojima ćemo dobiti smjer kretanja kuglica nakon sudara bez gubitka količine energije i količine gibanja. U ovome poglavlju, objasnili smo kako će se ponašati samo vrijednosti brzina nakon sudara. Sve što mi trebamo sada napraviti je, ove 2 jednadžbe iz jednadžbe \ref{equ:elastic_coll} dodati u kod za rješavanje sudara kuglica. Prema algoritmu \ref{alg:resolve_collision_1} možemo iznijeti slijedeći algoritam za to:\newline
+Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome što je ranije navedeno u poglavlju \ref{subsec:no_energy} nama i trebaju samo 1 dimenzionalni sudari. Ranije u poglavlju \ref{subsec:no_energy} opisane su jednadžbe kojima dobivamo smjer kretanja kuglica nakon sudara bez prijenosa količine energije i količine gibanja. U ovome poglavlju, objašnjeno kako će se ponašati samo vrijednosti brzina nakon sudara. Sada samo treba izvesti, ove 2 jednadžbe iz jednadžbe \ref{equ:elastic_coll} dodati u kod za rješavanje sudara kuglica. Prema algoritmu \ref{alg:resolve_collision_1} možemo iznijeti slijedeći algoritam za to:\newline
 \begin{algorithm}
 	\caption{Algoritam za izračunavanje smjera i iznosa brzina sudara između 2 kuglice uz promjenu količine gibanja jedne kuglice}
 	\label{alg:resolve_collision_2}

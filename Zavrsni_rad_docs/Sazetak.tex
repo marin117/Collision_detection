@@ -3,12 +3,15 @@
 %:::::::::::::::::::::::::::::::::::::::::::::::::::::
 %:::::::::::: HRVATSKI :::::::::::::::::::::::::::::::
 \noindent
-Ovo je tekst u kojem se opiše sažetak vašeg rada. Tekst treba imati duh rekapitulacije što je prikazano u radu, nakon čega slijedi 3-5 ključnih riječi (zamijenite dolje postavljene općenite predloške riječi nekim suvislim vlastitim ključnim riječima).
-%:::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+U ovome radu obrađuju se algoritmi za detekciju sudara, njihova implementacija u C++ programskom jeziku i usporedba istih na temelju jednostavnih kuglica. Cilj algoritama je da budu što efikasniji i da detektiraju sve sudare na sceni. Algoritme možemo podijeliti u nekoliko skupina, no obrađeni algoritmi su: algoritam za podjelu objekta, algoritam za podjelu prostor. Sudari između kuglica definirani su kao elastični sudari u kojima nema gubitka energije, ali se energija prenosi s jedne kuglice na drugu. Dodana je gravitacija kao vanjska sila koja djeluje na cijeloj sceni, pa kuglice cijelo vrijeme padaju i sudaraju se s nevidljivim zidom. U konačnosti, dodano je sjenčanje kuglica kojime se postigao bolji vizualni dojam samog rada.
+
+U početku, praktični dio rada izvršen je u alatu OpenGL 1.x, dok je za sjenčanje bilo potrebno prijeći na OpenGL 3.3 .
+%::::::::::::::::::::::::::::::::::::::::::::::::::::: 
 
 \vspace{5pt}
 %
-\noindent \textbf{\textit{Ključne riječi} --- Ključna riječ 1, Ključna riječ 2, Ključna riječ 3} 
+\noindent \textbf{\textit{Ključne riječi} --- detekcija sudara, particioniranje prostora, Hijerarhija ograničavajućih volumena, elastični sudari, sjenčanje} 
 
 %:::::::::::: KRAJ HRVATSKOG DIJELA :::::::::::::::::::
 
@@ -19,12 +22,14 @@ Ovo je tekst u kojem se opiše sažetak vašeg rada. Tekst treba imati duh rekap
 %\vspace{-10pt}
 \section*{Abstract}
 \vspace{-10pt}
-This is a text where a brief summary of your work is outlined. The text should have a sense of recap of what was presented in the thesis, followed by 3-5 keywords (replace the general keyword templates below with some meaningful keywords of your own) .
-%:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+\noindent
+The paper deals with collision detection algorithms, their implementation in the C ++ programming language, and their comparison in simple balls. The goal of algorithms is to be as effective as possible and to detect all collisions on the scene. Algorithms can be divided into several groups, without the processed algorithms are: bouning volume hierarchy algorithms, space partitioning algorithms. Colliding between the balls is defined as elastic collisions in which there is no loss of energy, but the energy is transmitted from one ball another. Gravity was added as an external force acting on the whole scene, so the balls are falling all the time and colliding with the invisible wall. In conclusion, ball shading was added to achieve a better visual appearance of the animation itself.
+
+Initially, the practical part of the paper was done in OpenGL 1.x, while for shading it was necessary to switch to OpenGL 3.3. 
 
 \vspace{5pt}
 %
-\noindent \textbf{\textit{Keywords} --- keyword 1, keyword 2, keyword 3}
+\noindent \textbf{\textit{Keywords} --- collision detection, space partitioning, bounding volume hierarchy, elastic collisions, shading}
 
 %::::::::::::::::::::::::::::::::::::::::::::::::::::::
 %:::::::::::: KRAJ ENGLESKOG DIJELA :::::::::::::::::::

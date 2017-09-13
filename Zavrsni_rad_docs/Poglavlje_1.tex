@@ -2,14 +2,14 @@
 
 Detekcija sudara temelji se u na preklapanju primitiva(trokut, kvadrat, poligon,...)\cite{1}, tj. točaka primitiva objekata. U praksi danas postoji cijeli niz algoritama koji omogućuju brzu detekciju sudara između objekata \cite{1}. Oni se mogu podijeliti na 2 dijela:
 \begin{itemize}
-	\item Algoritme na podjelu objekata
-	\item Algoritme na podjelu prostora
+	\item Algoritme za podjelu objekata
+	\item Algoritme za podjelu prostora
 \end{itemize}
 Postoje i još neki drugi algoritmi, no u ovom radu usredotočiti ćemo se na ova 2 najčešća pristupa. Ovisno o našim potrebama, odabiremo algoritam koji nam najviše odgovara. U ovom radu bit će opisana oba pristupa i prednosti i mane svakoga.
 
-Prilikom sudara, objekti imaju i neku fizikalnu reakciju na sudar. Ovisno o tome, događa se i gubitak energije na objektima. U ovome radu biti će posvećena posebna pažnja u gubitku energije gibanja prilikom sudara neovisno o tome događa li se sudar od zida, ili od drugog objekta. U početku je zamišljeno da objekti u ovome radu budu kuglice s obzirom na jednostavnu implementaciju i vjerni prikaz detekcije sudara. Na objekte također mora djelovati neka vanjska sila, objekti se ne mogu kretati u prostoru sami od sebe. Odlučeno je da će na cijeloj sceni djelovati gravitacijska sila koja vuče objekte prema "podlozi" od koje se zatim objekti odbijaju. Kako je i već spomenuto, objekti prilikom odbijanja gube energiju.
+Prilikom sudara, objekti imaju i neku fizikalnu reakciju na sudar. Ovisno o tome, događa se i gubitak energije na objektima. U ovome radu biti će posvećena posebna pažnja u prijenosu energije gibanja prilikom sudara neovisno o tome događa li se sudar od zida, ili od drugog objekta. U početku je zamišljeno da objekti u ovome radu budu kuglice s obzirom na jednostavnu implementaciju i vjerni prikaz detekcije sudara. Na objekte također mora djelovati neka vanjska sila, objekti se ne mogu kretati u prostoru sami od sebe. Odlučeno je da će na cijeloj sceni djelovati gravitacijska sila koja vuče objekte prema "podlozi" od koje se zatim objekti odbijaju. Kako je i već spomenuto, objekti prilikom odbijanja prenose energiju.
 
-Smisao ovog rada bio je vjerno prikazati i usporediti efikasnost algoritma u odnosu na primitivnu detekciju sudara gdje se provjerava sudar jednog objekta u odnosu na sve ostale, itd. . U konačnosti, kada se efikasnost algoritma svede do zadovoljavajuće razine, objekti dobivaju neka svojstva da animacije dobiju smisao i dodatnu ljepotu (npr. sudari kuglica na biljarskom stolu, kapljice vode, ...).
+Smisao ovog rada bio je vjerno prikazati i usporediti efikasnost algoritma u odnosu na primitivnu detekciju sudara gdje se provjerava sudar jednog objekta u odnosu na sve ostale. U konačnosti, kada se efikasnost algoritma svede do zadovoljavajuće razine, objekti dobivaju neka svojstva da animacije dobiju smisao i vizualni izgled (npr. sudari kuglica na biljarskom stolu, kapljice vode, ...).
 
 
 %%%%  POGLAVLJE ZAVRSENO  %%%%%

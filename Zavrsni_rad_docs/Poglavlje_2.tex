@@ -32,7 +32,7 @@ S obzirom da je AABB najjednostavniji oblik volumena, on nije uvijek točan. Ogr
 	\end{center}
 \end{figure}
 
-AABB u kodu možemo prikazati na nekoliko načina. Postoje 3 različite reprezentacije\cite{1} te ćemo u nastavku proći kroz sve te pobliže opisati opisati onu koja se koristila u ovome radu.
+AABB u kodu možemo prikazati na nekoliko načina. Postoje 3 različite reprezentacije\cite{1} te ćemo u nastavku proći kroz sve, te pobliže opisati opisati onu koja se koristila u ovome radu.
 
 \subsection{Reprezentacije AABB-a}\label{sec::AABB_representation}
 
@@ -85,7 +85,7 @@ struct AABB{
  \end{figure}
 
 
-Detekcija sudara za ovu reprezentaciju je također nešto kompliciranija nego u prethodnom slučaj i najmanje je "privlačna" od sve 3 reprezentacije \cite{1}.
+Detekcija sudara je za ovu reprezentaciju također malo kompliciranija nego u prethodnom slučaju i najmanje je "privlačna" od sve 3 reprezentacije \cite{1}.
 
 
 \begin{lstlisting}[style = {myC++},label={code:4}, caption = {Provjeravanje sudara za min-width reprezentaciju AABB-a\cite{1}}]
@@ -116,7 +116,7 @@ float rad[3]; //radijus
  	\end{center}
  \end{figure}
  \newpage
- Detektiranje sudara za ovu reprezentaciju je trivijalno. Za svaku dimenziju provjeravamo odnose centara i radijusa u svakoj dimenziji.
+ Detektiranje sudara, za ovu reprezentaciju, je trivijalno. Za svaku dimenziju provjeravamo odnose centara i radijusa u svakoj dimenziji.
  
 \begin{lstlisting}[style={myC++},label={code:6},caption={Provjeravanje sudara za centar-radijus reprezentaciju AABB-a\cite{1}}]
 bool Collision(AABB a, AABB b)
@@ -134,17 +134,17 @@ Razlog biranja ove reprezentacije AABB-a leži u tome što smo odabrali kuglice 
 
 Kao što je već ranije spomenuto, objekti koji će se koristiti za detektiranje sudara u prostoru su kuglice tj. sfere. Kuglice su odabrane iz razloga što se vrlo jednostavno može odrediti fizikalna reakcija na sudar i što se na njih mogu lijepo primijeniti vanjske sile kao gravitacija i slično. Samim korištenjem kuglica i prijašnjim odabirom AABB-a kao ograničavajućih volumena javljaju se pojedini problemi.
 
-Prvi i najveći problem u ovome slučaju je već spomenut. Naime, kako je to i prikazano na slici \ref{fig:2-1}, AABB ograniči prostor koji sfera ne pokriva tj. prostor koji je izvan sfere. To se može objasniti vrlo jednostavnom matematikom. Ako prikažemo stranicu kvadrata kao:
+Problem u ovome slučaju je već spomenut. Naime, kako je to i prikazano na slici \ref{fig:2-1}, AABB ograniči prostor koji sfera ne pokriva tj. prostor koji je izvan sfere. To se može objasniti vrlo jednostavnom matematikom. Ako prikažemo stranicu kvadrata kao:
 \begin{equation}
-a = 2*r \label{eq:stranica}
+a = 2r \label{eq:stranica}
 \end{equation}
 gdje nam je r radijus sfere tj. kuglice. Dalje, dijagonala kvadrata iznosi:
 \begin{equation}
-diag = a * \sqrt{2} \label{eq:dijagonala}
+diag = a  \sqrt{2} \label{eq:dijagonala}
 \end{equation}
-može se zaključiti da je udaljenost od presjecišta dijagonala tj. centra kvadrata veća od radijusa sfere za $\sqrt{2}$. Što je veća sfera to je pogreška u ograničavajućem volumenu također veća. Zbog toga sigurno će se događati da ćemo otkrivati sudare i onda, kada se oni ne događaju, a pri vrlo velikim sferama to može stvarati puno nelogičnosti i čudnih fizikalnih reakcija na sudar.Kada su sfere vrlo malog radijusa, ta pogreška se u principu i ne primjeti, ali je ipak prisutna.
+Može se zaključiti da je udaljenost od sjecišta dijagonala tj. centra kvadrata veća od radijusa sfere za $\sqrt{2}$. Što je veća sfera to je pogreška u ograničavajućem volumenu također veća. Zbog toga će se sigurno događati da ćemo otkrivati sudare i onda, kada se oni ne događaju, a pri vrlo velikim sferama to može stvarati puno nelogičnosti i čudnih fizikalnih reakcija na sudar.Kada su sfere vrlo malog radijusa, ta pogreška se u principu i ne primjeti, ali je ipak prisutna.
 
-Na sreću ovome problemu se može uskočiti na vrlo dobar način. Naime, kako je prikazano na slici \ref{fig:1}, sfera sama po sebi može biti ograničavajući volumen \cite{1}. To proizlazi iz činjenice da se na vrlo jednostavan i elegantan način može detektirati sudar između 2 sfere. 
+Ovome problemu uskače se na vrlo dobar način. Kako je prikazano na slici \ref{fig:1}, sfera sama po sebi može biti ograničavajući volumen \cite{1}. To proizlazi iz činjenice da se na vrlo jednostavan i elegantan način može detektirati sudar između 2 sfere. 
 
 \begin{lstlisting}[style = {myC++},label={code:6-1}, caption = {Detekcija sudara između 2 sfere\cite{1}}]
 bool SphereCollision(Sphere a, Sphere b)
@@ -157,11 +157,11 @@ float radiusSum = a.r + b.r;
 return dist2 <= radiusSum * radiusSum;
 }
 \end{lstlisting}
-U stvarnom kodu, implementacija ove funkcije izgleda nešto drugačije nego što je opisana ovdje i u literaturi, ali u principu algoritam i pristup su jednaki.
+U stvarnom kodu, implementacija ove funkcije izgleda drugačije nego što je opisana ovdje i u literaturi\cite{1}, ali u principu algoritam i pristup su jednaki.
 \newpage
 \subsection{Implementacija klase za kuglice}
 
-Implementacija klase za kuglice u principu je prilično jednostavna. Ona je prikazana sljedećim kodom:
+Implementacija klase za kuglice u principu je jednostavna. Prikazana je sljedećim kodom:
 
 \begin{lstlisting}[style = {myC++},label={code:7}, caption = {Implementacija klase za kuglice}]
 public:
@@ -198,24 +198,24 @@ private:
 
 \end{lstlisting}
 
-U principu, da se primjetiti da se u samoj deklaraciji klase uglavnom nalaze konstruktori i get metode za dobivanje privatnih varijabli. Get i template metode su definirane u samoj deklaraciji klase zbog svoje jednostavnosti i veće brzine pristupanja.
+Da se primijetiti da se u samoj deklaraciji klase uglavnom nalaze konstruktori i get metode za dobivanje privatnih varijabli. \emph{Get} i \emph{template} metode su definirane u samoj deklaraciji klase zbog svoje jednostavnosti i veće brzine pristupanja.
 
 U privatnim varijablama klase definirali smo najvažnije informacije o kuglici, a to su:
 
 \begin{itemize}
-	\item Center - točka centra za svaku kuglicu
-	\item r - radijus sfere
-	\item mass - masa sfere koja se kasnije koristi za količinu gibanja
-	\item i - pozicija kuglice u listi kojom se osigurava da kuglica ne provjerava sudar sa samom sobom 
+	\item $Center$ - točka centra za svaku kuglicu
+	\item $r$ - radijus sfere
+	\item $mass$ - masa sfere koja se kasnije koristi za količinu gibanja
+	\item $i$ - pozicija kuglice u listi kojom se osigurava da kuglica ne provjerava sudar sa samom sobom 
 
 \end{itemize}
 
 U javnim varijablama odredili smo:
 \begin{itemize}
-	\item bBox - odgovarajući AABB koji je opisan prethodno
+	\item $bBox$ - odgovarajući AABB koji je opisan prethodno
 	\newline
-	U ovom slučaju bBox dobiva vrijednosti radijusa i centra od sfere kroz konstruktor
-	\item vecDir - vektor definiran u klasi Vector3D koja sadrži osnovne operacije nad vektorima (skalarni produkt, oduzimanje, normaliziranje i sl.)
+	U ovom slučaju $bBox$ dobiva vrijednosti radijusa i centra od sfere kroz konstruktor
+	\item $vecDir$ - vektor definiran u klasi \emph{Vector3D} koja sadrži osnovne operacije nad vektorima (skalarni produkt, oduzimanje, normaliziranje i sl.)
 	\newline
 	Ovaj objekt nam omogućava kretanje kuglice i olakšava izračunavanje sudara od zida i druge kuglice. Implementacija same klase biti će pokazana u kasnijim poglavljima.
 	
@@ -223,13 +223,13 @@ U javnim varijablama odredili smo:
 
 Metode koje su definirane, u konačnosti govore same za sebe:
 \begin{itemize}
-	\item collision - detektira sudar kuglice ovisno o tipu s kojim se sudara.\newline
+	\item $collision$ - detektira sudar kuglice ovisno o tipu s kojim se sudara.\newline
 	Ukoliko se događa sudar sa drugom kuglicom, sudar se detektira na ranije opisani način. Sudar sa zidom i bilo kojim drugim objektom se detektira preko pridodanih AABB-a.
-	\item resolveCollision - u metodama ovog imena definiramo fizikalnu reakciju kuglice na sudar. Ovisno o objektu s kojim se kuglica sudara, tako se i poziva određena resolveCollision funkcija
-	\item drawSphere - funkcija za crtanje kuglica
+	\item $resolveCollision$ - u metodama ovog imena definiramo fizikalnu reakciju kuglice na sudar. Ovisno o objektu s kojim se kuglica sudara, tako se i poziva određena $resolveCollision$ funkcija
+	\item $drawSphere$ - funkcija za crtanje kuglica
 	\newline
 	Kuglice u prvom trenutku crtamo sa \emph{glutSolidSphere} i pomoću \emph{glTranslatef} ih pomičemo po prostoru. Kasnije, pri korištenju Opengl 3.3 kuglice će se crtati na drugačiji način.
-	\item updatePosition - metoda kojom definiramo kretanje kuglica po prostoru uz pridodanu gravitaciju. \newline
+	\item $updatePosition$ - metoda kojom definiramo kretanje kuglica po prostoru uz pridodanu gravitaciju. \newline
 	Detaljnija implementacija će biti kasnije objašnjena
 \end{itemize}
 

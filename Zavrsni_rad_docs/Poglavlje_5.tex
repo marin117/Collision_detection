@@ -1,8 +1,8 @@
 \chapter{Particioniranje prostora}
-Kako smo to spomenuli u uvodu, postoje razni algoritmi za detekciju sudara. Najvažniji od njih su oni kojima dijelimo objekte (BVH), i one kojima dijelimo prostor. Algoritam s kojim dijelimo objekt smo već prošlu u poglavlju \ref{cha:BVH}. Kako smo u nekom trenutku odustali od BVH-a bilo je potrebno pronaći dobar i brz način za detektiranje sudara na cijeloj sceni. Detekcija sudara sama po sebi, komplicirana je operacija i potrebno je da bude manje složena od O(n\texttt{$^2$}) operacija. Kako smo to opisali u poglavlju \ref{cha:BVH}, BVH-u je ptorebno O{logN} operacija sa detekciju sudara na sceni, iako je nekada prije potrebno napraviti dodatne kalkulacije i ažuriranja strukture da bi ona bila funkcionalna. To dodatno komplicira stvari, ali je vrlo efikasno. U ovom poglavlju, pokazati ćemo da je particioniranje prostora također jedna efikasna i lako razumljiva strategija za detekciju sudara.
+Kako je spomenuto u Uvodu, postoje razni algoritmi za detekciju sudara. Najvažniji od njih su oni kojima dijelimo objekte (BVH), i one kojima dijelimo prostor. Algoritam s kojim dijelimo objekt smo već prošlu u poglavlju \ref{cha:BVH}. Kako smo u nekom trenutku odustali od BVH-a bilo je potrebno pronaći dobar i brz način za detektiranje sudara na cijeloj sceni. Detekcija sudara sama po sebi, komplicirana je operacija i potrebno je da bude manje složena od O(n\texttt{$^2$}) operacija. Kako smo to opisali u poglavlju \ref{cha:BVH}, BVH-u je ptorebno O{logN} operacija sa detekciju sudara na sceni, iako je nekada prije potrebno napraviti dodatne kalkulacije i ažuriranja strukture da bi ona bila funkcionalna. To dodatno komplicira stvari, ali je vrlo efikasno. U ovom poglavlju, pokazati ćemo da je particioniranje prostora također jedna efikasna i lako razumljiva strategija za detekciju sudara.
 
 \section{Primitivna detekcija sudara}
-U prošlom poglavlju objasnili smo kako sudare, nakon što ih detektiramo, kalkulirati. Nigdje nismo spomenuli kako smo i te sudare detektirali. Koristili smo za to vrlo primitivan i jednostavan algoritam. Za svaki objekt na sceni, iterativno bi tražili s kojim se objektom sudara. Ovo u principu nije problem kada je situacija sa zidovima jer u konačnici imamo 4 zida pa je sama složenost te operacije O(4 * N). Problem se javlja kada imamo kuglica. Do 50 kuglica ovaj algoritam će raditi, no nakon prelaska na veći broj kuglica javlja se problem. Za 500 kuglica potrebno je napraviti isto toliko provjera. To nas dovodi do brojke od 250 000 tisuća provjera i složenosti O(n\texttt{$^2$}). Kako smo ranije opisali ovo smo željeli izbjeći. Takav algoritam bi glasio ovako:
+U prošlom poglavlju objašnjeno je kako sudare, nakon što ih detektiramo, kalkulirati. Nigdje nismo spomenuli kako smo i te sudare detektirali. Koristili smo za to vrlo primitivan i jednostavan algoritam. Za svaki objekt na sceni, iterativno bi tražili s kojim se objektom sudara. Ovo u principu nije problem kada je situacija sa zidovima jer u konačnici imamo 4 zida pa je sama složenost te operacije O(4 * N). Problem se javlja kada imamo kuglica. Do 50 kuglica ovaj algoritam će raditi, no nakon prelaska na veći broj kuglica javlja se problem. Za 500 kuglica potrebno je napraviti isto toliko provjera. To nas dovodi do brojke od 250 000 tisuća provjera i složenosti O(n\texttt{$^2$}). Kako smo ranije opisali ovo smo željeli izbjeći. Takav algoritam bi glasio ovako:
 \begin{algorithm}
 	\caption{Algoritam za primitivnu detekciju sudara između kuglica}
 	\label{alg:primitive_collision}
@@ -25,9 +25,9 @@ gdje je:
 	\item list - lista kuglica
 	\item N - broj kuglica
 \end{itemize}
-Kako smo ranije već spomenuli, za listu smo koristili \emph{std::vector} u C++. Ovakav pristup smo koristili samo pri početku projekta. Za mali broj kuglica i za provjeru ispravnosti proračuna, ovakav pristup je bio dovoljan. \newpage
-\section{k-d stablo (K-dimensional tree)}
-Spomenuli smo da je složenost koju želimo postići pri detektiranju sudara najmanje O(NlogN) (za N objekata na sceni). Da bi to postigli moramo naš prostor podijeliti u smislene regije u kojima ćemo provjeravati sudar. Promotrimo to na jednom primjeru:
+Kako je već spomenuto, za listu smo koristili \emph{std::vector} u C++. Ovakav pristup smo koristili samo pri početku projekta. Za mali broj kuglica i za provjeru ispravnosti proračuna, ovakav pristup je bio dovoljan. \newpage
+\section{k-dimenzionalno stablo (K-dimensional tree - k-d)}
+Složenost koju želimo postići pri detektiranju sudara najmanje O(NlogN) (za N objekata na sceni). Da bi to postigli prostor se mora podijeliti u smislene regije u kojima ćemo provjeravati sudar. Promotrimo to na jednom primjeru:
 \begin{figure}[!http]	
 	\begin{center}
 		\begin{tikzpicture}
@@ -54,7 +54,7 @@ gdje su koordinate centara:\newpage
 \end{itemize}
 Na slici \ref{fig:25} vidimo da ne treba u svim situacijama provjeravati sudar. Na primjer za kuglicu 2 i 6 znamo da se sudar neće dogoditi te tu provjeri ne moramo uzimati u obzir dok između kuglica 5 i 4 te 1 i 2 znamo da bi se mogao dogoditi sudar u skorom vremenu, te, te sudare moramo provjeriti.
 
-Postoje mnoge tehnike za podijeliti prostor, no ona koju smo mi koristili je k-d stablo. k-d stablo je binarno stablo gdje je svaki čvor k-dimenzionalna točka\cite{14}. Svaki čvor koji nije list, može se shvatit kao ravnina koja dijeli prostor. Točke koje se nalaze lijevo od ravnine predstavlja lijeva strana stabla, dok desne točke predstavlja desna strana stabla\cite{14}. Konkretno, ukoliko odaberemo X os za os podijele, točke manje od vrijednosti X bit će nam u lijevoj grani stabla, dok točke veće od X vrijednosti će biti na desnoj strani stabla\cite{14}. U 3D prostoru intuitivno je da ćemo imat 3 dimenzije. Dakle, root čvor stabla će podijeliti prostor prema X koordinati, zatim njegova djeca prema Y koordinati, djeca djece po Z koordinati itd. .
+Postoje mnoge tehnike za podijeliti prostor, no ona koju smo mi koristili je k-d stablo. K-d stablo je binarno stablo gdje je svaki čvor k-dimenzionalna točka\cite{14}. Svaki čvor koji nije list, može se shvatit kao ravnina koja dijeli prostor. Točke koje se nalaze lijevo od ravnine predstavlja lijeva strana stabla, dok desne točke predstavlja desna strana stabla\cite{14}. Konkretno, ukoliko odaberemo X os za os podijele, točke manje od vrijednosti X bit će nam u lijevoj grani stabla, dok točke veće od X vrijednosti će biti na desnoj strani stabla\cite{14}. U 3D prostoru intuitivno je da ćemo imat 3 dimenzije. Dakle, root čvor stabla će podijeliti prostor prema X koordinati, zatim njegova djeca prema Y koordinati, djeca djece po Z koordinati itd. .
 \begin{figure}[!http]
 	\begin{center}
 		\begin{tikzpicture}[level distance=1.5cm,
@@ -75,7 +75,7 @@ Postoje mnoge tehnike za podijeliti prostor, no ona koju smo mi koristili je k-d
 	\caption {Prikaz k-d stabla za 3 dimenzije}
 	\label{fig:25}
 \end{figure} \newline
-Nakon što smo došli do Z dimenzije, ponovno dijelimo prostor po "x" koordinati, i tako se vrtimo dok ne podijelimo cijeli prostor. 
+Nakon što smo došli do Z dimenzije, ponovno dijelimo prostor po $x$ koordinati, i tako se vrtimo dok ne podijelimo cijeli prostor. 
 Sada se možemo vratiti na situaciju iz slike \ref{fig:26}. k-d stablo će nam onakav prostor podijeliti na sljedeći način\cite{14}:
 \begin{figure}[!http]
 	\begin{center}
@@ -104,7 +104,7 @@ Sada se možemo vratiti na situaciju iz slike \ref{fig:26}. k-d stablo će nam o
 Primjetimo da smo prostor podijelili po koordinatama centra svake kuglice.Crvene linije prikazuju podjelu prostora po X koordinati, dok plave ukazuju na podjelu prostora po Y koordinati. Da smo imali još Z koordinatu, analogija je ista, imali bi dodatnu dimenziju, no zbog jednostavnosti dovoljno je ovo prikazati u 2D prostoru.\newpage
 
 \subsection{Izgradnja k-d stabla}
-U prijašnjem poglavlju podijelili smo prostor bez da znamo zapravo kako je to napravljeno niti da znamo kako će struktura stabla izgledati za takvu situaciju. Općenito, znamo kako struktura stabla izgleda. Svaka razina stabla particionirala je prostor po nekoj koordinati. Jedino pitanje koje se postavlja je, kako izabrati točke na način da dobijemo kvalitetno podijeljen prostor i balansirano stablo. S obzirom da postoji puno načina na koji možemo odabrati osi presijecenja koje su poravnate s koordinatnim osima, postoji i puno načina da izgradimo k-d stablo. Kanonski način izgradnje je onaj koji smo već opisali\cite{14}:
+U prijašnjem poglavlju podijelili smo prostor bez da znamo zapravo kako je to napravljeno, niti da znamo kako će struktura stabla izgledati za takvu situaciju. Općenito, znamo kako struktura stabla izgleda. Svaka razina stabla particionirala je prostor po nekoj koordinati. Jedino pitanje koje se postavlja je, kako izabrati točke na način da dobijemo kvalitetno podijeljen prostor i balansirano stablo. S obzirom da postoji puno načina na koji možemo odabrati osi presijecenja koje su poravnate s koordinatnim osima, postoji i puno načina da izgradimo k-d stablo. Kanonski način izgradnje je onaj koji smo već opisali\cite{14}:
 \begin{itemize}
 	\item Kako se krećemo po stablu, kružno biramo osi presijecanja
 	\item Točke odabiremo tako da odaberemo median element s obzirom na os presijecanja
@@ -179,10 +179,10 @@ gdje je:
 \end{itemize}
 Algoritmi koji se uglavnom koriste za sortiranje su \emph{Mergesort} (implementiran u C++ STL-u) i \emph{Heapsort}. Složenost ovih algoritama u općem slučaju je O(NlogN). Sukladno tome to je i najbolja složenost koja se može postići s ovim algoritmima sortiranja. Složenost izgradnje stabla u najgorem slučaju može biti O(kNlogN) operacija što ćemo mi i imati s obzirom da u svakoj od k dimenzija moramo sortirati točke i odabrati median element. S obzirom da se kuglice na sceni kreću, stablo moramo graditi u svakom frameu pa je i ovakav način detekcije sudara sam po sebi dosta složen, no još uvijek je brži od onog opisanog u algoritmu \ref{alg:primitive_collision}. 
 
-Sada kada smo naš prostor podijelili prema točkama kuglica, potrebno je samo pretražiti sve potencijalne sudare na sceni. Dobra osobina k-d stabla je ta što će nam podijeliti prostor po gustoći točaka. Tako možemo vrlo jednostavno detektirati sudare na sceni i izračunati ih ukoliko se sudar dogodio.
+Sada je potrebno pretražiti sve potencijalne sudare na sceni. Dobra osobina k-d stabla je ta što će nam podijeliti prostor po gustoći točaka. Tako možemo vrlo jednostavno detektirati sudare na sceni i izračunati ih ukoliko se sudar dogodio.
 
 \subsection{Pretraga sudara u k-d stablu}
-Pretraga sudara u k-d stablu nakon izgradnje je trivijalna stvar. Sve se svodi na jednostavno šetanje po stablu. Da dodatno ne povećavamo složenost, šetanje će uključiti samo onu granu stabla koja je bliže u prostoru i/ili onu s kojom se kuglica sudara. Da se izbjegne korištenje funkcije korijena (\emph{sqrt}) koristiti će se kvadrirana udaljenost (eng. \emph{squared distance}). Ukoliko detektiramo sudar, u istom trenutku ga i računamo. Algoritam je rekurzivan i glasi:\newpage
+Pretraga sudara u k-d stablu nakon izgradnje je trivijalna stvar. Sve se svodi na jednostavno "šetanje" po stablu. Da dodatno ne povećavamo složenost, šetanje će uključiti samo onu granu stabla koja je bliže u prostoru i/ili onu s kojom se kuglica sudara. Da se izbjegne korištenje funkcije korijena (\emph{sqrt}) koristiti će se kvadrirana udaljenost (eng. \emph{squared distance}). Ukoliko detektiramo sudar, u istom trenutku ga i računamo. Algoritam je rekurzivan i glasi:\newpage
 \begin{algorithm}
 	\caption{Algoritam za pretragu sudara u k-d stablu}
 	\label{alg:serch_collisions_kd}
@@ -213,7 +213,7 @@ Pretraga sudara u k-d stablu nakon izgradnje je trivijalna stvar. Sve se svodi n
 
 	\end{algorithmic}
 \end{algorithm}
-Na ovakav ćemo način vrlo jednostavno na cijeloj sceni detektirati sudare i izračunati. S obzirom da je kuglica uvijek u sudaru sama sa sobom, potrebno je izbjeći računanje takvog sudara. Prilikom implementacije klase za kuglice, u kodu \ref{code:7}, spomenuli smo atribut \emph{i} tipa integer. Ovaj atribut označava poziciju kuglice u listi i na taj način ćemo vrlo jednostavno izbjeći računanje sudara kuglice same sa sobom. Testiranjem je utvrđeno da se prilikom takvog računanja mogu pojaviti anomalije i ponašanje kuglica koje ne želimo.\newpage
+Na ovakav ćemo način jednostavno na cijeloj sceni detektirati sudare i izračunati. S obzirom da je kuglica uvijek u sudaru sama sa sobom, potrebno je izbjeći računanje takvog sudara. Prilikom implementacije klase za kuglice, u kodu \ref{code:7}, spomenuli smo atribut \emph{i} tipa integer. Ovaj atribut označava poziciju kuglice u listi i na taj način ćemo vrlo jednostavno izbjeći računanje sudara kuglice same sa sobom. Testiranjem je utvrđeno da se prilikom takvog računanja mogu pojaviti anomalije i ponašanje kuglica koje ne želimo.\newpage
 \subsection{Implementacija klase za k-d stablo}
 U ovome poglavlju nećemo prikazivati implementaciju svih funkcija. Opisati ćemo samo odluke i strukturu same klase.
 \begin{lstlisting}[style = myC++, label = {code:13}, caption={Implementacija klase za k-d stablo}]
@@ -239,7 +239,7 @@ private:
 
 \end{lstlisting}
 
-U početku bila je dilema koristiti li normalnu klasu koja bi radila samo an temelju kuglica, ili \emph{template} klasu koja bi onda radila za sve tipove objekata koje bi stavili scenu. Odabrana je \emph{template} klasa upravo iz tog razloga, da prilikom dodavanja nekih drugih objekata koji nisu kuglice, ne moramo raditi novu strukturu za samo taj specifični objekt. Točnost ove tvrdnje pokazana je kada se ista klasa za k-d stablo koristila i za particioniranje zidova. Jednom strukturom smo odradili posao za sve moguće objekte na sceni. Postoji i bolji pristup da se koriste samo točke objekata, ali za nas je ovakav bio dovoljan. Klase \emph{sortby(x,y,z)} poslužile su za sortiranje cijele liste prema određenoj osi. Ostale funkcije koje smo koristili su ili već opisane (\emph{build\texttt{\_}tree}, \emph{searchCollisions}) ili su samo \emph{Get} funkcije za dohvat privatnih varijabli. \newpage
+U početku bila je dilema koristiti li normalnu klasu koja bi radila samo na temelju kuglica, ili \emph{template} klasu koja bi onda radila za sve tipove objekata koje bi stavili scenu. Odabrana je \emph{template} klasa upravo iz tog razloga, da prilikom dodavanja nekih drugih objekata koji nisu kuglice, ne moramo raditi novu strukturu za samo taj specifični objekt. Točnost ove tvrdnje pokazana je kada se ista klasa za k-d stablo koristila i za particioniranje zidova. Jednom strukturom smo odradili posao za sve moguće objekte na sceni. Postoji i bolji pristup da se koriste samo točke objekata, ali za nas je ovakav bio dovoljan. Klase \emph{sortby(x,y,z)} poslužile su za sortiranje cijele liste prema određenoj osi. Ostale funkcije koje smo koristili su ili već opisane (\emph{build\texttt{\_}tree}, \emph{searchCollisions}) ili su samo \emph{Get} funkcije za dohvat privatnih varijabli. \newpage
 \section{Prednosti i mane korištenja algoritama za particioniranje prostora (k-d stabla)}
 
 K-d stablo svakako pronalazi svoju uporabu u stvarnome svijetu. Vrlo jednostavna implementacija i razumijevanje same strukture omogućuje široku primjenu u svijetu igara. Skladno tome, jasno je da je k-d stablo dobar način kojim ćemo pretraživati sudare na sceni. Vrlo je efikasno iako ima svoje mane. 
