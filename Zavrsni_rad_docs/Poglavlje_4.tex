@@ -331,16 +331,15 @@ Nakon implementacije klase koje nam definiraju zidove, same sudare nije problem 
 Ovakav tip sudara možemo prikazati formulom:
 \begin{equation}\label{equ:wall_collision}
 		\begin{aligned}
-			vector = vector - 2Dot(vector, normal) normal;
+			vector = vector - 2(vector.x \ normal.x + vector.y \ normal.y + vector.z \ normal.z) normal;
 		\end{aligned}
 \end{equation}
 gdje su:
 \begin{itemize}
 	\item $vector$ - brzina i smjer kretanja kuglice
 	\item $normal$ - normala zida
-	\item $Dot$ - skalarni produkt
 \end{itemize}
-Ovo se također može prikazati jednostavni algoritmom koji je prikazan na sljedećoj stranici.\newpage
+Ovo se također može prikazati jednostavnim algoritmom koji je prikazan na sljedećoj stranici.
 \begin{algorithm}
 	\caption{Algoritam za izračunavanje smjera kretanja kuglice nakon sudara sa zidom}
 	\label{alg:resolve_Wallcollision}
@@ -354,14 +353,14 @@ Ovo se također može prikazati jednostavni algoritmom koji je prikazan na sljed
 		\State $ball.vector = ball.vector - collisionNormal$
 		\EndFunction
 	\end{algorithmic}
-\end{algorithm}
+\end{algorithm}\newpage
 
 Animacija sada izgleda smisleno. Možemo dodati puno kuglica i testirati sudare između njih i sudare između kuglica i zidova. Prostor je ograničen i fizika odbijanja je smislena. Idući korak je dodavanje vanjske sile i gravitacije. Želimo da kuglice padaju, kao u stvarnome svijetu te realizirati padanje i odbijanje od podloge. U sljedećem poglavlju razmotrit ćemo dodavanje gravitacije na kretanje kuglica i njihovo odbijanje od podloge. U konačnici, odbijanje od podloge će biti isto. No, nakon odbijanja s kuglice trebaju imati fizikalnu reakciju na sudar. Kuglice se u stvarnom svijetu ne mogu stalno odbijati od podloge. Mora se dogoditi prijenos (u ovome slučaju gubitak) kinetičke energije što će u nekom trenutku rezultirati da se kuglice prestanu gibati. Sve ove slučajeve razmotriti ćemo u narednim poglavljima.\newpage
 
 \section{Sila teža} 
-Sila teže je sila kojom Zemlja privlači neko tijelo mase m, označavamo ju najčešće slovom G. Ta sila privlači sva tijela prema središtu Zemlje pa je stoga tu i usmjerena.
+Sila teže je sila kojom Zemlja privlači neko tijelo mase m, označavamo ju najčešće slovom $G$. Ta sila privlači sva tijela prema središtu Zemlje pa je stoga tu i usmjerena.
 Sila teže razlog je zbog kojeg sva bića i predmeti ne odlete u Svemir, već stoje na površini Zemlje.
-Kada pustimo tijelo da slobodno pada s određene visine, ono se giba ubrzanjem g koje iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$ neovisno o njegovoj težini što znači da će istovremeno pasti i iznimno teško i iznimno lagano tijelo ukoliko ih bacimo s iste visine. To je sila kojom predmet djeluje na vodoravnu podlogu na koju je položen, npr. knjiga na stol, ili uteg na nit na koju je obješen.
+Kada pustimo tijelo da slobodno pada s određene visine, ono se giba ubrzanjem $g$ koje iznosi 9.81 $\frac{m}{s\textsuperscript{2}}$ neovisno o njegovoj težini što znači da će istovremeno pasti i iznimno teško i iznimno lagano tijelo ukoliko ih bacimo s iste visine. 
 Sila teža i težina jednake su po iznosu i smjeru djelovanja, ali nisu identični pojmovi.
 
 \begin{figure}[!http]
@@ -396,9 +395,9 @@ Fizikalna veličina koju trebamo je slobodni pad. Brzina slobodnog pada iznosi:
 		v = g \ t
 	\end{aligned}
 \end{equation}
-Slobodni pad je gibanje tijela isključivo pod utjecajem sile teže Slobodnoi pad je prijeđeni put s proporcionalan kvadratu protekloga vremena t, a brzina v jednoliko raste s proteklim vremenom, te da gibanje ne ovisi o masi tijela koje pada \cite{10}.Uobičajeno je da se slobodni pad uzima kao primjer jednolikog ubrzanog gibanja (gibanja sa stalnim ubrzanjem). Pritom se pretpostavlja da nema otpora zraka ili trenja \cite{10}.
+Slobodni pad je gibanje tijela isključivo pod utjecajem sile teže Slobodnoi pad je prijeđeni put s proporcionalan kvadratu protekloga vremena $t$, a brzina $v$ jednoliko raste s proteklim vremenom, te da gibanje ne ovisi o masi tijela koje pada \cite{10}.Uobičajeno je da se slobodni pad uzima kao primjer jednolikog ubrzanog gibanja (gibanja sa stalnim ubrzanjem). Pritom se pretpostavlja da nema otpora zraka ili trenja \cite{10}.
 
-Sama implementacija slobodnog pada je trivijalna:
+Algoritam slobodnog pada prikazuje se:
 \begin{algorithm}
 	\caption{Algoritam za implementaciju slobodnog pada}
 	\label{alg:free_fall}
@@ -411,7 +410,7 @@ Sama implementacija slobodnog pada je trivijalna:
 	\end{algorithmic}
 \end{algorithm}
 
-U algoritmu \ref{alg:free_fall} $dt$ (delta time) nam označava vrijeme koje je dobiveno između 2 framea. Na primjer, ukoliko imamo 60 sličica po sekundi, dt nam iznosi 16.6667 ms. Dobivanje razlike vremena između 2 framea je vrlo jednostavno. U nastavku ćemo prikazati implementaciju funkcije koja nam omogućuje izračunavanje proteklog vremena i kretanje kuglica po prostoru. \newpage
+U algoritmu \ref{alg:free_fall} $dt$ (delta time) nam označava vrijeme koje je dobiveno između 2 framea. Na primjer, ukoliko imamo 60 sličica po sekundi, $dt$ nam iznosi 16.6667 ms. Dobivanje razlike vremena između 2 framea je vrlo jednostavno. U nastavku ćemo prikazati implementaciju funkcije koja nam omogućuje izračunavanje proteklog vremena i kretanje kuglica po prostoru. \newpage
 \begin{lstlisting}[style = myC++, label = {code:12}, caption = {Implementacije update funkcija}]
 
 void Ball::updatePosition(float dt) {
@@ -440,7 +439,7 @@ Funkcija \emph{glutGet(\texttt{GLUT\_ELAPSED\_TIME})} će nam vratit broj milise
 
 Stvari s gravitacijom gledane na ovakav način su zapravo jasne. Na ovakav način možemo dodati bilo koju vanjsku silu koja će djelovati na kuglice. Iduće što želimo je da kuglice prilikom sudara prenose energiju. To će biti dodatno objašnjeno u idućem poglavlju.\newpage
 \section{Elastični sudari}
-U svim poglavljima do sada stalno se spominjala nekakva fizikalna reakcija kuglice na sudar. Svaka kuglica prilikom svog kretanja ima nekakvu kinetičku energiju. Opća formula kinetičke energije glasi:
+Kuglice pri sudaru imaju fizikalnu reakciju. Svaka kuglica prilikom svog kretanja ima kinetičku energiju. Opća formula kinetičke energije glasi:
 \begin{equation}\label{equ:kinetic}
 	\begin{aligned}
 	E_{k} = \frac{m \ v^2}{2}
@@ -451,9 +450,9 @@ gdje je:
 	\item $m$ - masa kuglice 
 	\item $v$ - brzina kuglice
 \end{itemize}
-Prilikom sudara između 2 kuglice, dio kinetičke energije će se izgubiti, tj. prijeći će u iz jedne kuglice na drugu i obrnuto. S obzirom da vrijedi ZAKON OČUVANJA ENERGIJE, zbroj energije 2 kuglice se neće promijeniti. Zakon očuvanja energije nam govori da u u zatvorenom sustavu zbroj svih oblika energije (mehaničke, toplinske, električne, magneske,...) konstantan. Drugim riječima, u zatvorenom sustavu jedan oblik energije može prelaziti u druge oblike, a da se pri tom energija niti stvara niti poništava\cite{11}.
+Prilikom sudara između 2 kuglice, dio kinetičke energije će se izgubiti, tj. prijeći će u iz jedne kuglice na drugu i obrnuto. S obzirom da vrijedi ZAKON OČUVANJA ENERGIJE, zbroj energije 2 kuglice se neće promijeniti. Zakon očuvanja energije nam govori da u u zatvorenom sustavu zbroj svih oblika energije (mehaničke, toplinske, električne, magnetske,...) konstantan. Drugim riječima, u zatvorenom sustavu jedan oblik energije može prelaziti u druge oblike, a da se pri tom energija niti stvara niti poništava\cite{11}.
 
-Iduća fizikalna pojava koju ćemo analizirati je količina gibanja. Količina gibanja ili zalet (oznaka p) je vektorska fizikalna veličina u klasičnoj mehanici koja opisuje gibanje čestice ili sustava čestica\cite{12}:
+Iduća fizikalna pojava koju ćemo analizirati je količina gibanja. Količina gibanja ili zalet (oznaka $p$) je vektorska fizikalna veličina u klasičnoj mehanici koja opisuje gibanje čestice ili sustava čestica\cite{12}:
 \begin{equation}\label{equ:impuls}
 \begin{aligned}
 	p = m \ v
@@ -521,7 +520,7 @@ Nakon niza matematičkih operacija i skraćivanja izraza možemo donijeti konač
 		v'_{2} = \frac{v_{2}  (m_{2} - m_{1}) + 2  m_{1} v_{1}}{m_{1} + m_{2}}
 	\end{aligned}
 \end{equation}
-Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome što je ranije navedeno u poglavlju \ref{subsec:no_energy} nama i trebaju samo 1 dimenzionalni sudari. Ranije u poglavlju \ref{subsec:no_energy} opisane su jednadžbe kojima dobivamo smjer kretanja kuglica nakon sudara bez prijenosa količine energije i količine gibanja. U ovome poglavlju, objašnjeno kako će se ponašati samo vrijednosti brzina nakon sudara. Sada samo treba izvesti, ove 2 jednadžbe iz jednadžbe \ref{equ:elastic_coll} dodati u kod za rješavanje sudara kuglica. Prema algoritmu \ref{alg:resolve_collision_1} možemo iznijeti slijedeći algoritam za to:\newline
+Ovi sudari vrijede samo za 1 dimenziju, ali to je u redu\cite{13}. Prema onome što je ranije navedeno u poglavlju \ref{subsec:no_energy} nama i trebaju samo sudari u jednoj dimenziji. Ranije u poglavlju \ref{subsec:no_energy} opisane su jednadžbe kojima dobivamo smjer kretanja kuglica nakon sudara bez prijenosa količine energije i količine gibanja. U ovome poglavlju, objašnjeno kako će se ponašati samo vrijednosti brzina nakon sudara. Sada samo treba izvesti, ove dvije jednadžbe iz jednadžbe \ref{equ:elastic_coll} dodati u kod za rješavanje sudara kuglica. Prema algoritmu \ref{alg:resolve_collision_1} možemo iznijeti slijedeći algoritam za to:\newline
 \begin{algorithm}
 	\caption{Algoritam za izračunavanje smjera i iznosa brzina sudara između 2 kuglice uz promjenu količine gibanja jedne kuglice}
 	\label{alg:resolve_collision_2}

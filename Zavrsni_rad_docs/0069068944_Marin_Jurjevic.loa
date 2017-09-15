@@ -2,7 +2,7 @@
 \contentsline {algorithm}{\numberline {2}{\ignorespaces Algoritam za ubacivanje lista u AABB stablo\relax }}{21}{algorithm.2}
 \contentsline {algorithm}{\numberline {3}{\ignorespaces Algoritam za detektciju sudara izme\IeC {\dj }u 2 AABB stabla\relax }}{23}{algorithm.3}
 \contentsline {algorithm}{\numberline {4}{\ignorespaces Algoritam za izra\IeC {\v c}unavanje smjera brzina nakon sudara izme\IeC {\dj }u 2 kuglice\relax }}{33}{algorithm.4}
-\contentsline {algorithm}{\numberline {5}{\ignorespaces Algoritam za izra\IeC {\v c}unavanje smjera kretanja kuglice nakon sudara sa zidom\relax }}{38}{algorithm.5}
+\contentsline {algorithm}{\numberline {5}{\ignorespaces Algoritam za izra\IeC {\v c}unavanje smjera kretanja kuglice nakon sudara sa zidom\relax }}{37}{algorithm.5}
 \contentsline {algorithm}{\numberline {6}{\ignorespaces Algoritam za implementaciju slobodnog pada\relax }}{40}{algorithm.6}
 \contentsline {algorithm}{\numberline {7}{\ignorespaces Algoritam za izra\IeC {\v c}unavanje smjera i iznosa brzina sudara izme\IeC {\dj }u 2 kuglice uz promjenu koli\IeC {\v c}ine gibanja jedne kuglice\relax }}{45}{algorithm.7}
 \contentsline {algorithm}{\numberline {8}{\ignorespaces Algoritam za primitivnu detekciju sudara izme\IeC {\dj }u kuglica\relax }}{47}{algorithm.8}
