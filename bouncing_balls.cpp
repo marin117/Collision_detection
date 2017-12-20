@@ -81,13 +81,13 @@ int main(void) {
   KDtreeNode<Wall> wallsKDtree;
   KDtreeNode<Ball> ballsKDtree;
   // walls.emplace_back(Wall(0, 20, 0, 25, 0, 0, 0, -1, 0, 10000));
-  walls.emplace_back(Wall(0, -20, 0, 25000, 0, 0, 0, 1, 0, 10000));
-  walls.emplace_back(Wall(23, 0, 0, 0, 25000, 0, -1, 0, 0, 10000));
-  walls.emplace_back(Wall(-23, 0, 0, 0, 25000, 0, 1, 0, 0, 10000));
+  walls.emplace_back(Wall(0, -40, 0, 25000, 0, 0, 0, 1, 0, 10000));
+  walls.emplace_back(Wall(46, 0, 0, 0, 25000, 0, -1, 0, 0, 10000));
+  walls.emplace_back(Wall(-46, 0, 0, 0, 25000, 0, 1, 0, 0, 10000));
 
   std::vector<Ball> balls;
 
-  for (uint i = 0; i < 5; i++) {
+  for (uint i = 0; i < 100; i++) {
     float x = std::rand() % 40 - 20;
     float y = std::rand() % 20;
 
@@ -114,9 +114,9 @@ int main(void) {
                                             (float)4 / (float)3, 0.1f, 1000.0f);
 
     glm::mat4 View = glm::lookAt(
-        glm::vec3(0, 0, 50), // Camera is at (0,0,50), in World Space
-        glm::vec3(0, 0, -1), // and looks at the origin
-        glm::vec3(0, 1, 0)   // Head is up (set to 0,-1,0 to look upside-down)
+        glm::vec3(0, 0, 100), // Camera is at (0,0,50), in World Space
+        glm::vec3(0, 0, -1),  // and looks at the origin
+        glm::vec3(0, 1, 0)    // Head is up (set to 0,-1,0 to look upside-down)
         );
 
     glm::mat4 VP = Projection * View;

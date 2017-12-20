@@ -1,8 +1,0 @@
-\chapter{Zaključak}
-
-Zaključno, možemo reći da postoje brojne metode za detekciju sudara. U ovom radu
-obradili smo tek 2 algoritma koji su zapravo vrlo jednostavni. Svaki od ovih algoritama ima svoje prednosti i nedostatke te je bilo zanimljivo usporediti brzine i točnosti detekcije sudara između algoritama. Možemo zaključiti da je K-d stablo, algoritam koji ćemo koristiti onda kada na sceni postoji puno statičnih objekata i kada stablo možemo izgraditi unaprijed, tj. prije samo iscrtavanja objekata. AABB stablo ćemo, za razliku od K-d stabla, primijeniti onda kada imamo puno dinamičnih objekata jer u svakom koraku ne moramo graditi stablo. AABB stablo se pokazalo vrlo jednostavnim za implementirati i pokazuje vrlo visoku efikasnost pri samoj detekciji sudara. Iz tog razloga sve je popularnije u modernim aplikacijama u kojima je potrebna detekcija sudara. Ipak, K-d stablo je popularno u igrama jer pokazuju vrlo visoke perfomanse ako nemamo potrebu graditi stablo u svakom koraku. 
-
-U konačnosti, dodavanje Shadera na ova 2 algoritma pokazuje kako je detekcija sudara zapravo vrlo dobar paralelni algoritam gdje samu detekciju možemo izvršavati na procesoru, dok crtanje objekata možemo dati grafičkoj kartici na obradu. 
-
-I konačno, ne možemo se procijeniti koji je algoritam za detekciju sudara najbolji. U praksi ćemo analizom algoritama odabrati onaj, koji najbolje odgovara zahtjevima naše aplikacije i sredstvima koja je potrebno uložiti u taj algoritam. 
